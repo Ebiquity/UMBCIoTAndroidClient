@@ -2,21 +2,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.umbc.cs.iot.clients.android.ui.fragments.QueryFragment">
+    tools:context="edu.umbc.cs.iot.clients.android.ui.fragments.QueryFragment"
+    android:focusable="true"
+    android:focusableInTouchMode="true" >
 
-    <TextView
-        android:id="@+id/defaultDisplayTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <ScrollView
+        android:id="@+id/scrollViewForDisplayText"
+        android:layout_above="@+id/userQueryEditText"
         android:layout_alignParentTop="true"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:textAlignment="center"
-        android:textSize="25sp"
-        android:textColor="@color/colorPrimaryDark"
-        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
-        android:text="@string/DefaultDisplayText" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!--<HorizontalScrollView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent">-->
+
+            <!-- Main content here -->
+            <TextView
+                android:id="@+id/defaultDisplayTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:textAlignment="center"
+                android:textSize="25sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+                android:text="@string/defaultDisplayText" />
+
+        <!--</HorizontalScrollView>-->
+    </ScrollView>
 
     <EditText
         android:id="@+id/userQueryEditText"
@@ -30,8 +45,10 @@
         android:imeOptions="actionSend"
         android:fontFamily="sans-serif-condensed"
         android:hint="@string/queryHint"
-        android:inputType="textMultiLine"
-        android:layout_toStartOf="@+id/sendQueryToServerImageButton" />
+        android:inputType="textImeMultiLine"
+        android:layout_toStartOf="@+id/sendQueryToServerImageButton"
+        android:textSize="20sp"
+        android:selectAllOnFocus="true" />
 
     <ImageButton
         android:id="@+id/sendQueryToServerImageButton"
@@ -41,15 +58,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:visibility="visible"
-        android:contentDescription="@string/sendQueryToServerImageButtonContentDescriptionText" />
+        android:contentDescription="@string/sendQueryToServerImageButtonContentDescriptionText"
+        android:backgroundTint="@color/colorAccent"
+        android:elevation="24dp" />
 
-    <!--<android.support.design.widget.FloatingActionButton-->
-    <!--android:id="@+id/fab"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:gravity="bottom|end"-->
-    <!--android:layout_margin="@dimen/fab_margin"-->
-    <!--android:src="@android:drawable/ic_menu_send"-->
-    <!--app:fabSize="normal"-->
-    <!--app:rippleColor="@android:color/holo_red_dark" />-->
 </RelativeLayout>

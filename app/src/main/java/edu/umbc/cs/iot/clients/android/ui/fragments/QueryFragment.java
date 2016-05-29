@@ -1,19 +1,24 @@
 package edu.umbc.cs.iot.clients.android.ui.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +58,7 @@ public class QueryFragment extends Fragment {
     private String jsonResponse;
 
     private TextView mDefaultDisplayTextView;
+    private ScrollView mScrollViewForDisplayTextView;
     private EditText mUserQueryEditText;
     private View view;
     private ImageButton mSendQueryToServerImageButton;
@@ -99,12 +105,14 @@ public class QueryFragment extends Fragment {
         initData();
         setOnClickListeners();
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_query, container, false);
+        return view;
     }
 
     private void initViews() {
         mDefaultDisplayTextView = (TextView) view.findViewById(R.id.defaultDisplayTextView);
+        mScrollViewForDisplayTextView = (ScrollView) view.findViewById(R.id.scrollViewForDisplayText);
         mUserQueryEditText = (EditText) view.findViewById(R.id.userQueryEditText);
+        mUserQueryEditText.clearFocus();
         mSendQueryToServerImageButton = (ImageButton) view.findViewById(R.id.sendQueryToServerImageButton);
     }
 
@@ -115,38 +123,49 @@ public class QueryFragment extends Fragment {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
+//                    Toast.makeText(v.getContext(),"This is what we have"+mUserQueryEditText.getText(),Toast.LENGTH_LONG).show();
                     callWebServiceWithQuery(mUserQueryEditText.getText().toString());
+                    mUserQueryEditText.clearFocus();
+                    hideKeyboardFrom(v.getContext(),v);
                     handled = true;
                 }
                 return handled;
             }
         });
 
-//        mUserQueryEditText.setOnKeyListener(new View.OnKeyListener() {
-//            @Override
-//            public boolean onKey(View v, int keyCode, KeyEvent event) {
-//                // If the event is a key-down event on the "enter" button
-//                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-//                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
-//                    // Perform action on key press
-//                    callWebServiceQithQuery(mUserQueryEditText.getText().toString());
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
-
         mSendQueryToServerImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(),"This is what we have",Toast.LENGTH_LONG).show();
+//                Toast.makeText(v.getContext(),"This is what we have"+mUserQueryEditText.getText(),Toast.LENGTH_LONG).show();
                 if(mUserQueryEditText.getText().toString().isEmpty())
                     Snackbar.make(view, "Type a query first...", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 else
                     callWebServiceWithQuery(mUserQueryEditText.getText().toString());
+                mUserQueryEditText.clearFocus();
+                hideKeyboardFrom(v.getContext(),v);
             }
         });
+
+        mDefaultDisplayTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mScrollViewForDisplayTextView.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        });
+    }
+
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private void initData() {
@@ -205,7 +224,7 @@ public class QueryFragment extends Fragment {
         } catch (JSONException aJSONException) {
             Log.d("JSONException:"," Something went wrong in JSON object creation");
         }
-        Toast.makeText(view.getContext(),"Calling the webservice with url: "+UMBCIoTApplication.getUrl()+" and payload "+jsonObject.toString(),Toast.LENGTH_LONG).show();
+//        Toast.makeText(view.getContext(),"Calling the webservice with url: "+UMBCIoTApplication.getUrl()+" and payload "+jsonObject.toString(),Toast.LENGTH_LONG).show();
         /**
          * Creates a new request.
          * @param method the HTTP method to use
@@ -232,12 +251,14 @@ public class QueryFragment extends Fragment {
 //                            String mobile = phone.getString("mobile");
 
 //                            jsonResponse = "";
-                            jsonResponse += "Status: " + status + "\n\n";
-                            jsonResponse += "Text: " + text + "\n\n";
+                            if (!mDefaultDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.defaultDisplayText)))
+                                jsonResponse += "------------------------" + "\n";
+                            jsonResponse += "Status: " + status + "\n";
+                            jsonResponse += "Text: " + text + "\n";
 //                            response += "Home: " + home + "\n\n";
 //                            response += "Mobile: " + mobile + "\n\n";
 
-                            Toast.makeText(view.getContext(),"JSON response: "+jsonResponse,Toast.LENGTH_LONG).show();
+//                            Toast.makeText(view.getContext(),"JSON response: "+jsonResponse,Toast.LENGTH_LONG).show();
                             mDefaultDisplayTextView.setText(jsonResponse);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -251,7 +272,7 @@ public class QueryFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(UMBCIoTApplication.getDebugTag(), "Error: " + error.getMessage());
-                Toast.makeText(view.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(view.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
         // Add a request (in this example, called stringRequest) to your RequestQueue.
