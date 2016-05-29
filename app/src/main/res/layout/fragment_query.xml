@@ -13,22 +13,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <!--<HorizontalScrollView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent">-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent">-->
 
-            <!-- Main content here -->
-            <TextView
-                android:id="@+id/defaultDisplayTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:textAlignment="center"
-                android:textSize="25sp"
-                android:textColor="@color/colorPrimaryDark"
-                android:textAppearance="@android:style/TextAppearance.Holo.Medium"
-                android:text="@string/defaultDisplayText" />
+        <!-- Main content here -->
+        <TextView
+            android:id="@+id/defaultDisplayTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+            android:text="@string/defaultDisplayText" />
 
         <!--</HorizontalScrollView>-->
     </ScrollView>
