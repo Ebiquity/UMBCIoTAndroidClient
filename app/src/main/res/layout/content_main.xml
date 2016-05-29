@@ -6,21 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="edu.umbc.cs.iot.clients.android.MainActivity"
+    tools:context="edu.umbc.cs.iot.clients.android.ui.activities.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <TextView
-        android:id="@+id/defaultDisplayTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:textSize="25sp"
-        android:textColor="@color/colorPrimaryDark"
-        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
-        android:gravity="center"
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintLeft_toLeftOf="@+id/content_main"
         app:layout_constraintTop_toTopOf="@+id/content_main"
         app:layout_constraintRight_toRightOf="@+id/content_main"
-        app:layout_constraintBottom_toBottomOf="@+id/content_main" />
-
+        app:layout_constraintBottom_toBottomOf="@+id/content_main">
+    </FrameLayout>
 </android.support.constraint.ConstraintLayout>

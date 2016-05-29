@@ -5,4 +5,10 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="DefaultDisplayText">What do you want to know about UMBC?</string>
+    <string name="queryHint">Type your query here...</string>
+    <string name="sendQueryToServerImageButtonContentDescriptionText">Click this button to send the query to server</string>
 </resources>

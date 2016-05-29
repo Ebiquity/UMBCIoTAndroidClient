@@ -16,7 +16,7 @@
             android:value="AIzaSyBCXNEmWel8hvAkzD0suYpZZhPwcs3WsCw" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
