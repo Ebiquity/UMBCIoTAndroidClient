@@ -1,5 +1,10 @@
 package edu.umbc.cs.iot.clients.android.ui.activities;
 
+/**
+ * Created on May 27, 2016
+ * @author: Prajit Kumar Das
+ */
+
 import android.Manifest;
 import android.app.FragmentManager;
 import android.content.Intent;

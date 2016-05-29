@@ -1,5 +1,10 @@
 package edu.umbc.cs.iot.clients.android;
 
+/**
+ * Created on May 27, 2016
+ * @author: Prajit Kumar Das
+ */
+
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.MediumTest;
