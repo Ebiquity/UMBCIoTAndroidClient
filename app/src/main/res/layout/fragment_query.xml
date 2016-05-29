@@ -45,7 +45,7 @@
         android:imeOptions="actionSend"
         android:fontFamily="sans-serif-condensed"
         android:hint="@string/queryHint"
-        android:inputType="textImeMultiLine"
+        android:inputType="textCapSentences|textImeMultiLine"
         android:layout_toStartOf="@+id/sendQueryToServerImageButton"
         android:textSize="20sp"
         android:selectAllOnFocus="true" />
