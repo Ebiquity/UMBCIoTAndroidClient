@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements
     private QueryFragment aQueryFragment;
     private GoogleApiClient mGoogleApiClient;
     private String beaconData;
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,16 +103,26 @@ public class MainActivity extends AppCompatActivity implements
         navigationView.setNavigationItemSelectedListener(this);
 
         aQueryFragment = new QueryFragment();
+        fragmentManager = getFragmentManager();
     }
 
     private void defaultFragmentLoad() {
         Bundle bundle = new Bundle();
-        bundle.putString(UMBCIoTApplication.getBeaconTag(),beaconData);
-        aQueryFragment.setArguments(bundle);
+        if(!isFragmentUIActive()) {
+            bundle.putString(UMBCIoTApplication.getBeaconTag(), beaconData);
+            aQueryFragment.setArguments(bundle);
+            fragmentManager.beginTransaction().replace(R.id.container, aQueryFragment)
+                    .commit();
+        } else {
+            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.detach(aQueryFragment);
+            fragmentTransaction.attach(aQueryFragment);
+            fragmentTransaction.commit();
+        }
+    }
 
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.container, aQueryFragment)
-                .commit();
+    public boolean isFragmentUIActive() {
+        return aQueryFragment.isAdded() && !aQueryFragment.isDetached() && !aQueryFragment.isRemoving();
     }
 
     @Override
@@ -138,7 +150,8 @@ public class MainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_clear) {
+            defaultFragmentLoad();
             return true;
         }
 

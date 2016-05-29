@@ -10,7 +10,6 @@ import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -39,7 +38,7 @@ import org.json.JSONObject;
 
 import edu.umbc.cs.iot.clients.android.R;
 import edu.umbc.cs.iot.clients.android.UMBCIoTApplication;
-import edu.umbc.cs.iot.clients.android.VolleySingleton;
+import edu.umbc.cs.iot.clients.android.util.VolleySingleton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -122,14 +121,16 @@ public class QueryFragment extends Fragment {
     }
 
     private void setOnClickListeners() {
-        Log.d(UMBCIoTApplication.getDebugTag(),"Came to setOnClickListeners");
         mUserQueryEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-//                    Toast.makeText(v.getContext(),"This is what we have"+mUserQueryEditText.getText(),Toast.LENGTH_LONG).show();
-                    callWebServiceWithQuery(mUserQueryEditText.getText().toString());
+                    if(mUserQueryEditText.getText().toString().isEmpty())
+                        Snackbar.make(view, "Type a query first...", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    else
+                        callWebServiceWithQuery(mUserQueryEditText.getText().toString());
                     mUserQueryEditText.clearFocus();
                     hideKeyboardFrom(v.getContext(),v);
                     handled = true;
@@ -141,7 +142,6 @@ public class QueryFragment extends Fragment {
         mSendQueryToServerImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(v.getContext(),"This is what we have"+mUserQueryEditText.getText(),Toast.LENGTH_LONG).show();
                 if(mUserQueryEditText.getText().toString().isEmpty())
                     Snackbar.make(view, "Type a query first...", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
@@ -174,7 +174,6 @@ public class QueryFragment extends Fragment {
     }
 
     private void initData() {
-        Log.d(UMBCIoTApplication.getDebugTag(),"Came to initdata");
         Bundle bundle = this.getArguments();
         mBeconID = bundle.getString(UMBCIoTApplication.getBeaconTag(), "No beaconID");
         jsonResponse = new String("");
@@ -204,6 +203,9 @@ public class QueryFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        mDefaultDisplayTextView.setText(view.getContext().getResources().getString(R.string.defaultDisplayText));
+        mUserQueryEditText.setText("");
+        mUserQueryEditText.clearFocus();
     }
 
     /**
