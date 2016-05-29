@@ -254,9 +254,11 @@ public class MainActivity extends AppCompatActivity implements
                 result.startResolutionForResult(this, UMBCIoTApplication.getRequestResolveError());
             } catch (IntentSender.SendIntentException e) {
                 Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed due to"+e.getMessage());
+                Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed due to"+e.getMessage(), Toast.LENGTH_LONG).show();
             }
         } else {
             Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed");
+            Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed", Toast.LENGTH_LONG).show();
         }
     }
 
