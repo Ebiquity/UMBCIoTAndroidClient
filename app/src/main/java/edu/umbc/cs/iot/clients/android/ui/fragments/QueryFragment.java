@@ -203,11 +203,15 @@ public class QueryFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        resetFragmentView();
+    }
+
+    private void resetFragmentView() {
         mDefaultDisplayTextView.setText(view.getContext().getResources().getString(R.string.defaultDisplayText));
         mUserQueryEditText.setText("");
         mUserQueryEditText.clearFocus();
+        hideKeyboardFrom(view.getContext(),view);
     }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -292,6 +296,7 @@ public class QueryFragment extends Fragment {
         jsonObject = new JSONObject();
         jsonObject.put(UMBCIoTApplication.getQuestionTag(), mUserQuestion);
         jsonObject.put(UMBCIoTApplication.getBeaconTag(), mBeconID);
+//        Toast.makeText(view.getContext(),"I have: "+mBeconID,Toast.LENGTH_LONG).show();
 
 //        JSONArray jsonArray = new JSONArray();
 //        for(String applicationInfo : getCurrentlyInstalledAppsList()) {

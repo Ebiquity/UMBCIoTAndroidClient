@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.app.FragmentTransaction;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -23,12 +24,17 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.messages.Message;
+import com.google.android.gms.nearby.messages.MessageListener;
 import com.google.android.gms.nearby.messages.MessagesOptions;
 import com.google.android.gms.nearby.messages.NearbyPermissions;
+import com.google.android.gms.nearby.messages.Strategy;
+import com.google.android.gms.nearby.messages.SubscribeOptions;
 
 import edu.umbc.cs.iot.clients.android.R;
 import edu.umbc.cs.iot.clients.android.UMBCIoTApplication;
@@ -47,48 +53,12 @@ public class MainActivity extends AppCompatActivity implements
     private GoogleApiClient mGoogleApiClient;
     private String beaconData;
     private FragmentManager fragmentManager;
+//    private Message mActiveMessage;
+    private MessageListener mMessageListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initViews();
-        initData();
-    }
-
-    private void initData() {
-        // Get a GoogleApiClient object for the using the NearbyMessagesApi
-        setGoogleApiClient();
-        //TODO fix the beacon data, assigning dummy info right now
-        beaconData = new String("beacon1");
-        defaultFragmentLoad();
-    }
-
-    private void setGoogleApiClient() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(Nearby.MESSAGES_API, new MessagesOptions.Builder()
-                            .setPermissions(NearbyPermissions.BLE)
-                            .build())
-                    .addConnectionCallbacks(this)
-                    .enableAutoManage(this, this)
-                    .build();
-        }
-        else
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(Nearby.MESSAGES_API)
-                    .addConnectionCallbacks(this)
-                    .enableAutoManage(this, this)
-                    .build();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
-
-    private void initViews() {
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -104,11 +74,94 @@ public class MainActivity extends AppCompatActivity implements
 
         aQueryFragment = new QueryFragment();
         fragmentManager = getFragmentManager();
+
+        // Get a GoogleApiClient object for the using the NearbyMessagesApi
+        setGoogleApiClient();
+        setListeners();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //Initiate connection to Play Services
+        mGoogleApiClient.connect();
+
+        //The location permission is required on API 23+ to obtain BLE scan results
+        int result = ActivityCompat
+                .checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (result != PackageManager.PERMISSION_GRANTED) {
+            //Ask for the location permission
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    UMBCIoTApplication.getRequestPermission());
+        }
+    }
+
+    @Override
+    public void onStop() {
+        if (mGoogleApiClient.isConnected()) {
+//        unpublish();
+            unsubscribe();
+            mGoogleApiClient.disconnect();
+        }
+        super.onStop();
+    }
+
+    private void setGoogleApiClient() {
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+//                == PackageManager.PERMISSION_GRANTED) {
+//            mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                    .addApi(Nearby.MESSAGES_API, new MessagesOptions.Builder()
+//                            .setPermissions(NearbyPermissions.BLE)
+//                            .build())
+//                    .addConnectionCallbacks(this)
+//                    .enableAutoManage(this, this)
+//                    .build();
+//        }
+//        else
+//            mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                    .addApi(Nearby.MESSAGES_API)
+//                    .addConnectionCallbacks(this)
+//                    .enableAutoManage(this, this)
+//                    .build();
+        //Construct a connection to Play Services
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Nearby.MESSAGES_API)
+                .build();
+    }
+
+    private void setListeners() {
+        mMessageListener = new MessageListener() {
+            @Override
+            public void onFound(Message message) {
+                String foundMessage = new String(message.getContent());
+                // Do something with the message here.
+                Log.i(UMBCIoTApplication.getDebugTag(), "Message string: " + new String(message.getContent()));
+                Log.i(UMBCIoTApplication.getDebugTag(), "Message namespace type: " + message.getNamespace() +
+                        "/" + message.getType());
+                if(message.getNamespace().equals("dark-airway-132523")
+                        && message.getType().equals("string")
+                        && foundMessage.startsWith("beacon")) {
+                    beaconData = foundMessage;
+                    // Only when the beaconData has been found we shall move on to loading the UI
+                    defaultFragmentLoad();
+                }
+            }
+
+            @Override
+            public void onLost(Message message) {
+                String messageAsString = new String(message.getContent());
+                Log.d(UMBCIoTApplication.getDebugTag(), "Lost sight of message: " + messageAsString);
+            }
+        };
     }
 
     private void defaultFragmentLoad() {
         Bundle bundle = new Bundle();
         if(!isFragmentUIActive()) {
+//            Toast.makeText(getApplicationContext(),"I have: "+beaconData,Toast.LENGTH_LONG).show();
             bundle.putString(UMBCIoTApplication.getBeaconTag(), beaconData);
             aQueryFragment.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.container, aQueryFragment)
@@ -185,34 +238,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        publish("Hello World");
+//        publish("Hello World");
         subscribe();
-    }
-
-    private void subscribe() {
-        //TODO Add subscribe code
-    }
-
-    private void publish(String s) {
-        //TODO Add publish code
-    }
-
-    @Override
-    public void onStop() {
-        unpublish();
-        unsubscribe();
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-        super.onStop();
-    }
-
-    private void unsubscribe() {
-        //TODO Add unsubscribe code
-    }
-
-    private void unpublish() {
-        //TODO Add unpublish code
     }
 
     @Override
@@ -233,16 +260,56 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * This is called in response to a button tap in the system permissions dialog.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == UMBCIoTApplication.getRequestResolveError()) {
             if (resultCode == RESULT_OK) {
-                mGoogleApiClient.connect();
+                // Permission granted or error resolved successfully then we proceed
+                // with publish and subscribe..
+                subscribe();
             } else {
-                Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed. Unable to resolve.");
+                Toast.makeText(getApplicationContext(),"GoogleApiClient connection failed. Unable to resolve.",Toast.LENGTH_LONG).show();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+        if (requestCode == UMBCIoTApplication.getRequestPermission()) {
+            if (resultCode != RESULT_OK) {
+                Toast.makeText(getApplicationContext(),"We need location permission to get scan results!",Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }
     }
+
+    // Subscribe to receive messages.
+    private void subscribe() {
+        Log.i(UMBCIoTApplication.getDebugTag(), "Subscribing.");
+        SubscribeOptions options = new SubscribeOptions.Builder()
+                .setStrategy(Strategy.BLE_ONLY)
+                .build();
+        Nearby.Messages.subscribe(mGoogleApiClient, mMessageListener, options);
+    }
+
+    private void unsubscribe() {
+        Log.i(UMBCIoTApplication.getDebugTag(), "Unsubscribing.");
+        Nearby.Messages.unsubscribe(mGoogleApiClient, mMessageListener);
+    }
+
+    // Publishing messages.
+//    private void publish(String message) {
+//        Log.i(UMBCIoTApplication.getDebugTag(), "Publishing message: " + message);
+//        mActiveMessage = new Message(message.getBytes());
+//        Nearby.Messages.publish(mGoogleApiClient, mActiveMessage);
+//    }
+
+//    private void unpublish() {
+//        Log.i(UMBCIoTApplication.getDebugTag(), "Unpublishing.");
+//        if (mActiveMessage != null) {
+//            Nearby.Messages.unpublish(mGoogleApiClient, mActiveMessage);
+//            mActiveMessage = null;
+//        }
+//    }
 }

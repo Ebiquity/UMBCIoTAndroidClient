@@ -9,6 +9,7 @@ import android.app.Application;
 
 public class UMBCIoTApplication extends Application {
     private static final int REQUEST_RESOLVE_ERROR = 1001;
+    private static final int REQUEST_PERMISSION = 42;
     private static final String DEBUG_TAG = "UMBCIoTDebugTag";
     private static final String QUESTION_TAG = "question";
     private static final String BEACON_TAG = "beaconid";
@@ -37,5 +38,9 @@ public class UMBCIoTApplication extends Application {
 
     public static String getUrl() {
         return url;
+    }
+
+    public static int getRequestPermission() {
+        return REQUEST_PERMISSION;
     }
 }
