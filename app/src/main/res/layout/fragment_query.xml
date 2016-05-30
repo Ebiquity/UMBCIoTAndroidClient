@@ -28,7 +28,7 @@
             android:textSize="25sp"
             android:textColor="@color/colorPrimaryDark"
             android:textAppearance="@android:style/TextAppearance.Holo.Medium"
-            android:text="@string/defaultDisplayText" />
+            android:text="@string/default_display_text" />
 
         <!--</HorizontalScrollView>-->
     </ScrollView>
@@ -49,7 +49,7 @@
             android:layout_height="match_parent"
             android:imeOptions="actionSend"
             android:fontFamily="sans-serif-condensed"
-            android:hint="@string/queryHint"
+            android:hint="@string/query_hint"
             android:inputType="textCapSentences|textImeMultiLine"
             android:textSize="20sp"
             android:selectAllOnFocus="true" />
@@ -64,7 +64,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:visibility="visible"
-        android:contentDescription="@string/sendQueryToServerImageButtonContentDescriptionText"
+        android:contentDescription="@string/send_query_to_server_image_button_content_description_text"
         android:backgroundTint="@color/colorAccent"
         android:elevation="24dp" />
 

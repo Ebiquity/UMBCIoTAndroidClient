@@ -6,10 +6,14 @@ package edu.umbc.cs.iot.clients.android.ui.activities;
  */
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -55,11 +59,25 @@ public class MainActivity extends AppCompatActivity implements
     private FragmentManager fragmentManager;
 //    private Message mActiveMessage;
     private MessageListener mMessageListener;
+    private AlertDialog.Builder btEnableDialog;
+    private AlertDialog btEnableAlertDialog;
+    private AlertDialog.Builder userBtEnableDialog;
+    private AlertDialog userBtEnableAlertDialog;
+    private WaitToConnectBeacon aWaitToConnectBeaconObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(!isBluetoothAvailable()) {
+            createAlertDialogForUserActionOnBT();
+            userBtEnableAlertDialog = userBtEnableDialog.create();
+            userBtEnableAlertDialog.show();
+        }
+
+        aWaitToConnectBeaconObject = new WaitToConnectBeacon();
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -78,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements
         // Get a GoogleApiClient object for the using the NearbyMessagesApi
         setGoogleApiClient();
         setListeners();
+        aWaitToConnectBeaconObject.execute();
     }
 
     @Override
@@ -153,7 +172,9 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onLost(Message message) {
                 String messageAsString = new String(message.getContent());
-                Log.d(UMBCIoTApplication.getDebugTag(), "Lost sight of message: " + messageAsString);
+                Log.d(UMBCIoTApplication.getDebugTag(), "Lost beacon message: " + messageAsString);
+                Toast.makeText(getApplicationContext(), "Lost contact with beacon!", Toast.LENGTH_LONG).show();
+                launchAlternateMainActivity();
             }
         };
     }
@@ -204,7 +225,10 @@ public class MainActivity extends AppCompatActivity implements
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_clear) {
-            defaultFragmentLoad();
+            if(beaconData != null)
+                defaultFragmentLoad();
+            else
+                launchAlternateMainActivity();
             return true;
         }
 
@@ -289,6 +313,7 @@ public class MainActivity extends AppCompatActivity implements
     // Subscribe to receive messages.
     private void subscribe() {
         Log.i(UMBCIoTApplication.getDebugTag(), "Subscribing.");
+        Toast.makeText(getApplicationContext(),"Subscribing!",Toast.LENGTH_LONG).show();
         SubscribeOptions options = new SubscribeOptions.Builder()
                 .setStrategy(Strategy.BLE_ONLY)
                 .build();
@@ -297,6 +322,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void unsubscribe() {
         Log.i(UMBCIoTApplication.getDebugTag(), "Unsubscribing.");
+        Toast.makeText(getApplicationContext(),"Unsubscribing!",Toast.LENGTH_LONG).show();
         Nearby.Messages.unsubscribe(mGoogleApiClient, mMessageListener);
     }
 
@@ -314,4 +340,95 @@ public class MainActivity extends AppCompatActivity implements
 //            mActiveMessage = null;
 //        }
 //    }
+
+    private void createAlertDialogForEnablingBT() {
+        btEnableDialog = new AlertDialog.Builder(this);
+        btEnableDialog.setMessage("Bluetooth is not enabled. You need to enable bluetooth in order to use this app.");
+        btEnableDialog.setCancelable(true);
+
+        btEnableDialog.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), 0);
+//                        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//                        bluetoothAdapter.enable();
+                    }
+                });
+
+        btEnableDialog.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Toast.makeText(getApplicationContext(), "You cannot use this app without Bluetooth!", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                });
+    }
+
+    private void createAlertDialogForUserActionOnBT() {
+        userBtEnableDialog = new AlertDialog.Builder(this);
+        userBtEnableDialog.setMessage("Bluetooth is not enabled. You need to enable bluetooth in order to use this app. Please enable it and restart the app.");
+        userBtEnableDialog.setCancelable(true);
+
+        userBtEnableDialog.setPositiveButton(
+                "Okay!",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+//                        startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), 0);
+//                        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//                        bluetoothAdapter.enable();
+                    }
+                });
+
+//        btEnableDialog.setNegativeButton(
+//                "No",
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        Toast.makeText(getApplicationContext(), "You cannot use this app without Bluetooth!", Toast.LENGTH_LONG).show();
+//                        finish();
+//                    }
+//                });
+    }
+
+    /**
+     * Check for Bluetooth.
+     * @return True if Bluetooth is available.
+     */
+    public static boolean isBluetoothAvailable() {
+        final BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        return (bluetoothAdapter != null && bluetoothAdapter.isEnabled());
+    }
+
+    private void enableBluetooth() {
+        Log.d(UMBCIoTApplication.getDebugTag(), "came into enableBluetooth");
+        if(!isBluetoothAvailable()) {
+            Log.d(UMBCIoTApplication.getDebugTag(), "came into isBluetoothAvailable");
+            createAlertDialogForEnablingBT();
+            btEnableAlertDialog = btEnableDialog.create();
+            btEnableAlertDialog.show();
+        }
+    }
+
+    private void launchAlternateMainActivity() {
+        Intent alternateActivityLaunchIntent = new Intent(getApplicationContext(), AlternateMainActivity.class);
+        startActivity(alternateActivityLaunchIntent);
+    }
+
+    class WaitToConnectBeacon extends AsyncTask<Void, Void, Void> {
+        protected Void doInBackground(Void... params) {
+            try {
+                Log.d(UMBCIoTApplication.getDebugTag(),"doInBackground");
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onPostExecute() {
+            launchAlternateMainActivity();
+        }
+    }
 }

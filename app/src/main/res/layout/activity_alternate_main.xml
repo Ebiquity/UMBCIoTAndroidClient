@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:drawable/screen_background_light"
+    tools:context="edu.umbc.cs.iot.clients.android.ui.activities.AlternateMainActivity">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+    <TextView
+        android:id="@+id/fullscreen_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:keepScreenOn="true"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:fontFamily="serif"
+        android:textColor="@color/colorPrimaryDark"
+        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+        android:text="@string/info_display_text" />
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:id="@+id/fullscreen_content_controls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:orientation="horizontal"
+            tools:ignore="UselessParent">
+
+            <Button
+                android:text="@string/check_again_button_text"
+                android:id="@+id/checkAgainButton"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:elevation="24dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="20sp"
+                android:fontFamily="serif"
+                android:textColor="?attr/colorPrimaryDark" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+</RelativeLayout>

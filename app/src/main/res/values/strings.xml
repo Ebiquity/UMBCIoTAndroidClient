@@ -5,10 +5,12 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_clear">Clear</string>
+    <string name="check_again_button_text">Check again!</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="defaultDisplayText">What do you want to know about UMBC?</string>
-    <string name="queryHint">Type your query here...</string>
-    <string name="sendQueryToServerImageButtonContentDescriptionText">Click this button to send the query to server</string>
+    <string name="default_display_text">What do you want to know about UMBC?</string>
+    <string name="info_display_text">Hmmm... Can\'t connect to any Beacons. If you think you should see one anyway, click on the button below.</string>
+    <string name="query_hint">Type your query here...</string>
+    <string name="send_query_to_server_image_button_content_description_text">Click this button to send the query to server</string>
+
+    <string name="title_activity_alternate_main">No beacons found</string>
 </resources>

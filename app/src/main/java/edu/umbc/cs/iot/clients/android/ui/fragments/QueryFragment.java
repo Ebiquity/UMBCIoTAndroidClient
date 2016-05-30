@@ -207,7 +207,7 @@ public class QueryFragment extends Fragment {
     }
 
     private void resetFragmentView() {
-        mDefaultDisplayTextView.setText(view.getContext().getResources().getString(R.string.defaultDisplayText));
+        mDefaultDisplayTextView.setText(view.getContext().getResources().getString(R.string.default_display_text));
         mUserQueryEditText.setText("");
         mUserQueryEditText.clearFocus();
         hideKeyboardFrom(view.getContext(),view);
@@ -262,10 +262,14 @@ public class QueryFragment extends Fragment {
 //                            String mobile = phone.getString("mobile");
 
 //                            jsonResponse = "";
-                            if (!mDefaultDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.defaultDisplayText)))
+                            if (!mDefaultDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
                                 jsonResponse += "------------------------" + "\n";
-                            jsonResponse += "Status: " + status + "\n";
-                            jsonResponse += "Text: " + text + "\n";
+                            jsonResponse +=  "Query parameters were: "
+                                    +jsonObject.getString(UMBCIoTApplication.getQuestionTag())
+                                    +" "
+                                    +jsonObject.get(UMBCIoTApplication.getBeaconTag())
+                                    +"\n\n";
+                            jsonResponse += "Response is:\nStatus: " + status + " Text: " + text + "\n";
 //                            response += "Home: " + home + "\n\n";
 //                            response += "Mobile: " + mobile + "\n\n";
 
