@@ -14,7 +14,8 @@ public class UMBCIoTApplication extends Application {
     private static final String QUESTION_TAG = "question";
     private static final String BEACON_TAG = "beaconid";
     private static final String RESPONSE_TAG = "response";
-    private static final String url = "https://botengine-1323.appspot.com/bot";
+    private static final String url = "http://31230528.ngrok.io/bot";
+    //private static final String oldUrl = "https://botengine-1323.appspot.com/bot";
 
     public static int getRequestResolveError() {
         return REQUEST_RESOLVE_ERROR;

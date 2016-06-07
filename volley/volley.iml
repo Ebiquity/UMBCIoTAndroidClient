@@ -122,6 +122,5 @@
     <orderEntry type="library" exported="" scope="TEST" name="junit-4.10" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="mockito-core-1.9.5" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="robolectric-3.0" level="project" />
-    <orderEntry type="library" exported="" name="android-android-22" level="project" />
   </component>
 </module>
