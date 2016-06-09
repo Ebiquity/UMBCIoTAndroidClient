@@ -70,6 +70,12 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M){
+            Log.d(UMBCIoTApplication.getDebugTag(),"Have to request permissions");
+            // Do something for Marhsmallow and above versions
+            getPermissions();
+        }
+
         if(!isBluetoothAvailable()) {
             createAlertDialogForUserActionOnBT();
             userBtEnableAlertDialog = userBtEnableDialog.create();
@@ -96,7 +102,113 @@ public class MainActivity extends AppCompatActivity implements
         // Get a GoogleApiClient object for the using the NearbyMessagesApi
         setGoogleApiClient();
         setListeners();
-        aWaitToConnectBeaconObject.execute();
+//        aWaitToConnectBeaconObject.execute();
+    }
+
+    private void getPermissions() {
+        /**
+         * Check for the following permissions
+         * android.permission.INTERNET
+         * android.permission.ACCESS_FINE_LOCATION
+         * android.permission.BLUETOOTH
+         * android.permission.BLUETOOTH_ADMIN
+         */
+        getInternetAccessPermission();
+        getAccessFineLocationPermission();
+        getBluetoothPermission();
+//        getBluetoothAdminPermission();
+    }
+
+    private void getInternetAccessPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.INTERNET)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.INTERNET)) {
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                Toast.makeText(getApplicationContext(),"Internet access is required to respond to user queries",Toast.LENGTH_LONG).show();
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.INTERNET},
+                        UMBCIoTApplication.PERMISSIONS_REQUEST_INTERNET);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+    }
+
+    private void getAccessFineLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                Toast.makeText(getApplicationContext(),"Location access is required for using the Nearby Messages API",Toast.LENGTH_LONG).show();
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        UMBCIoTApplication.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+    }
+
+    private void getBluetoothPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.BLUETOOTH)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.BLUETOOTH)) {
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                Toast.makeText(getApplicationContext(),"Bluetooth access is required for checking bluetooth state",Toast.LENGTH_LONG).show();
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.BLUETOOTH},
+                        UMBCIoTApplication.PERMISSIONS_REQUEST_BLUETOOTH);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+    }
+
+    private void getBluetoothAdminPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.BLUETOOTH_ADMIN)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.BLUETOOTH_ADMIN)) {
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                Toast.makeText(getApplicationContext(),"Bluetooth admin access is required for change bluetooth state",Toast.LENGTH_LONG).show();
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.BLUETOOTH_ADMIN},
+                        UMBCIoTApplication.PERMISSIONS_REQUEST_BLUETOOTH_ADMIN);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
     }
 
     @Override
@@ -340,6 +452,83 @@ public class MainActivity extends AppCompatActivity implements
 //            mActiveMessage = null;
 //        }
 //    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case UMBCIoTApplication.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                Log.d(UMBCIoTApplication.getDebugTag(),Integer.toString(grantResults.length));
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // location-related task you need to do.
+                    Log.d(UMBCIoTApplication.getDebugTag(),"Location access permission was allowed");
+                    return;
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(getApplicationContext(),"Sorry, app needs location access",Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+            case UMBCIoTApplication.PERMISSIONS_REQUEST_BLUETOOTH: {
+                Log.d(UMBCIoTApplication.getDebugTag(),"Bluetooth access permission was allowed");
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // location-related task you need to do.
+                    Log.d(UMBCIoTApplication.getDebugTag(),"Bluetooth access permission was allowed");
+                    return;
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(getApplicationContext(),"Sorry, app needs bluetooth access",Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+            case UMBCIoTApplication.PERMISSIONS_REQUEST_BLUETOOTH_ADMIN: {
+                Log.d(UMBCIoTApplication.getDebugTag(),"Bluetooth admin access permission was allowed");
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // location-related task you need to do.
+                    Log.d(UMBCIoTApplication.getDebugTag(),"Bluetooth admin access permission was allowed");
+                    return;
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(getApplicationContext(),"Sorry, app needs bluetooth admin access",Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+            case UMBCIoTApplication.PERMISSIONS_REQUEST_INTERNET: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // location-related task you need to do.
+                    Log.d(UMBCIoTApplication.getDebugTag(),"Internet permission was allowed");
+                    return;
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(getApplicationContext(),"Sorry, app needs internet access",Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+        }
+    }
 
     private void createAlertDialogForEnablingBT() {
         btEnableDialog = new AlertDialog.Builder(this);
