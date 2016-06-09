@@ -18,6 +18,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.ParcelUuid;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +87,7 @@ public class EddystoneScannerService extends Service {
     public void onCreate() {
         super.onCreate();
 
+        Toast.makeText(getApplicationContext(),"Started the service",Toast.LENGTH_LONG).show();
         BluetoothManager manager =
                 (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
         mBluetoothLeScanner = manager.getAdapter().getBluetoothLeScanner();
