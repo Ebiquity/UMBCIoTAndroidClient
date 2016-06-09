@@ -162,8 +162,6 @@ public class MainActivity extends AppCompatActivity implements
                 mLEScanner = mBluetoothAdapter.getBluetoothLeScanner();
                 settings = new ScanSettings.Builder()
                         .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
-//                        .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
-//                        .setReportDelay(EXPIRE_TIMEOUT)
                         .build();
                 filters = new ArrayList<ScanFilter>();
             }
@@ -234,34 +232,22 @@ public class MainActivity extends AppCompatActivity implements
         public void onScanResult(int callbackType, ScanResult result) {
             Log.i("callbackType", String.valueOf(callbackType));
             Log.i("result", result.toString());
-            Log.i(UMBCIoTApplication.getDebugTag(),result.getDevice().getAddress());
-            if(result.getScanRecord().getServiceUuids().toString().equals(UMBCIoTApplication.getEddystoneUuid())) {
+            Log.i(UMBCIoTApplication.getDebugTag(),result.getDevice().getAddress()+result.getScanRecord().getServiceUuids().toString());
+//            if(result.getScanRecord().getServiceUuids().toString().equals(UMBCIoTApplication.getEddystoneUuid())) {
                 Toast.makeText(getApplicationContext(), "Discovered EddystoneUUID: " + result.getDevice().getAddress() + " " + result.getRssi() + " " + result.getDevice().fetchUuidsWithSdp() + " " + result.getScanRecord().getServiceUuids().toString(), Toast.LENGTH_LONG).show();
                 beaconData = result.getDevice().getAddress();
 //                    // Only when the beaconData has been found we shall move on to loading the UI
                 defaultFragmentLoad();
-            }
+//            }
             BluetoothDevice btDevice = result.getDevice();
             connectToDevice(btDevice);
         }
 
         @Override
         public void onBatchScanResults(List<ScanResult> results) {
-//            int rssi = Integer.MIN_VALUE;
-//            String highestPowerBLEAddr = new String();
             for (ScanResult sr : results) {
                 Log.i("ScanResult - Results", sr.toString());
-//                if(sr.getScanRecord().getServiceUuids().toString().equals(UMBCIoTApplication.getEddystoneUuid())) {
-//                    if(sr.getRssi()>rssi) {
-//                        rssi = sr.getRssi();
-//                        highestPowerBLEAddr = sr.getDevice().getAddress();
-//                    }
-//                }
             }
-//            Toast.makeText(getApplicationContext(), "Discovered EddystoneUUID: " + highestPowerBLEAddr + " " + rssi, Toast.LENGTH_LONG).show();
-//            beaconData = highestPowerBLEAddr;
-////                    // Only when the beaconData has been found we shall move on to loading the UI
-//            defaultFragmentLoad();
         }
 
         @Override
@@ -289,6 +275,7 @@ public class MainActivity extends AppCompatActivity implements
         if (mGatt == null) {
             mGatt = device.connectGatt(this, false, gattCallback);
             scanLeDevice(false);// will stop after first device detection
+//            defaultFragmentLoad();
         }
     }
 
