@@ -10,12 +10,15 @@ import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -35,11 +38,12 @@ import edu.umbc.cs.iot.clients.android.R;
 import edu.umbc.cs.iot.clients.android.UMBCIoTApplication;
 import edu.umbc.cs.iot.clients.android.service.EddystoneScannerService;
 import edu.umbc.cs.iot.clients.android.ui.fragments.QueryFragment;
+import edu.umbc.cs.iot.clients.android.util.Beacon;
 
 public class OldMainActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener {//,
-//        ServiceConnection,
-//        EddystoneScannerService.OnBeaconEventListener {
+        NavigationView.OnNavigationItemSelectedListener,
+        ServiceConnection,
+        EddystoneScannerService.OnBeaconEventListener {
 //        GoogleApiClient.ConnectionCallbacks,
 //        GoogleApiClient.OnConnectionFailedListener {
 
@@ -62,49 +66,48 @@ public class OldMainActivity extends AppCompatActivity implements
     private static final int EXPIRE_TASK_PERIOD = 1000;
 
     private EddystoneScannerService mService;
-    private ArrayList<BluetoothDevice> listOfBeacons;
+    private ArrayList<Beacon> listOfBeacons;
 
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
-    private Handler mHandler;
 
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
 
     // Device scan callback.
-    private BluetoothAdapter.LeScanCallback mLeScanCallback =
-            new BluetoothAdapter.LeScanCallback() {
-                @Override
-                public void onLeScan(final BluetoothDevice device, int rssi,
-                                     byte[] scanRecord) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            listOfBeacons.add(device);
-//                            mLeDeviceListAdapter.notifyDataSetChanged();
-                        }
-                    });
-                }
-            };
+//    private BluetoothAdapter.LeScanCallback mLeScanCallback =
+//            new BluetoothAdapter.LeScanCallback() {
+//                @Override
+//                public void onLeScan(final BluetoothDevice device, int rssi,
+//                                     byte[] scanRecord) {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            listOfBeacons.add(device);
+////                            mLeDeviceListAdapter.notifyDataSetChanged();
+//                        }
+//                    });
+//                }
+//            };
 
-    private void scanLeDevice(final boolean enable) {
-        if (enable) {
-            // Stops scanning after a pre-defined scan period.
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mScanning = false;
-                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                }
-            }, SCAN_PERIOD);
-
-            mScanning = true;
-            mBluetoothAdapter.startLeScan(mLeScanCallback);
-        } else {
-            mScanning = false;
-            mBluetoothAdapter.stopLeScan(mLeScanCallback);
-        }
-    }
+//    private void scanLeDevice(final boolean enable) {
+//        if (enable) {
+//            // Stops scanning after a pre-defined scan period.
+//            mHandler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mScanning = false;
+//                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
+//                }
+//            }, SCAN_PERIOD);
+//
+//            mScanning = true;
+//            mBluetoothAdapter.startLeScan(mLeScanCallback);
+//        } else {
+//            mScanning = false;
+//            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+//        }
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,14 +143,14 @@ public class OldMainActivity extends AppCompatActivity implements
         aQueryFragment = new QueryFragment();
         fragmentManager = getFragmentManager();
 
-//        listOfBeacons = new ArrayList<>();
-//
-//        if (checkBluetoothStatus()) {
-//            Intent intent = new Intent(this, EddystoneScannerService.class);
-//            bindService(intent, this, BIND_AUTO_CREATE);
-//
-//            mHandler.post(mPruneTask);
-//        }
+        listOfBeacons = new ArrayList<>();
+
+        if (checkBluetoothStatus()) {
+            Intent intent = new Intent(this, EddystoneScannerService.class);
+            bindService(intent, this, BIND_AUTO_CREATE);
+
+            mHandler.post(mPruneTask);
+        }
 
         // Get a GoogleApiClient object for the using the NearbyMessagesApi
 //        setGoogleApiClient();
@@ -155,16 +158,16 @@ public class OldMainActivity extends AppCompatActivity implements
 //        aWaitToConnectBeaconObject.execute();
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        if (checkBluetoothStatus()) {
-//            Intent intent = new Intent(this, EddystoneScannerService.class);
-//            bindService(intent, this, BIND_AUTO_CREATE);
-//
-//            mHandler.post(mPruneTask);
-//        }
-//    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (checkBluetoothStatus()) {
+            Intent intent = new Intent(this, EddystoneScannerService.class);
+            bindService(intent, this, BIND_AUTO_CREATE);
+
+            mHandler.post(mPruneTask);
+        }
+    }
 //
 //    @Override
 //    protected void onPause() {
@@ -174,118 +177,118 @@ public class OldMainActivity extends AppCompatActivity implements
 //        mService.setBeaconEventListener(null);
 //        unbindService(this);
 //    }
-//
-//    /* This task checks for beacons we haven't seen in awhile */
-//    private Handler mHandler = new Handler();
-//    private Runnable mPruneTask = new Runnable() {
-//        @Override
-//        public void run() {
-//            final ArrayList<Beacon> expiredBeacons = new ArrayList<>();
-//            final long now = System.currentTimeMillis();
-//            for (Beacon beacon : listOfBeacons) {
-//                long delta = now - beacon.lastDetectedTimestamp;
-//                if (delta >= EXPIRE_TIMEOUT) {
-//                    expiredBeacons.add(beacon);
-//                }
-//            }
-//
-//            if (!expiredBeacons.isEmpty()) {
-//                Log.d(UMBCIoTApplication.getDebugTag(), "Found " + expiredBeacons.size() + " expired");
-//                listOfBeacons.removeAll(expiredBeacons);
-//            }
-//
-//            mHandler.postDelayed(this, EXPIRE_TASK_PERIOD);
-//        }
-//    };
-//
-//    /* Verify Bluetooth Support */
-//    private boolean checkBluetoothStatus() {
-//        BluetoothManager manager =
-//                (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
-//        BluetoothAdapter adapter = manager.getAdapter();
-//        /*
-//         * We need to enforce that Bluetooth is first enabled, and take the
-//         * user to settings to enable it if they have not done so.
-//         */
-//        if (adapter == null || !adapter.isEnabled()) {
-//            //Bluetooth is disabled
-//            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//            startActivity(enableBtIntent);
-//            finish();
-//            return false;
-//        }
-//
-//        /*
-//         * Check for Bluetooth LE Support.  In production, our manifest entry will keep this
-//         * from installing on these devices, but this will allow test devices or other
-//         * sideloads to report whether or not the feature exists.
-//         */
-//        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-//            Toast.makeText(this, "No LE Support.", Toast.LENGTH_SHORT).show();
-//            finish();
-//            return false;
-//        }
-//
-//        return true;
-//    }
-//
-//    /* Handle connection events to the discovery service */
-//    @Override
-//    public void onServiceConnected(ComponentName name, IBinder service) {
-//        Log.d(UMBCIoTApplication.getDebugTag(), "Connected to scanner service");
-//        mService = ((EddystoneScannerService.LocalBinder) service).getService();
-//        mService.setBeaconEventListener(this);
-//    }
-//
-//    @Override
-//    public void onServiceDisconnected(ComponentName name) {
-//        Log.d(UMBCIoTApplication.getDebugTag(), "Disconnected from scanner service");
-//        mService = null;
-//    }
-//
-//    /* Handle callback events from the discovery service */
-//    @Override
-//    public void onBeaconIdentifier(String deviceAddress, int rssi, String instanceId) {
-//        final long now = System.currentTimeMillis();
-//        for (Beacon item : listOfBeacons) {
-//            if (instanceId.equals(item.id)) {
-//                //Already have this one, make sure device info is up to date
-//                item.update(deviceAddress, rssi, now);
-//                getBestRssiBeacon();
-//                defaultFragmentLoad();
-//                return;
-//            }
-//        }
-//
-//        //New beacon, add it
-//        Beacon beacon =
-//                new Beacon(deviceAddress, rssi, instanceId, now);
-//        listOfBeacons.add(beacon);
-//    }
-//
-//    private void getBestRssiBeacon() {
-//        int bestRssi = 0;
-//        String deviceAddress = new String();
-//        for (Beacon item : listOfBeacons) {
-//            if(bestRssi < item.latestRssi) {
-//                bestRssi = item.latestRssi;
-//                deviceAddress = item.deviceAddress;
-//            }
-//        }
-//        beaconData = deviceAddress;
-//    }
-//
-//    @Override
-//    public void onBeaconTelemetry(String deviceAddress, float battery, float temperature) {
-//        for (Beacon item : listOfBeacons) {
-//            if (deviceAddress.equals(item.deviceAddress)) {
-//                //Found it, update voltage
-//                item.battery = battery;
-//                item.temperature = temperature;
-//                return;
-//            }
-//        }
-//    }
+
+    /* This task checks for beacons we haven't seen in awhile */
+    private Handler mHandler = new Handler();
+    private Runnable mPruneTask = new Runnable() {
+        @Override
+        public void run() {
+            final ArrayList<Beacon> expiredBeacons = new ArrayList<>();
+            final long now = System.currentTimeMillis();
+            for (Beacon beacon : listOfBeacons) {
+                long delta = now - beacon.lastDetectedTimestamp;
+                if (delta >= EXPIRE_TIMEOUT) {
+                    expiredBeacons.add(beacon);
+                }
+            }
+
+            if (!expiredBeacons.isEmpty()) {
+                Log.d(UMBCIoTApplication.getDebugTag(), "Found " + expiredBeacons.size() + " expired");
+                listOfBeacons.removeAll(expiredBeacons);
+            }
+
+            mHandler.postDelayed(this, EXPIRE_TASK_PERIOD);
+        }
+    };
+
+    /* Verify Bluetooth Support */
+    private boolean checkBluetoothStatus() {
+        BluetoothManager manager =
+                (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
+        BluetoothAdapter adapter = manager.getAdapter();
+        /*
+         * We need to enforce that Bluetooth is first enabled, and take the
+         * user to settings to enable it if they have not done so.
+         */
+        if (adapter == null || !adapter.isEnabled()) {
+            //Bluetooth is disabled
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivity(enableBtIntent);
+            finish();
+            return false;
+        }
+
+        /*
+         * Check for Bluetooth LE Support.  In production, our manifest entry will keep this
+         * from installing on these devices, but this will allow test devices or other
+         * sideloads to report whether or not the feature exists.
+         */
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(this, "No LE Support.", Toast.LENGTH_SHORT).show();
+            finish();
+            return false;
+        }
+
+        return true;
+    }
+
+    /* Handle connection events to the discovery service */
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        Log.d(UMBCIoTApplication.getDebugTag(), "Connected to scanner service");
+        mService = ((EddystoneScannerService.LocalBinder) service).getService();
+        mService.setBeaconEventListener(this);
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+        Log.d(UMBCIoTApplication.getDebugTag(), "Disconnected from scanner service");
+        mService = null;
+    }
+
+    /* Handle callback events from the discovery service */
+    @Override
+    public void onBeaconIdentifier(String deviceAddress, int rssi, String instanceId) {
+        final long now = System.currentTimeMillis();
+        for (Beacon item : listOfBeacons) {
+            if (instanceId.equals(item.id)) {
+                //Already have this one, make sure device info is up to date
+                item.update(deviceAddress, rssi, now);
+                getBestRssiBeacon();
+                defaultFragmentLoad();
+                return;
+            }
+        }
+
+        //New beacon, add it
+        Beacon beacon =
+                new Beacon(deviceAddress, rssi, instanceId, now);
+        listOfBeacons.add(beacon);
+    }
+
+    private void getBestRssiBeacon() {
+        int bestRssi = 0;
+        String deviceAddress = new String();
+        for (Beacon item : listOfBeacons) {
+            if(bestRssi < item.latestRssi) {
+                bestRssi = item.latestRssi;
+                deviceAddress = item.deviceAddress;
+            }
+        }
+        beaconData = deviceAddress;
+    }
+
+    @Override
+    public void onBeaconTelemetry(String deviceAddress, float battery, float temperature) {
+        for (Beacon item : listOfBeacons) {
+            if (deviceAddress.equals(item.deviceAddress)) {
+                //Found it, update voltage
+                item.battery = battery;
+                item.temperature = temperature;
+                return;
+            }
+        }
+    }
 
     private void getPermissions() {
         /**

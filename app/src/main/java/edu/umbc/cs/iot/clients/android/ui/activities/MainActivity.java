@@ -6,18 +6,35 @@ package edu.umbc.cs.iot.clients.android.ui.activities;
  */
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
+import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -32,6 +49,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.umbc.cs.iot.clients.android.R;
 import edu.umbc.cs.iot.clients.android.UMBCIoTApplication;
@@ -40,12 +58,15 @@ import edu.umbc.cs.iot.clients.android.ui.fragments.QueryFragment;
 import edu.umbc.cs.iot.clients.android.util.Beacon;
 
 public class MainActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener {//,
-//        ServiceConnection,
-//        EddystoneScannerService.OnBeaconEventListener {
-//        GoogleApiClient.ConnectionCallbacks,
-//        GoogleApiClient.OnConnectionFailedListener {
+        NavigationView.OnNavigationItemSelectedListener,
+        QueryFragment.OnFragmentInteractionListener{
 
+    private int REQUEST_ENABLE_BT = 1;
+    private static final long SCAN_PERIOD = 10000;
+    private BluetoothLeScanner mLEScanner;
+    private ScanSettings settings;
+    private List<ScanFilter> filters;
+    private BluetoothGatt mGatt;
     private NavigationView navigationView;
     private Toolbar toolbar;
     private DrawerLayout drawer;
@@ -65,49 +86,11 @@ public class MainActivity extends AppCompatActivity implements
     private static final int EXPIRE_TASK_PERIOD = 1000;
 
     private EddystoneScannerService mService;
-    private ArrayList<BluetoothDevice> listOfBeacons;
+    private ArrayList<Beacon> listOfBeacons;
 
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
     private Handler mHandler;
-
-    // Stops scanning after 10 seconds.
-    private static final long SCAN_PERIOD = 10000;
-
-    // Device scan callback.
-    private BluetoothAdapter.LeScanCallback mLeScanCallback =
-            new BluetoothAdapter.LeScanCallback() {
-                @Override
-                public void onLeScan(final BluetoothDevice device, int rssi,
-                                     byte[] scanRecord) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            listOfBeacons.add(device);
-//                            mLeDeviceListAdapter.notifyDataSetChanged();
-                        }
-                    });
-                }
-            };
-
-    private void scanLeDevice(final boolean enable) {
-        if (enable) {
-            // Stops scanning after a pre-defined scan period.
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mScanning = false;
-                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                }
-            }, SCAN_PERIOD);
-
-            mScanning = true;
-            mBluetoothAdapter.startLeScan(mLeScanCallback);
-        } else {
-            mScanning = false;
-            mBluetoothAdapter.stopLeScan(mLeScanCallback);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +109,16 @@ public class MainActivity extends AppCompatActivity implements
             userBtEnableAlertDialog.show();
         }
 
+        mHandler = new Handler();
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(this, "BLE Not Supported",
+                    Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        final BluetoothManager bluetoothManager =
+                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = bluetoothManager.getAdapter();
+
 //        aWaitToConnectBeaconObject = new WaitToConnectBeacon();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -143,8 +136,8 @@ public class MainActivity extends AppCompatActivity implements
         aQueryFragment = new QueryFragment();
         fragmentManager = getFragmentManager();
 
-//        listOfBeacons = new ArrayList<>();
-//
+        listOfBeacons = new ArrayList<>();
+
 //        if (checkBluetoothStatus()) {
 //            Intent intent = new Intent(this, EddystoneScannerService.class);
 //            bindService(intent, this, BIND_AUTO_CREATE);
@@ -158,137 +151,181 @@ public class MainActivity extends AppCompatActivity implements
 //        aWaitToConnectBeaconObject.execute();
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        if (checkBluetoothStatus()) {
-//            Intent intent = new Intent(this, EddystoneScannerService.class);
-//            bindService(intent, this, BIND_AUTO_CREATE);
-//
-//            mHandler.post(mPruneTask);
-//        }
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        mHandler.removeCallbacks(mPruneTask);
-//
-//        mService.setBeaconEventListener(null);
-//        unbindService(this);
-//    }
-//
-//    /* This task checks for beacons we haven't seen in awhile */
-//    private Handler mHandler = new Handler();
-//    private Runnable mPruneTask = new Runnable() {
-//        @Override
-//        public void run() {
-//            final ArrayList<Beacon> expiredBeacons = new ArrayList<>();
-//            final long now = System.currentTimeMillis();
-//            for (Beacon beacon : listOfBeacons) {
-//                long delta = now - beacon.lastDetectedTimestamp;
-//                if (delta >= EXPIRE_TIMEOUT) {
-//                    expiredBeacons.add(beacon);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        } else {
+            if (Build.VERSION.SDK_INT >= 21) {
+                mLEScanner = mBluetoothAdapter.getBluetoothLeScanner();
+                settings = new ScanSettings.Builder()
+                        .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+//                        .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
+//                        .setReportDelay(EXPIRE_TIMEOUT)
+                        .build();
+                filters = new ArrayList<ScanFilter>();
+            }
+            scanLeDevice(true);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mBluetoothAdapter != null && mBluetoothAdapter.isEnabled()) {
+            scanLeDevice(false);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mGatt == null) {
+            return;
+        }
+        mGatt.close();
+        mGatt = null;
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_ENABLE_BT) {
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Bluetooth not enabled.
+                finish();
+                return;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void scanLeDevice(final boolean enable) {
+        if (enable) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (Build.VERSION.SDK_INT < 21) {
+                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                    } else {
+                        mLEScanner.stopScan(mScanCallback);
+
+                    }
+                }
+            }, SCAN_PERIOD);
+            if (Build.VERSION.SDK_INT < 21) {
+                mBluetoothAdapter.startLeScan(mLeScanCallback);
+            } else {
+                mLEScanner.startScan(filters, settings, mScanCallback);
+            }
+        } else {
+            if (Build.VERSION.SDK_INT < 21) {
+                mBluetoothAdapter.stopLeScan(mLeScanCallback);
+            } else {
+                mLEScanner.stopScan(mScanCallback);
+            }
+        }
+    }
+
+
+    private ScanCallback mScanCallback = new ScanCallback() {
+        @Override
+        public void onScanResult(int callbackType, ScanResult result) {
+            Log.i("callbackType", String.valueOf(callbackType));
+            Log.i("result", result.toString());
+            Log.i(UMBCIoTApplication.getDebugTag(),result.getDevice().getAddress());
+            if(result.getScanRecord().getServiceUuids().toString().equals(UMBCIoTApplication.getEddystoneUuid())) {
+                Toast.makeText(getApplicationContext(), "Discovered EddystoneUUID: " + result.getDevice().getAddress() + " " + result.getRssi() + " " + result.getDevice().fetchUuidsWithSdp() + " " + result.getScanRecord().getServiceUuids().toString(), Toast.LENGTH_LONG).show();
+                beaconData = result.getDevice().getAddress();
+//                    // Only when the beaconData has been found we shall move on to loading the UI
+                defaultFragmentLoad();
+            }
+            BluetoothDevice btDevice = result.getDevice();
+            connectToDevice(btDevice);
+        }
+
+        @Override
+        public void onBatchScanResults(List<ScanResult> results) {
+//            int rssi = Integer.MIN_VALUE;
+//            String highestPowerBLEAddr = new String();
+            for (ScanResult sr : results) {
+                Log.i("ScanResult - Results", sr.toString());
+//                if(sr.getScanRecord().getServiceUuids().toString().equals(UMBCIoTApplication.getEddystoneUuid())) {
+//                    if(sr.getRssi()>rssi) {
+//                        rssi = sr.getRssi();
+//                        highestPowerBLEAddr = sr.getDevice().getAddress();
+//                    }
 //                }
-//            }
-//
-//            if (!expiredBeacons.isEmpty()) {
-//                Log.d(UMBCIoTApplication.getDebugTag(), "Found " + expiredBeacons.size() + " expired");
-//                listOfBeacons.removeAll(expiredBeacons);
-//            }
-//
-//            mHandler.postDelayed(this, EXPIRE_TASK_PERIOD);
-//        }
-//    };
-//
-//    /* Verify Bluetooth Support */
-//    private boolean checkBluetoothStatus() {
-//        BluetoothManager manager =
-//                (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
-//        BluetoothAdapter adapter = manager.getAdapter();
-//        /*
-//         * We need to enforce that Bluetooth is first enabled, and take the
-//         * user to settings to enable it if they have not done so.
-//         */
-//        if (adapter == null || !adapter.isEnabled()) {
-//            //Bluetooth is disabled
-//            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//            startActivity(enableBtIntent);
-//            finish();
-//            return false;
-//        }
-//
-//        /*
-//         * Check for Bluetooth LE Support.  In production, our manifest entry will keep this
-//         * from installing on these devices, but this will allow test devices or other
-//         * sideloads to report whether or not the feature exists.
-//         */
-//        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-//            Toast.makeText(this, "No LE Support.", Toast.LENGTH_SHORT).show();
-//            finish();
-//            return false;
-//        }
-//
-//        return true;
-//    }
-//
-//    /* Handle connection events to the discovery service */
-//    @Override
-//    public void onServiceConnected(ComponentName name, IBinder service) {
-//        Log.d(UMBCIoTApplication.getDebugTag(), "Connected to scanner service");
-//        mService = ((EddystoneScannerService.LocalBinder) service).getService();
-//        mService.setBeaconEventListener(this);
-//    }
-//
-//    @Override
-//    public void onServiceDisconnected(ComponentName name) {
-//        Log.d(UMBCIoTApplication.getDebugTag(), "Disconnected from scanner service");
-//        mService = null;
-//    }
-//
-//    /* Handle callback events from the discovery service */
-//    @Override
-//    public void onBeaconIdentifier(String deviceAddress, int rssi, String instanceId) {
-//        final long now = System.currentTimeMillis();
-//        for (Beacon item : listOfBeacons) {
-//            if (instanceId.equals(item.id)) {
-//                //Already have this one, make sure device info is up to date
-//                item.update(deviceAddress, rssi, now);
-//                getBestRssiBeacon();
-//                defaultFragmentLoad();
-//                return;
-//            }
-//        }
-//
-//        //New beacon, add it
-//        Beacon beacon =
-//                new Beacon(deviceAddress, rssi, instanceId, now);
-//        listOfBeacons.add(beacon);
-//    }
-//
-//    private void getBestRssiBeacon() {
-//        int bestRssi = 0;
-//        String deviceAddress = new String();
-//        for (Beacon item : listOfBeacons) {
-//            if(bestRssi < item.latestRssi) {
-//                bestRssi = item.latestRssi;
-//                deviceAddress = item.deviceAddress;
-//            }
-//        }
-//        beaconData = deviceAddress;
-//    }
-//
-//    @Override
-//    public void onBeaconTelemetry(String deviceAddress, float battery, float temperature) {
-//        for (Beacon item : listOfBeacons) {
-//            if (deviceAddress.equals(item.deviceAddress)) {
-//                //Found it, update voltage
-//                item.battery = battery;
-//                item.temperature = temperature;
-//                return;
-//            }
-//        }
-//    }
+            }
+//            Toast.makeText(getApplicationContext(), "Discovered EddystoneUUID: " + highestPowerBLEAddr + " " + rssi, Toast.LENGTH_LONG).show();
+//            beaconData = highestPowerBLEAddr;
+////                    // Only when the beaconData has been found we shall move on to loading the UI
+//            defaultFragmentLoad();
+        }
+
+        @Override
+        public void onScanFailed(int errorCode) {
+            Log.e("Scan Failed", "Error Code: " + errorCode);
+        }
+    };
+
+    private BluetoothAdapter.LeScanCallback mLeScanCallback =
+            new BluetoothAdapter.LeScanCallback() {
+                @Override
+                public void onLeScan(final BluetoothDevice device, int rssi,
+                                     byte[] scanRecord) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.i("onLeScan", device.toString());
+                            connectToDevice(device);
+                        }
+                    });
+                }
+            };
+
+    public void connectToDevice(BluetoothDevice device) {
+        if (mGatt == null) {
+            mGatt = device.connectGatt(this, false, gattCallback);
+            scanLeDevice(false);// will stop after first device detection
+        }
+    }
+
+    private final BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
+        @Override
+        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            Log.i("onConnectionStateChange", "Status: " + status);
+            switch (newState) {
+                case BluetoothProfile.STATE_CONNECTED:
+                    Log.i("gattCallback", "STATE_CONNECTED");
+                    gatt.discoverServices();
+                    break;
+                case BluetoothProfile.STATE_DISCONNECTED:
+                    Log.e("gattCallback", "STATE_DISCONNECTED");
+                    break;
+                default:
+                    Log.e("gattCallback", "STATE_OTHER");
+            }
+
+        }
+
+        @Override
+        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            List<BluetoothGattService> services = gatt.getServices();
+            Log.i("onServicesDiscovered", services.toString());
+            gatt.readCharacteristic(services.get(1).getCharacteristics().get
+                    (0));
+        }
+
+        @Override
+        public void onCharacteristicRead(BluetoothGatt gatt,
+                                         BluetoothGattCharacteristic
+                                                 characteristic, int status) {
+            Log.i("onCharacteristicRead", characteristic.toString());
+            gatt.disconnect();
+        }
+    };
 
     private void getPermissions() {
         /**
@@ -395,48 +432,6 @@ public class MainActivity extends AppCompatActivity implements
             }
         }
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        //Initiate connection to Play Services
-//        mGoogleApiClient.connect();
-    }
-
-    @Override
-    public void onStop() {
-//        if (mGoogleApiClient.isConnected()) {
-////        unpublish();
-//            unsubscribe();
-//            mGoogleApiClient.disconnect();
-//        }
-        super.onStop();
-    }
-
-//    private void setGoogleApiClient() {
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-//                == PackageManager.PERMISSION_GRANTED) {
-//            mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                    .addApi(Nearby.MESSAGES_API, new MessagesOptions.Builder()
-//                            .setPermissions(NearbyPermissions.BLE)
-//                            .build())
-//                    .addConnectionCallbacks(this)
-//                    .enableAutoManage(this, this)
-//                    .build();
-//        }
-//        else
-//            mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                    .addApi(Nearby.MESSAGES_API)
-//                    .addConnectionCallbacks(this)
-//                    .enableAutoManage(this, this)
-//                    .build();
-        //Construct a connection to Play Services
-//        mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                .addConnectionCallbacks(this)
-//                .addOnConnectionFailedListener(this)
-//                .addApi(Nearby.MESSAGES_API)
-//                .build();
-//    }
 
     private void setListeners() {
 //        mMessageListener = new MessageListener() {
@@ -546,87 +541,6 @@ public class MainActivity extends AppCompatActivity implements
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-//    @Override
-//    public void onConnected(@Nullable Bundle bundle) {
-////        publish("Hello World");
-//        subscribe();
-//    }
-//
-//    @Override
-//    public void onConnectionSuspended(int cause) {
-//        Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient disconnected with cause: " + cause);
-//    }
-//
-//    @Override
-//    public void onConnectionFailed(ConnectionResult result) {
-//        if (result.hasResolution()) {
-//            try {
-//                result.startResolutionForResult(this, UMBCIoTApplication.getRequestResolveError());
-//            } catch (IntentSender.SendIntentException e) {
-//                Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed due to"+e.getMessage());
-//                Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed due to"+e.getMessage(), Toast.LENGTH_LONG).show();
-//            }
-//        } else {
-//            Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed");
-//            Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed", Toast.LENGTH_LONG).show();
-//        }
-//    }
-
-    /**
-     * This is called in response to a button tap in the system permissions dialog.
-     */
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == UMBCIoTApplication.getRequestResolveError()) {
-//            if (resultCode == RESULT_OK) {
-//                // Permission granted or error resolved successfully then we proceed
-//                // with publish and subscribe..
-//                subscribe();
-//            } else {
-//                Toast.makeText(getApplicationContext(),"GoogleApiClient connection failed. Unable to resolve.",Toast.LENGTH_LONG).show();
-//            }
-//        } else {
-//            super.onActivityResult(requestCode, resultCode, data);
-//        }
-//        if (requestCode == UMBCIoTApplication.getRequestPermission()) {
-//            if (resultCode != RESULT_OK) {
-//                Toast.makeText(getApplicationContext(),"We need location permission to get scan results!",Toast.LENGTH_LONG).show();
-//                finish();
-//            }
-//        }
-//    }
-
-//    // Subscribe to receive messages.
-//    private void subscribe() {
-//        Log.i(UMBCIoTApplication.getDebugTag(), "Subscribing.");
-//        Toast.makeText(getApplicationContext(),"Subscribing!",Toast.LENGTH_LONG).show();
-//        SubscribeOptions options = new SubscribeOptions.Builder()
-//                .setStrategy(Strategy.BLE_ONLY)
-//                .build();
-//        Nearby.Messages.subscribe(mGoogleApiClient, mMessageListener, options);
-//    }
-//
-//    private void unsubscribe() {
-//        Log.i(UMBCIoTApplication.getDebugTag(), "Unsubscribing.");
-//        Toast.makeText(getApplicationContext(),"Unsubscribing!",Toast.LENGTH_LONG).show();
-//        Nearby.Messages.unsubscribe(mGoogleApiClient, mMessageListener);
-//    }
-
-    // Publishing messages.
-//    private void publish(String message) {
-//        Log.i(UMBCIoTApplication.getDebugTag(), "Publishing message: " + message);
-//        mActiveMessage = new Message(message.getBytes());
-//        Nearby.Messages.publish(mGoogleApiClient, mActiveMessage);
-//    }
-
-//    private void unpublish() {
-//        Log.i(UMBCIoTApplication.getDebugTag(), "Unpublishing.");
-//        if (mActiveMessage != null) {
-//            Nearby.Messages.unpublish(mGoogleApiClient, mActiveMessage);
-//            mActiveMessage = null;
-//        }
-//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -778,6 +692,11 @@ public class MainActivity extends AppCompatActivity implements
     private void launchAlternateMainActivity() {
         Intent alternateActivityLaunchIntent = new Intent(getApplicationContext(), AlternateMainActivity.class);
         startActivity(alternateActivityLaunchIntent);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 
 //    class WaitToConnectBeacon extends AsyncTask<Void, Void, Void> {

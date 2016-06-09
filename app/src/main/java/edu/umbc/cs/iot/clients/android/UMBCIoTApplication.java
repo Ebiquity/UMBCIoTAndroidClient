@@ -14,6 +14,7 @@ public class UMBCIoTApplication extends Application {
     private static final String QUESTION_TAG = "question";
     private static final String BEACON_TAG = "beaconid";
     private static final String RESPONSE_TAG = "response";
+    private static final String EDDYSTONE_UUID = "0000feaa-0000-1000-8000-00805f9b34fb";
     private static final String url = "http://31230528.ngrok.io/bot";
     public static final int PERMISSIONS_REQUEST_INTERNET = 1;
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2;
@@ -47,5 +48,9 @@ public class UMBCIoTApplication extends Application {
 
     public static String getUrl() {
         return url;
+    }
+
+    public static String getEddystoneUuid() {
+        return EDDYSTONE_UUID;
     }
 }

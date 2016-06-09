@@ -13,4 +13,5 @@
     <string name="send_query_to_server_image_button_content_description_text">Click this button to send the query to server</string>
 
     <string name="title_activity_alternate_main">No beacons found</string>
+    <string name="title_activity_device_scan">DeviceScanActivity</string>
 </resources>
