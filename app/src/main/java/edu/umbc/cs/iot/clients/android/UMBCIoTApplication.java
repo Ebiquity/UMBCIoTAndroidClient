@@ -8,8 +8,8 @@ package edu.umbc.cs.iot.clients.android;
 import android.app.Application;
 
 public class UMBCIoTApplication extends Application {
-    private static final int REQUEST_RESOLVE_ERROR = 1001;
-    private static final int REQUEST_PERMISSION = 42;
+//    private static final int REQUEST_RESOLVE_ERROR = 1001;
+//    private static final int REQUEST_PERMISSION = 42;
     private static final String DEBUG_TAG = "UMBCIoTDebugTag";
     private static final String QUESTION_TAG = "question";
     private static final String BEACON_TAG = "beaconid";
@@ -21,13 +21,13 @@ public class UMBCIoTApplication extends Application {
     public static final int PERMISSIONS_REQUEST_BLUETOOTH_ADMIN = 4;
     //private static final String oldUrl = "https://botengine-1323.appspot.com/bot";
 
-    public static int getRequestResolveError() {
-        return REQUEST_RESOLVE_ERROR;
-    }
-
-    public static int getRequestPermission() {
-        return REQUEST_PERMISSION;
-    }
+//    public static int getRequestResolveError() {
+//        return REQUEST_RESOLVE_ERROR;
+//    }
+//
+//    public static int getRequestPermission() {
+//        return REQUEST_PERMISSION;
+//    }
 
     public static String getDebugTag() {
         return DEBUG_TAG;
