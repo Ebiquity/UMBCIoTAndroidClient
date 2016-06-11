@@ -45,36 +45,35 @@ import edu.umbc.cs.iot.clients.android.util.VolleySingleton;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link QueryFragment.OnFragmentInteractionListener} interface
+ * {@link TextQueryFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the  factory method to
  * create an instance of this fragment.
  */
-public class QueryFragment extends Fragment {
+public class TextQueryFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 //    private static final String ARG_QUESTION = UMBCIoTApplication.getQuestionTag();
 //    private static final String ARG_BEACONID = UMBCIoTApplication.getBeaconTag();
-
-//    private String mQuesionParam;
-//    private String mBeaconIDParam;
 
     private JSONObject jsonObject;
     private RequestQueue queue;
     // temporary string to show the parsed response
     private String jsonResponse;
 
-    private TextView mDefaultDisplayTextView;
-    private ScrollView mScrollViewForDisplayTextView;
+    private TextView mTextFgmtDisplayTextView;
+    private ScrollView mTextFgmtScrollViewForDisplayTextView;
     private EditText mUserQueryEditText;
     private View view;
-    private ImageButton mSendQueryToServerImageButton;
+    private ImageButton mSendTextQueryToServerImageButton;
 
-    private String mUserQuestion;
-    private String mBeconID;
+    private String mBeconIDParam;
 
     private OnFragmentInteractionListener mListener;
 
-    public QueryFragment() {
+    public TextQueryFragment() {
+        super();
+        // Just to be an empty Bundle. You can use this later with getArguments().set...
+        setArguments(new Bundle());
         // Required empty public constructor
     }
 
@@ -83,10 +82,10 @@ public class QueryFragment extends Fragment {
 //     * this fragment using the provided parameters.
 //     *
 //     * @param beaconIDParam Parameter 2.
-//     * @return A new instance of fragment QueryFragment.
+//     * @return A new instance of fragment TextQueryFragment.
 //     */
-//    public static QueryFragment newInstance(String beaconIDParam){
-//        QueryFragment fragment = new QueryFragment();
+//    public static TextQueryFragment newInstance(String beaconIDParam){
+//        TextQueryFragment fragment = new TextQueryFragment();
 //        Bundle args = new Bundle();
 ////        args.putString(ARG_QUESTION, quesionParam);
 //        args.putString(ARG_BEACONID, beaconIDParam);
@@ -98,15 +97,14 @@ public class QueryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-//            mQuesionParam = getArguments().getString(ARG_QUESTION);
-            mBeconID = getArguments().getString(UMBCIoTApplication.getBeaconTag());
+            mBeconIDParam = getArguments().getString(UMBCIoTApplication.getBeaconTag(), "No beaconID");
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_query, container, false);
+        view = inflater.inflate(R.layout.fragment_text_query, container, false);
         initViews();
         initData();
         setOnClickListeners();
@@ -115,11 +113,11 @@ public class QueryFragment extends Fragment {
     }
 
     private void initViews() {
-        mDefaultDisplayTextView = (TextView) view.findViewById(R.id.defaultDisplayTextView);
-        mScrollViewForDisplayTextView = (ScrollView) view.findViewById(R.id.scrollViewForDisplayText);
+        mTextFgmtDisplayTextView = (TextView) view.findViewById(R.id.textFgmtDisplayTextView);
+        mTextFgmtScrollViewForDisplayTextView = (ScrollView) view.findViewById(R.id.textFgmtScrollViewForDisplayText);
         mUserQueryEditText = (EditText) view.findViewById(R.id.userQueryEditText);
         mUserQueryEditText.clearFocus();
-        mSendQueryToServerImageButton = (ImageButton) view.findViewById(R.id.sendQueryToServerImageButton);
+        mSendTextQueryToServerImageButton = (ImageButton) view.findViewById(R.id.sendTextQueryToServerImageButton);
     }
 
     private void setOnClickListeners() {
@@ -141,7 +139,7 @@ public class QueryFragment extends Fragment {
             }
         });
 
-        mSendQueryToServerImageButton.setOnClickListener(new View.OnClickListener() {
+        mSendTextQueryToServerImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mUserQueryEditText.getText().toString().isEmpty())
@@ -154,7 +152,7 @@ public class QueryFragment extends Fragment {
             }
         });
 
-        mDefaultDisplayTextView.addTextChangedListener(new TextWatcher() {
+        mTextFgmtDisplayTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -165,7 +163,7 @@ public class QueryFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                mScrollViewForDisplayTextView.fullScroll(ScrollView.FOCUS_DOWN);
+                mTextFgmtScrollViewForDisplayTextView.fullScroll(ScrollView.FOCUS_DOWN);
             }
         });
     }
@@ -177,7 +175,7 @@ public class QueryFragment extends Fragment {
 
     private void initData() {
         Bundle bundle = this.getArguments();
-        mBeconID = bundle.getString(UMBCIoTApplication.getBeaconTag(), "No beaconID");
+        mBeconIDParam = bundle.getString(UMBCIoTApplication.getBeaconTag(), "No beaconID");
         jsonResponse = new String("");
         // Get a RequestQueue
         queue = VolleySingleton.getInstance(view.getContext()).getRequestQueue();
@@ -209,7 +207,7 @@ public class QueryFragment extends Fragment {
     }
 
     private void resetFragmentView() {
-        mDefaultDisplayTextView.setText(view.getContext().getResources().getString(R.string.default_display_text));
+        mTextFgmtDisplayTextView.setText(view.getContext().getResources().getString(R.string.default_display_text));
         mUserQueryEditText.setText("");
         mUserQueryEditText.clearFocus();
         hideKeyboardFrom(view.getContext(),view);
@@ -232,10 +230,9 @@ public class QueryFragment extends Fragment {
 
     private void callWebServiceWithQuery(String query) {
         Log.d(UMBCIoTApplication.getDebugTag(),"Came to callWebServiceWithQuery");
-        mUserQuestion = query;
         // Create a JSONObject for the POST call to the NLP engine server
         try {
-            createJSONObject();
+            createJSONObject(query,mBeconIDParam);
         } catch (JSONException aJSONException) {
             Log.d("JSONException:"," Something went wrong in JSON object creation");
         }
@@ -267,7 +264,7 @@ public class QueryFragment extends Fragment {
 //                            String mobile = phone.getString("mobile");
 
 //                            jsonResponse = "";
-                        if (!mDefaultDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
+                        if (!mTextFgmtDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
                             jsonResponse += "------------------------" + "\n";
                         jsonResponse +=  "Query parameters were: "
                                 +jsonObject.getString(UMBCIoTApplication.getQuestionTag())
@@ -279,7 +276,7 @@ public class QueryFragment extends Fragment {
 //                            response += "Mobile: " + mobile + "\n\n";
 
 //                            Toast.makeText(view.getContext(),"JSON response: "+jsonResponse,Toast.LENGTH_LONG).show();
-                        mDefaultDisplayTextView.setText(jsonResponse);
+                        mTextFgmtDisplayTextView.setText(jsonResponse);
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(view.getContext(),
@@ -297,7 +294,7 @@ public class QueryFragment extends Fragment {
                     String statusCode = String.valueOf(error.networkResponse.statusCode);
                     if (statusCode.equals("500")) {
                         try {
-                            if (!mDefaultDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
+                            if (!mTextFgmtDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
                                 jsonResponse += "------------------------" + "\n";
                             jsonResponse +=  "Query parameters were: "
                                     +jsonObject.getString(UMBCIoTApplication.getQuestionTag())
@@ -309,7 +306,7 @@ public class QueryFragment extends Fragment {
     //                            response += "Mobile: " + mobile + "\n\n";
 
     //                            Toast.makeText(view.getContext(),"JSON response: "+jsonResponse,Toast.LENGTH_LONG).show();
-                            mDefaultDisplayTextView.setText(jsonResponse);
+                            mTextFgmtDisplayTextView.setText(jsonResponse);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(view.getContext(),
@@ -338,12 +335,12 @@ public class QueryFragment extends Fragment {
         VolleySingleton.getInstance(view.getContext()).addToRequestQueue(jsObjRequest);
     }
 
-    private String createJSONObject() throws JSONException {
+    private String createJSONObject(String query, String beacon) throws JSONException {
         // Add your data
         //Create JSONObject here
         jsonObject = new JSONObject();
-        jsonObject.put(UMBCIoTApplication.getQuestionTag(), mUserQuestion);
-        jsonObject.put(UMBCIoTApplication.getBeaconTag(), mBeconID);
+        jsonObject.put(UMBCIoTApplication.getQuestionTag(), query);
+        jsonObject.put(UMBCIoTApplication.getBeaconTag(), beacon);
 //        Toast.makeText(view.getContext(),"I have: "+mBeconID,Toast.LENGTH_LONG).show();
 
 //        JSONArray jsonArray = new JSONArray();

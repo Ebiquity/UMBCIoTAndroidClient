@@ -6,10 +6,10 @@ package edu.umbc.cs.iot.clients.android.ui.activities;
  */
 
 import android.Manifest;
-import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -18,8 +18,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.app.FragmentTransaction;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -43,22 +41,23 @@ import com.google.android.gms.nearby.messages.SubscribeOptions;
 
 import edu.umbc.cs.iot.clients.android.R;
 import edu.umbc.cs.iot.clients.android.UMBCIoTApplication;
-import edu.umbc.cs.iot.clients.android.ui.fragments.QueryFragment;
+import edu.umbc.cs.iot.clients.android.ui.fragments.PrefsFragment;
+import edu.umbc.cs.iot.clients.android.ui.fragments.TextQueryFragment;
+import edu.umbc.cs.iot.clients.android.ui.fragments.VoiceQueryFragment;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        QueryFragment.OnFragmentInteractionListener {
+        TextQueryFragment.OnFragmentInteractionListener,
+        VoiceQueryFragment.OnFragmentInteractionListener {
 
     private NavigationView navigationView;
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
-    private QueryFragment aQueryFragment;
     private GoogleApiClient mGoogleApiClient;
     private String beaconData;
-    private FragmentManager fragmentManager;
     private MessageListener mMessageListener;
 
     @Override
@@ -77,9 +76,6 @@ public class MainActivity extends AppCompatActivity implements
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        aQueryFragment = new QueryFragment();
-        fragmentManager = getFragmentManager();
 
         // Get a GoogleApiClient object for the using the NearbyMessagesApi
         setGoogleApiClient();
@@ -146,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements
                     beaconData = foundMessage;
                     Toast.makeText(getApplicationContext(),"Found: "+beaconData,Toast.LENGTH_LONG).show();
                     // Only when the beaconData has been found we shall move on to loading the UI
-                    defaultFragmentLoad();
+                    launchFragment(new VoiceQueryFragment());
                 }
             }
 
@@ -154,31 +150,11 @@ public class MainActivity extends AppCompatActivity implements
             public void onLost(Message message) {
                 String messageAsString = new String(message.getContent());
                 Log.d(UMBCIoTApplication.getDebugTag(), "Lost beacon message: " + messageAsString);
-                Toast.makeText(getApplicationContext(), "Lost contact with beacon! I will wait for 60 seconds...", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Lost contact with beacon! I will wait for 100 seconds...", Toast.LENGTH_LONG).show();
                 PauseBeaconNotFoundActivity aPauseBeaconNotFoundActivity = new PauseBeaconNotFoundActivity();
                 aPauseBeaconNotFoundActivity.execute();
             }
         };
-    }
-
-    private void defaultFragmentLoad() {
-        Bundle bundle = new Bundle();
-        if(!isFragmentUIActive()) {
-//            Toast.makeText(getApplicationContext(),"I have: "+beaconData,Toast.LENGTH_LONG).show();
-            bundle.putString(UMBCIoTApplication.getBeaconTag(), beaconData);
-            aQueryFragment.setArguments(bundle);
-            fragmentManager.beginTransaction().replace(R.id.container, aQueryFragment)
-                    .commit();
-        } else {
-            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.detach(aQueryFragment);
-            fragmentTransaction.attach(aQueryFragment);
-            fragmentTransaction.commit();
-        }
-    }
-
-    public boolean isFragmentUIActive() {
-        return aQueryFragment.isAdded() && !aQueryFragment.isDetached() && !aQueryFragment.isRemoving();
     }
 
     @Override
@@ -203,42 +179,56 @@ public class MainActivity extends AppCompatActivity implements
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_clear) {
-            if(beaconData != null)
-                defaultFragmentLoad();
-            else
-                launchAlternateMainActivity();
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_clear: {
+                if (beaconData != null)
+                    launchFragment(new VoiceQueryFragment());
+                else
+                    launchAlternateMainActivity();
+                return true;
+            }
+            default: {
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+            }
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    private void launchFragment(Fragment fragment) {
+        Bundle bundle = new Bundle();
+        bundle.putString(UMBCIoTApplication.getBeaconTag(), beaconData);
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.container, fragment)
+                .commit();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        Fragment fragment = null;
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.search_voice_btn) {
+            fragment = new VoiceQueryFragment();
+        } else if (id == R.id.search_text_btn) {
+            fragment = new TextQueryFragment();
+        } else if (id == R.id.app_settings_btn) {
+            fragment = new PrefsFragment();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
+        // update the main content by replacing fragments
+        if (fragment != null) {
+            launchFragment(fragment);
+        } else {
+            Log.e(UMBCIoTApplication.getDebugTag(), "Error");
+        }
+
         return true;
     }
 
@@ -343,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements
         protected Void doInBackground(Void... params) {
             try {
                 Log.d(UMBCIoTApplication.getDebugTag(), "came into doInBackground"+System.currentTimeMillis());
-                Thread.sleep(60000);
+                Thread.sleep(100000);
                 Log.d(UMBCIoTApplication.getDebugTag(), "sleep complete"+System.currentTimeMillis());
                 launchAlternateMainActivity();
             } catch (InterruptedException e) {

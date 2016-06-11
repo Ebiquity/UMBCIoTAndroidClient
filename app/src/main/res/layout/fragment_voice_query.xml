@@ -1,13 +1,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.umbc.cs.iot.clients.android.ui.fragments.QueryFragment"
+    tools:context="edu.umbc.cs.iot.clients.android.ui.fragments.VoiceQueryFragment"
     android:focusable="true"
     android:focusableInTouchMode="true" >
 
     <ScrollView
-        android:id="@+id/scrollViewForDisplayText"
+        android:id="@+id/voiceFgmtScrollViewForDisplayText"
         android:layout_above="@+id/textInputLayout"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
@@ -18,7 +19,7 @@
 
         <!-- Main content here -->
         <TextView
-            android:id="@+id/defaultDisplayTextView"
+            android:id="@+id/voiceFgmtDisplayTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_vertical_margin"
@@ -33,39 +34,16 @@
         <!--</HorizontalScrollView>-->
     </ScrollView>
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/textInputLayout"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/sendQueryToServerImageButton"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/userQueryEditText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:imeOptions="actionSend"
-            android:fontFamily="sans-serif-condensed"
-            android:hint="@string/query_hint"
-            android:inputType="textCapSentences|textImeMultiLine"
-            android:textSize="20sp"
-            android:selectAllOnFocus="true" />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <ImageButton
-        android:id="@+id/sendQueryToServerImageButton"
+    <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_send"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
+        android:id="@+id/sendVoiceQueryToServerFAB"
+        android:src="@drawable/microphone"
         android:visibility="visible"
         android:contentDescription="@string/send_query_to_server_image_button_content_description_text"
-        android:backgroundTint="@color/colorAccent"
-        android:elevation="24dp" />
+        android:elevation="24dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:padding="@dimen/activity_horizontal_margin" />
 
 </RelativeLayout>

@@ -1,0 +1,71 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="edu.umbc.cs.iot.clients.android.ui.fragments.TextQueryFragment"
+    android:focusable="true"
+    android:focusableInTouchMode="true" >
+
+    <ScrollView
+        android:id="@+id/textFgmtScrollViewForDisplayText"
+        android:layout_above="@+id/textInputLayout"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!--<HorizontalScrollView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!-- Main content here -->
+        <TextView
+            android:id="@+id/textFgmtDisplayTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+            android:text="@string/default_display_text" />
+
+        <!--</HorizontalScrollView>-->
+    </ScrollView>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/sendTextQueryToServerImageButton"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/userQueryEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:imeOptions="actionSend"
+            android:fontFamily="sans-serif-condensed"
+            android:hint="@string/query_hint"
+            android:inputType="textCapSentences|textImeMultiLine"
+            android:textSize="20sp"
+            android:selectAllOnFocus="true" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <ImageButton
+        android:id="@+id/sendTextQueryToServerImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_send"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="visible"
+        android:contentDescription="@string/send_query_to_server_image_button_content_description_text"
+        android:backgroundTint="@color/colorAccent"
+        android:elevation="24dp" />
+
+</RelativeLayout>
