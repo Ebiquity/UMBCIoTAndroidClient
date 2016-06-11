@@ -39,7 +39,7 @@
         android:src="@drawable/microphone"
         android:visibility="visible"
         android:contentDescription="@string/send_query_to_server_image_button_content_description_text"
-        android:backgroundTint="@color/colorAccent"
+        android:backgroundTint="@color/seagreen"
         android:elevation="24dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />

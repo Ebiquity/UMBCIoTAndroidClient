@@ -40,6 +40,7 @@ import com.google.android.gms.nearby.messages.SubscribeOptions;
 
 import edu.umbc.cs.iot.clients.android.R;
 import edu.umbc.cs.iot.clients.android.UMBCIoTApplication;
+import edu.umbc.cs.iot.clients.android.ui.fragments.PrefsFragment;
 import edu.umbc.cs.iot.clients.android.ui.fragments.TextQueryFragment;
 import edu.umbc.cs.iot.clients.android.ui.fragments.VoiceQueryFragment;
 
@@ -140,8 +141,8 @@ public class MainActivity extends AppCompatActivity implements
                     beaconData = foundMessage;
                     Toast.makeText(getApplicationContext(),"Found: "+beaconData,Toast.LENGTH_LONG).show();
                     // Only when the beaconData has been found we shall move on to loading the UI
-//                    launchFragment(new VoiceQueryFragment());
-                    launchFragment(new TextQueryFragment());
+                    launchFragment(new VoiceQueryFragment());
+//                    launchFragment(new TextQueryFragment());
                 }
             }
 
@@ -181,8 +182,8 @@ public class MainActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case R.id.action_clear: {
                 if (beaconData != null)
-//                    launchFragment(new VoiceQueryFragment());
-                    launchFragment(new TextQueryFragment());
+                    launchFragment(new VoiceQueryFragment());
+//                    launchFragment(new TextQueryFragment());
                 else
                     launchAlternateMainActivity();
                 return true;
@@ -211,11 +212,11 @@ public class MainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         if (id == R.id.search_voice_btn) {
-//            fragment = new VoiceQueryFragment();
+            fragment = new VoiceQueryFragment();
         } else if (id == R.id.search_text_btn) {
             fragment = new TextQueryFragment();
         } else if (id == R.id.app_settings_btn) {
-//            fragment = new PrefsFragment();
+            fragment = new PrefsFragment();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

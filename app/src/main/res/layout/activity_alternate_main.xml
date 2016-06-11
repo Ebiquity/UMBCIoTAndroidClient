@@ -45,7 +45,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 android:textSize="20sp"
                 android:fontFamily="serif"
-                android:textColor="?attr/colorPrimaryDark" />
+                android:textColor="@color/colorPrimaryDark" />
 
         </LinearLayout>
     </FrameLayout>
