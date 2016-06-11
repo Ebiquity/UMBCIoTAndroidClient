@@ -6,29 +6,22 @@ package edu.umbc.cs.iot.clients.android;
  */
 
 import android.app.Application;
+import android.bluetooth.BluetoothAdapter;
 
 public class UMBCIoTApplication extends Application {
-//    private static final int REQUEST_RESOLVE_ERROR = 1001;
-//    private static final int REQUEST_PERMISSION = 42;
     private static final String DEBUG_TAG = "UMBCIoTDebugTag";
+    private static final String PROJECT_ID = "androidclient-umbc";
     private static final String QUESTION_TAG = "question";
     private static final String BEACON_TAG = "beaconid";
     private static final String RESPONSE_TAG = "response";
     private static final String EDDYSTONE_UUID = "0000feaa-0000-1000-8000-00805f9b34fb";
     private static final String url = "http://31230528.ngrok.io/bot";
+    public static final int REQUEST_RESOLVE_ERROR = 1001;
+    public static final int REQUEST_PERMISSION = 42;
     public static final int PERMISSIONS_REQUEST_INTERNET = 1;
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2;
     public static final int PERMISSIONS_REQUEST_BLUETOOTH = 3;
     public static final int PERMISSIONS_REQUEST_BLUETOOTH_ADMIN = 4;
-    //private static final String oldUrl = "https://botengine-1323.appspot.com/bot";
-
-//    public static int getRequestResolveError() {
-//        return REQUEST_RESOLVE_ERROR;
-//    }
-//
-//    public static int getRequestPermission() {
-//        return REQUEST_PERMISSION;
-//    }
 
     public static String getDebugTag() {
         return DEBUG_TAG;
@@ -52,5 +45,9 @@ public class UMBCIoTApplication extends Application {
 
     public static String getEddystoneUuid() {
         return EDDYSTONE_UUID;
+    }
+
+    public static String getProjectId() {
+        return PROJECT_ID;
     }
 }

@@ -36,6 +36,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+
 import edu.umbc.cs.iot.clients.android.R;
 import edu.umbc.cs.iot.clients.android.UMBCIoTApplication;
 import edu.umbc.cs.iot.clients.android.util.VolleySingleton;
@@ -212,6 +214,7 @@ public class QueryFragment extends Fragment {
         mUserQueryEditText.clearFocus();
         hideKeyboardFrom(view.getContext(),view);
     }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -226,6 +229,7 @@ public class QueryFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
     private void callWebServiceWithQuery(String query) {
         Log.d(UMBCIoTApplication.getDebugTag(),"Came to callWebServiceWithQuery");
         mUserQuestion = query;
@@ -245,23 +249,54 @@ public class QueryFragment extends Fragment {
          * @param listener Listener to receive the JSON response
          * @param errorListener Error listener, or null to ignore errors.
          */
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.POST,
-                UMBCIoTApplication.getUrl(),
-                jsonObject,
-                new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest(
+            Request.Method.POST,
+            UMBCIoTApplication.getUrl(),
+            jsonObject,
+            new Response.Listener<JSONObject>() {
 
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            // Parsing json object response
-                            // response will be a json object
-                            String status = response.getString("status");
-                            String text = response.getString("text");
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        // Parsing json object response
+                        // response will be a json object
+                        String status = response.getString("status");
+                        String text = response.getString("text");
 //                            JSONObject phone = response.getJSONObject("phone");
 //                            String home = phone.getString("home");
 //                            String mobile = phone.getString("mobile");
 
 //                            jsonResponse = "";
+                        if (!mDefaultDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
+                            jsonResponse += "------------------------" + "\n";
+                        jsonResponse +=  "Query parameters were: "
+                                +jsonObject.getString(UMBCIoTApplication.getQuestionTag())
+                                +" "
+                                +jsonObject.get(UMBCIoTApplication.getBeaconTag())
+                                +"\n\n";
+                        jsonResponse += "Response is:\nStatus: " + status + " Text: " + text + "\n";
+//                            response += "Home: " + home + "\n\n";
+//                            response += "Mobile: " + mobile + "\n\n";
+
+//                            Toast.makeText(view.getContext(),"JSON response: "+jsonResponse,Toast.LENGTH_LONG).show();
+                        mDefaultDisplayTextView.setText(jsonResponse);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(view.getContext(),
+                                "Error: " + e.getMessage(),
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+            },
+            new Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    String body = new String();
+                    //get status code here
+                    String statusCode = String.valueOf(error.networkResponse.statusCode);
+                    if (statusCode.equals("500")) {
+                        try {
                             if (!mDefaultDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
                                 jsonResponse += "------------------------" + "\n";
                             jsonResponse +=  "Query parameters were: "
@@ -269,11 +304,11 @@ public class QueryFragment extends Fragment {
                                     +" "
                                     +jsonObject.get(UMBCIoTApplication.getBeaconTag())
                                     +"\n\n";
-                            jsonResponse += "Response is:\nStatus: " + status + " Text: " + text + "\n";
-//                            response += "Home: " + home + "\n\n";
-//                            response += "Mobile: " + mobile + "\n\n";
+                            jsonResponse += "Getting an error code: " + statusCode + " from the server\n";
+    //                            response += "Home: " + home + "\n\n";
+    //                            response += "Mobile: " + mobile + "\n\n";
 
-//                            Toast.makeText(view.getContext(),"JSON response: "+jsonResponse,Toast.LENGTH_LONG).show();
+    //                            Toast.makeText(view.getContext(),"JSON response: "+jsonResponse,Toast.LENGTH_LONG).show();
                             mDefaultDisplayTextView.setText(jsonResponse);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -282,15 +317,24 @@ public class QueryFragment extends Fragment {
                                     Toast.LENGTH_LONG).show();
                         }
                     }
-                }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(UMBCIoTApplication.getDebugTag(), "Error: " + error.getMessage());
-//                Toast.makeText(view.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                    else
+                        Log.d(UMBCIoTApplication.getDebugTag(), "Error status code was previously unseen, got: "+statusCode);
+                    //get response body and parse with appropriate encoding
+                    if(error.networkResponse.data!=null) {
+                        try {
+                            body = new String(error.networkResponse.data,"UTF-8");
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    Log.d(UMBCIoTApplication.getDebugTag(), "In ErrorListener"+statusCode+body);
+                    VolleyLog.d(UMBCIoTApplication.getDebugTag(), "I ma here Error: " + error.getMessage());
+    //                Toast.makeText(view.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
-        });
-        // Add a request (in this example, called stringRequest) to your RequestQueue.
+        );
+
+        // Add a request (in this example, called jsObjRequest) to your RequestQueue.
         VolleySingleton.getInstance(view.getContext()).addToRequestQueue(jsObjRequest);
     }
 

@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <uses-feature
         android:name="android.hardware.bluetooth_le"
@@ -19,7 +18,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.nearby.messages.API_KEY"
-            android:value="AIzaSyBCXNEmWel8hvAkzD0suYpZZhPwcs3WsCw" />
+            android:value="AIzaSyCbfjro22IeBTcB1xv_fPUHPFsnKUEw22k" />
 
         <activity
             android:name=".ui.activities.MainActivity"
