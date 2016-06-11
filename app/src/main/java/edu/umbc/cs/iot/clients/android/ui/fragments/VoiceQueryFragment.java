@@ -5,25 +5,16 @@ package edu.umbc.cs.iot.clients.android.ui.fragments;
  * @author: Prajit Kumar Das
  */
 
-import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.speech.RecognizerIntent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -51,18 +42,16 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link VoiceQueryFragment.OnFragmentInteractionListener} interface
+ * {@link VoiceQueryFragment.OnVoiceQueryFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the  factory method to
  * create an instance of this fragment.
  */
 public class VoiceQueryFragment extends Fragment {
-//    // TODO: Rename parameter arguments, choose names that match
 //    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 //    private static final String ARG_PARAM1 = "param1";
 //    private static final String ARG_PARAM2 = "param2";
 
-//    // TODO: Rename and change types of parameters
 //    private String mParam1;
 //    private String mParam2;
 
@@ -74,11 +63,11 @@ public class VoiceQueryFragment extends Fragment {
     private TextView mVoiceFgmtDisplayTextView;
     private ScrollView mVoiceFgmtScrollViewForDisplayText;
     private View view;
-    private FloatingActionButton mSendVoiceQueryToServerFAB;
+    private ImageButton mSendVoiceQueryToServerBtn;
 
     private String mBeconIDParam;
 
-    private OnFragmentInteractionListener mListener;
+    private OnVoiceQueryFragmentInteractionListener mListener;
 
     public VoiceQueryFragment() {
         super();
@@ -127,11 +116,11 @@ public class VoiceQueryFragment extends Fragment {
     private void initViews() {
         mVoiceFgmtDisplayTextView = (TextView) view.findViewById(R.id.voiceFgmtDisplayTextView);
         mVoiceFgmtScrollViewForDisplayText = (ScrollView) view.findViewById(R.id.voiceFgmtScrollViewForDisplayText);
-        mSendVoiceQueryToServerFAB = (FloatingActionButton) view.findViewById(R.id.sendVoiceQueryToServerFAB);
+        mSendVoiceQueryToServerBtn = (ImageButton) view.findViewById(R.id.sendVoiceQueryToServerBtn);
     }
 
     private void setOnClickListeners() {
-        mSendVoiceQueryToServerFAB.setOnClickListener(new View.OnClickListener() {
+        mSendVoiceQueryToServerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -167,18 +156,18 @@ public class VoiceQueryFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onVoiceQueryFragmentInteraction(uri);
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnVoiceQueryFragmentInteractionListener) {
+            mListener = (OnVoiceQueryFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnVoiceQueryFragmentInteractionListener");
         }
     }
 
@@ -198,9 +187,9 @@ public class VoiceQueryFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnVoiceQueryFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onVoiceQueryFragmentInteraction(Uri uri);
     }
     private void callWebServiceWithQuery(String query) {
         Log.d(UMBCIoTApplication.getDebugTag(),"Came to callWebServiceWithQuery");

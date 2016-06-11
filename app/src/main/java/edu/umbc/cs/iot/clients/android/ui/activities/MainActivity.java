@@ -8,7 +8,6 @@ package edu.umbc.cs.iot.clients.android.ui.activities;
 import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -41,7 +40,6 @@ import com.google.android.gms.nearby.messages.SubscribeOptions;
 
 import edu.umbc.cs.iot.clients.android.R;
 import edu.umbc.cs.iot.clients.android.UMBCIoTApplication;
-import edu.umbc.cs.iot.clients.android.ui.fragments.PrefsFragment;
 import edu.umbc.cs.iot.clients.android.ui.fragments.TextQueryFragment;
 import edu.umbc.cs.iot.clients.android.ui.fragments.VoiceQueryFragment;
 
@@ -49,8 +47,8 @@ public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        TextQueryFragment.OnFragmentInteractionListener,
-        VoiceQueryFragment.OnFragmentInteractionListener {
+        TextQueryFragment.OnTextQueryFragmentInteractionListener,
+        VoiceQueryFragment.OnVoiceQueryFragmentInteractionListener {
 
     private NavigationView navigationView;
     private Toolbar toolbar;
@@ -142,7 +140,8 @@ public class MainActivity extends AppCompatActivity implements
                     beaconData = foundMessage;
                     Toast.makeText(getApplicationContext(),"Found: "+beaconData,Toast.LENGTH_LONG).show();
                     // Only when the beaconData has been found we shall move on to loading the UI
-                    launchFragment(new VoiceQueryFragment());
+//                    launchFragment(new VoiceQueryFragment());
+                    launchFragment(new TextQueryFragment());
                 }
             }
 
@@ -182,7 +181,8 @@ public class MainActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case R.id.action_clear: {
                 if (beaconData != null)
-                    launchFragment(new VoiceQueryFragment());
+//                    launchFragment(new VoiceQueryFragment());
+                    launchFragment(new TextQueryFragment());
                 else
                     launchAlternateMainActivity();
                 return true;
@@ -204,7 +204,6 @@ public class MainActivity extends AppCompatActivity implements
                 .commit();
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         Fragment fragment = null;
@@ -212,11 +211,11 @@ public class MainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         if (id == R.id.search_voice_btn) {
-            fragment = new VoiceQueryFragment();
+//            fragment = new VoiceQueryFragment();
         } else if (id == R.id.search_text_btn) {
             fragment = new TextQueryFragment();
         } else if (id == R.id.app_settings_btn) {
-            fragment = new PrefsFragment();
+//            fragment = new PrefsFragment();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -325,7 +324,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onTextQueryFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onVoiceQueryFragmentInteraction(Uri uri) {
 
     }
 

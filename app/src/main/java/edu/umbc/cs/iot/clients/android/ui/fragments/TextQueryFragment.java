@@ -45,7 +45,7 @@ import edu.umbc.cs.iot.clients.android.util.VolleySingleton;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link TextQueryFragment.OnFragmentInteractionListener} interface
+ * {@link TextQueryFragment.OnTextQueryFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the  factory method to
  * create an instance of this fragment.
@@ -68,7 +68,7 @@ public class TextQueryFragment extends Fragment {
 
     private String mBeconIDParam;
 
-    private OnFragmentInteractionListener mListener;
+    private OnTextQueryFragmentInteractionListener mListener;
 
     public TextQueryFragment() {
         super();
@@ -184,18 +184,18 @@ public class TextQueryFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onTextQueryFragmentInteraction(uri);
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnTextQueryFragmentInteractionListener) {
+            mListener = (OnTextQueryFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnTextQueryFragmentInteractionListener");
         }
     }
 
@@ -223,9 +223,9 @@ public class TextQueryFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnTextQueryFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onTextQueryFragmentInteraction(Uri uri);
     }
 
     private void callWebServiceWithQuery(String query) {

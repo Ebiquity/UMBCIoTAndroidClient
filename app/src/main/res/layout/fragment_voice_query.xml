@@ -1,5 +1,4 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,7 +8,6 @@
 
     <ScrollView
         android:id="@+id/voiceFgmtScrollViewForDisplayText"
-        android:layout_above="@+id/textInputLayout"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -34,16 +32,16 @@
         <!--</HorizontalScrollView>-->
     </ScrollView>
 
-    <android.support.design.widget.FloatingActionButton
+    <ImageButton
+        android:id="@+id/sendVoiceQueryToServerBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/sendVoiceQueryToServerFAB"
         android:src="@drawable/microphone"
         android:visibility="visible"
         android:contentDescription="@string/send_query_to_server_image_button_content_description_text"
+        android:backgroundTint="@color/colorAccent"
         android:elevation="24dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:padding="@dimen/activity_horizontal_margin" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

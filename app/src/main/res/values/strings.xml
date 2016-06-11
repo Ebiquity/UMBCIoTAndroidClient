@@ -17,9 +17,8 @@
 
     <string name="action_voice_query">Ask me anything!</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="dept_email">dept@cs.umbc.edu</string>
+    <string name="app_icon">App icon</string>
 
     <!-- Strings related to Settings -->
 
