@@ -12,7 +12,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4e3aaeeb-b312-4a31-8437-e005b2b27275" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
     </list>
     <ignored path="UMBCIoT.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -44,21 +43,7 @@
     <favorites_list name="UMBCIoT" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="AndroidManifest.xml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-          <provider editor-type-id="android-manifest">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -2675,8 +2660,8 @@
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/QueryFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/UMBCIoTApplication.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java" />
       </list>
     </option>
   </component>
@@ -2745,24 +2730,6 @@
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="UMBCIoTAndroidClient" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -2794,80 +2761,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="android" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="UMBCIoTAndroidClient" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="android" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="util" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="UMBCIoTAndroidClient" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="android" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ui" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fragments" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="UMBCIoTAndroidClient" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="android" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ui" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="activities" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -2895,7 +2788,7 @@
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="device.picker.selection" value="019b3e3ff0a68015" />
     <property name="UI_DESIGNER_EDITOR_MODE.NlPaletteManager-NlPreviewForm.SHOW" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../eddystone-scanner" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Pictures" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android" />
     <property name="ExportApk.ApkPath" value="C:\Users\praji\Documents\code\StudioProjects\UMBCIoTAndroidClient\app\build\outputs\apk" />
     <property name="ExportApk.Flavors" value="" />
@@ -3368,7 +3261,14 @@
       <option name="project" value="LOCAL" />
       <updated>1465628462453</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="app is in working condition with NearbyMessagesAPI. The query &quot;Where am I?&quot; is casuing a 500 internal server error. Need to fix with help from @abhay1">
+      <created>1465628937120</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1465628937120</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -3506,118 +3406,15 @@
           <properties />
           <option name="timeStamp" value="98" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/QueryFragment.java</url>
-          <line>101</line>
-          <properties />
-          <option name="timeStamp" value="109" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/QueryFragment.java</url>
-          <line>109</line>
-          <properties />
-          <option name="timeStamp" value="110" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/QueryFragment.java</url>
-          <line>110</line>
-          <properties />
-          <option name="timeStamp" value="111" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/QueryFragment.java</url>
-          <line>111</line>
-          <properties />
-          <option name="timeStamp" value="112" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/QueryFragment.java</url>
-          <line>113</line>
-          <properties />
-          <option name="timeStamp" value="113" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java</url>
-          <line>134</line>
-          <properties />
-          <option name="timeStamp" value="125" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java</url>
-          <line>137</line>
-          <properties />
-          <option name="timeStamp" value="126" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java</url>
-          <line>149</line>
-          <properties />
-          <option name="timeStamp" value="127" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java</url>
-          <line>150</line>
-          <properties />
-          <option name="timeStamp" value="128" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java</url>
-          <line>154</line>
-          <properties />
-          <option name="timeStamp" value="129" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java</url>
-          <line>142</line>
-          <properties />
-          <option name="timeStamp" value="137" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java</url>
-          <line>139</line>
-          <properties />
-          <option name="timeStamp" value="138" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java</url>
-          <line>140</line>
-          <properties />
-          <option name="timeStamp" value="139" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java</url>
-          <line>145</line>
-          <properties />
-          <option name="timeStamp" value="140" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java</url>
-          <line>146</line>
-          <properties />
-          <option name="timeStamp" value="141" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java</url>
-          <line>148</line>
-          <properties />
-          <option name="timeStamp" value="143" />
-        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="144" />
+      <option name="time" value="145" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/settings.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/volley/proguard-project.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -3851,45 +3648,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/DeviceScanActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="38" column="28" selection-start-line="38" selection-start-column="26" selection-end-line="38" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/BLEAPIMainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="484" column="40" selection-start-line="484" selection-start-column="19" selection-end-line="484" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/OldMainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="505" column="0" selection-start-line="505" selection-start-column="0" selection-end-line="522" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/QueryFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="320" column="104" selection-start-line="320" selection-start-column="104" selection-end-line="320" selection-end-column="104" />
-          <folding>
-            <element signature="e#9747#11725#0" expanded="true" />
-            <element signature="e#10494#10567#0" expanded="true" />
-            <element signature="e#11724#11725#0" expanded="true" />
-            <element signature="e#11739#14395#0" expanded="true" />
-            <element signature="e#12199#12272#0" expanded="true" />
-            <element signature="e#14394#14395#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_alternate_main.xml">
       <provider selected="true" editor-type-id="android-designer2">
         <state />
@@ -3901,27 +3659,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/AlternateMainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="108" column="40" selection-start-line="108" selection-start-column="40" selection-end-line="108" selection-end-column="40" />
-          <folding>
-            <element signature="e#1409#2185#0" expanded="true" />
-            <element signature="e#2184#2185#0" expanded="true" />
-            <element signature="e#2305#2626#0" expanded="true" />
-            <element signature="e#2625#2626#0" expanded="true" />
-            <element signature="e#2701#2799#0" expanded="true" />
-            <element signature="e#2798#2799#0" expanded="true" />
-            <element signature="e#3081#3334#0" expanded="true" />
-            <element signature="e#3333#3334#0" expanded="true" />
-            <element signature="e#3943#4088#0" expanded="true" />
-            <element signature="e#4087#4088#0" expanded="true" />
-            <element signature="e#4474#4745#0" expanded="true" />
-            <element signature="e#4744#4745#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/UMBCIoTApplication.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="449">
@@ -3930,20 +3667,6 @@
             <element signature="imports" expanded="true" />
             <element signature="e#1578#1579#0" expanded="true" />
             <element signature="e#1611#1612#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="345" column="30" selection-start-line="345" selection-start-column="30" selection-end-line="345" selection-end-column="30" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2798#2829#0" expanded="true" />
-            <element signature="e#2831#2863#0" expanded="true" />
-            <element signature="e#9357#9358#0" expanded="true" />
-            <element signature="e#9384#9385#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -3964,6 +3687,64 @@
         <state relative-caret-position="119">
           <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Pictures/device-2016-06-11-031810.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2628">
+          <caret line="171" column="16" selection-start-line="171" selection-start-column="16" selection-end-line="171" selection-end-column="16" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/QueryFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3560">
+          <caret line="109" column="8" selection-start-line="109" selection-start-column="8" selection-end-line="109" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/OldMainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="157">
+          <caret line="505" column="0" selection-start-line="505" selection-start-column="0" selection-end-line="522" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/DeviceScanActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="38" column="28" selection-start-line="38" selection-start-column="26" selection-end-line="38" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/BLEAPIMainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="484" column="40" selection-start-line="484" selection-start-column="19" selection-end-line="484" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/AlternateMainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="108" column="40" selection-start-line="108" selection-start-column="40" selection-end-line="108" selection-end-column="40" />
+          <folding>
+            <element signature="e#3943#4088#0" expanded="true" />
+            <element signature="e#4087#4088#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

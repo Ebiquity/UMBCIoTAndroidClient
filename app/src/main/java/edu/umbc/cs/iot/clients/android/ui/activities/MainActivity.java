@@ -343,7 +343,7 @@ public class MainActivity extends AppCompatActivity implements
         protected Void doInBackground(Void... params) {
             try {
                 Log.d(UMBCIoTApplication.getDebugTag(), "came into doInBackground"+System.currentTimeMillis());
-                Thread.sleep(30000);
+                Thread.sleep(60000);
                 Log.d(UMBCIoTApplication.getDebugTag(), "sleep complete"+System.currentTimeMillis());
                 launchAlternateMainActivity();
             } catch (InterruptedException e) {
