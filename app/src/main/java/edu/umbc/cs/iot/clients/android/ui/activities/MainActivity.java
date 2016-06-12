@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements
             public void onLost(Message message) {
                 String messageAsString = new String(message.getContent());
                 Log.d(UMBCIoTApplication.getDebugTag(), "Lost beacon message: " + messageAsString);
-                Toast.makeText(getApplicationContext(), "Lost contact with beacon! I will wait for 100 seconds...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Lost contact with beacon! I will wait for "+AUTO_HIDE_DELAY_MILLIS+" milliseconds...", Toast.LENGTH_SHORT).show();
                 PauseBeaconNotFoundActivity aPauseBeaconNotFoundActivity = new PauseBeaconNotFoundActivity();
                 aPauseBeaconNotFoundActivity.execute();
             }
@@ -401,16 +401,20 @@ public class MainActivity extends AppCompatActivity implements
         Log.d(UMBCIoTApplication.getDebugTag(), "Came to delayedHide");
         if (beaconData == null) {
             Log.d(UMBCIoTApplication.getDebugTag(), "Came inside delayedHide");
-            mHideHandler.removeCallbacks(mHideRunnable);
-            mHideHandler.postDelayed(mHideRunnable, delayMillis);
+            /**
+             * TODO Callback to display beacon not found activity has been removed for the time being in order to ensure demo works.
+             * Fix it @prajit
+             */
+//            mHideHandler.removeCallbacks(mHideRunnable);
+//            mHideHandler.postDelayed(mHideRunnable, delayMillis);
         }
     }
 
     private final Runnable mHideRunnable = new Runnable() {
         @Override
         public void run() {
-            Log.d(UMBCIoTApplication.getDebugTag(), "Could not connect to any beacon for 100 seconds, going offline...");
-            Toast.makeText(getApplicationContext(), "Could not connect to any beacon for 100 seconds, going offline...", Toast.LENGTH_SHORT).show();
+            Log.d(UMBCIoTApplication.getDebugTag(), "Could not connect to any beacon for "+AUTO_HIDE_DELAY_MILLIS+" milliseconds, going offline...");
+            Toast.makeText(getApplicationContext(), "Could not connect to any beacon for "+AUTO_HIDE_DELAY_MILLIS+" milliseconds, going offline...", Toast.LENGTH_SHORT).show();
             launchAlternateMainActivity();
         }
     };

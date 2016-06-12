@@ -255,30 +255,28 @@ public class VoiceQueryFragment extends Fragment {
                         String body = new String();
                         //get status code here
                         String statusCode = String.valueOf(error.networkResponse.statusCode);
-                        if (statusCode.equals("500")) {
-                            try {
-                                if (!mVoiceFgmtDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
-                                    jsonResponse += "------------------------" + "\n";
-                                jsonResponse +=  "Query parameters were: "
-                                        +jsonObject.getString(UMBCIoTApplication.getQuestionTag())
-                                        +" "
-                                        +jsonObject.get(UMBCIoTApplication.getBeaconTag())
-                                        +"\n\n";
-                                jsonResponse += "Getting an error code: " + statusCode + " from the server\n";
-                                //                            response += "Home: " + home + "\n\n";
-                                //                            response += "Mobile: " + mobile + "\n\n";
+                        Log.d(UMBCIoTApplication.getDebugTag(), "Error status code was: " + statusCode);
+                        Toast.makeText(view.getContext(), "Error status code was: " + statusCode, Toast.LENGTH_LONG).show();
+                        try {
+                            if (!mVoiceFgmtDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
+                                jsonResponse += "------------------------" + "\n";
+                            jsonResponse +=  "Query parameters were: "
+                                    +jsonObject.getString(UMBCIoTApplication.getQuestionTag())
+                                    +" "
+                                    +jsonObject.get(UMBCIoTApplication.getBeaconTag())
+                                    +"\n\n";
+                            jsonResponse += "Getting an error code: " + statusCode + " from the server\n";
+//                            response += "Home: " + home + "\n\n";
+//                            response += "Mobile: " + mobile + "\n\n";
 
-                                //                            Toast.makeText(view.getContext(),"JSON response: "+jsonResponse,Toast.LENGTH_LONG).show();
-                                mVoiceFgmtDisplayTextView.setText(jsonResponse);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Toast.makeText(view.getContext(),
-                                        "Error: " + e.getMessage(),
-                                        Toast.LENGTH_LONG).show();
-                            }
+//                            Toast.makeText(view.getContext(),"JSON response: "+jsonResponse,Toast.LENGTH_LONG).show();
+                            mVoiceFgmtDisplayTextView.setText(jsonResponse);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(view.getContext(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
                         }
-                        else
-                            Log.d(UMBCIoTApplication.getDebugTag(), "Error status code was previously unseen, got: "+statusCode);
                         //get response body and parse with appropriate encoding
                         if(error.networkResponse.data!=null) {
                             try {
