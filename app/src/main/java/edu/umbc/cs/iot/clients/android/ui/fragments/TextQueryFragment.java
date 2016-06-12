@@ -117,6 +117,7 @@ public class TextQueryFragment extends Fragment {
         mTextFgmtScrollViewForDisplayTextView = (ScrollView) view.findViewById(R.id.textFgmtScrollViewForDisplayText);
         mUserQueryEditText = (EditText) view.findViewById(R.id.userQueryEditText);
         mUserQueryEditText.clearFocus();
+        mUserQueryEditText.setText("");
         mSendTextQueryToServerImageButton = (ImageButton) view.findViewById(R.id.sendTextQueryToServerImageButton);
     }
 
@@ -132,6 +133,7 @@ public class TextQueryFragment extends Fragment {
                     else
                         callWebServiceWithQuery(mUserQueryEditText.getText().toString());
                     mUserQueryEditText.clearFocus();
+                    mUserQueryEditText.setText("");
                     hideKeyboardFrom(v.getContext(),v);
                     handled = true;
                 }
@@ -148,6 +150,7 @@ public class TextQueryFragment extends Fragment {
                 else
                     callWebServiceWithQuery(mUserQueryEditText.getText().toString());
                 mUserQueryEditText.clearFocus();
+                mUserQueryEditText.setText("");
                 hideKeyboardFrom(v.getContext(),v);
             }
         });
@@ -210,6 +213,7 @@ public class TextQueryFragment extends Fragment {
         mTextFgmtDisplayTextView.setText(view.getContext().getResources().getString(R.string.default_display_text));
         mUserQueryEditText.setText("");
         mUserQueryEditText.clearFocus();
+        mUserQueryEditText.setText("");
         hideKeyboardFrom(view.getContext(),view);
     }
 

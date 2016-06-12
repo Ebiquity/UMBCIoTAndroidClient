@@ -52,6 +52,7 @@
             android:hint="@string/query_hint"
             android:inputType="textCapSentences|textImeMultiLine"
             android:textSize="20sp"
+            android:textColor="@color/colorPrimaryDark"
             android:selectAllOnFocus="true" />
 
     </android.support.design.widget.TextInputLayout>

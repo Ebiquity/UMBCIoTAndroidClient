@@ -19,10 +19,12 @@ public class UMBCIoTApplication extends Application {
     public static final int REQUEST_RESOLVE_ERROR = 1;
     public static final int REQUEST_PERMISSION = 2;
     public static final int VOICE_QUERY_RESPONSE = 3;
-    public static final int PERMISSIONS_REQUEST_INTERNET = 4;
+    public static final int PERMISSIONS_REQUEST_BLUETOOTH = 4;
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 5;
-    public static final int PERMISSIONS_REQUEST_BLUETOOTH = 6;
+    public static final int PERMISSIONS_REQUEST_INTERNET = 6;
     public static final int PERMISSIONS_REQUEST_BLUETOOTH_ADMIN = 7;
+    private static final String SHARED_PREFERENCE = "UMBC_IOT_APP_SHARED_PREFERENCE";
+    private static final String PREF_BEACON_DISABLED_TAG = "beacondisabledtag";
 
     public static String getDebugTag() {
         return DEBUG_TAG;
@@ -50,5 +52,13 @@ public class UMBCIoTApplication extends Application {
 
     public static String getProjectId() {
         return PROJECT_ID;
+    }
+
+    public static String getSharedPreference() {
+        return SHARED_PREFERENCE;
+    }
+
+    public static String getPrefBeaconDisabledTag() {
+        return PREF_BEACON_DISABLED_TAG;
     }
 }
