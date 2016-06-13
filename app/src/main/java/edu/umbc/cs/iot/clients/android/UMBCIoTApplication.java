@@ -15,7 +15,7 @@ public class UMBCIoTApplication extends Application {
     private static final String BEACON_TAG = "beaconid";
     private static final String RESPONSE_TAG = "response";
     private static final String EDDYSTONE_UUID = "0000feaa-0000-1000-8000-00805f9b34fb";
-    private static final String url = "http://31230528.ngrok.io/bot";
+    private static final String url = "https://c02d67b7.ngrok.io/bot";
     public static final int REQUEST_RESOLVE_ERROR = 1;
     public static final int REQUEST_PERMISSION = 2;
     public static final int VOICE_QUERY_RESPONSE = 3;
