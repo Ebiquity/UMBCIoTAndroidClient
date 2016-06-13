@@ -25,4 +25,10 @@
     <string name="preference_attributes">Context pref</string>
     <string name="pref_title_disable_beacon_scanning">Disable beacon scanning</string>
     <string name="pref_summary_disable_beacon_scanning">Slide to ask queries without obtaining context from beacons</string>
+
+    <!-- Strings related to Drawer Menu -->
+    <string name="voice_interface_menu_text">Voice interface</string>
+    <string name="text_interface_menu_text">Text Interface</string>
+    <string name="setting_menu_text">Settings</string>
+    <string name="help_feedback_menu_text">Help &amp; Feedback</string>
 </resources>

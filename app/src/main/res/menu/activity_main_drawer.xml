@@ -6,11 +6,11 @@
         <item
             android:id="@+id/search_voice_btn"
             android:icon="@drawable/microphone"
-            android:title="Voice interface" />
+            android:title="@string/voice_interface_menu_text" />
         <item
             android:id="@+id/search_text_btn"
             android:icon="@drawable/keyboard"
-            android:title="Text Interface" />
+            android:title="@string/text_interface_menu_text" />
         <!--<item-->
         <!--android:id="@+id/nav_slideshow"-->
         <!--android:icon="@drawable/ic_menu_slideshow"-->
@@ -27,10 +27,10 @@
         <item
             android:id="@+id/app_settings_btn"
             android:icon="@drawable/settings"
-            android:title="Settings" />
+            android:title="@string/setting_menu_text" />
         <item
             android:id="@+id/help_btn"
             android:icon="@drawable/help_circle"
-            android:title="Help &amp; Feedback" />
+            android:title="@string/help_feedback_menu_text" />
     </group>
 </menu>
