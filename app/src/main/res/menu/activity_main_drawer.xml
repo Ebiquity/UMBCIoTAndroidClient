@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/topMenu"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/search_voice_btn"
             android:icon="@drawable/microphone"
@@ -10,23 +12,25 @@
             android:icon="@drawable/keyboard"
             android:title="Text Interface" />
         <!--<item-->
-            <!--android:id="@+id/nav_slideshow"-->
-            <!--android:icon="@drawable/ic_menu_slideshow"-->
-            <!--android:title="Slideshow" />-->
+        <!--android:id="@+id/nav_slideshow"-->
+        <!--android:icon="@drawable/ic_menu_slideshow"-->
+        <!--android:title="Slideshow" />-->
         <!--<item-->
-            <!--android:id="@+id/nav_manage"-->
-            <!--android:icon="@drawable/ic_menu_manage"-->
-            <!--android:title="Tools" />-->
+        <!--android:id="@+id/nav_manage"-->
+        <!--android:icon="@drawable/ic_menu_manage"-->
+        <!--android:title="Tools" />-->
     </group>
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/bottomMenu"
+        android:checkableBehavior="single" >
         <item
             android:id="@+id/app_settings_btn"
             android:icon="@drawable/settings"
             android:title="Settings" />
-        <!--<item-->
-            <!--android:id="@+id/nav_send"-->
-            <!--android:icon="@drawable/ic_menu_send"-->
-            <!--android:title="Send" />-->
+        <item
+            android:id="@+id/help_btn"
+            android:icon="@drawable/help_circle"
+            android:title="Help &amp; Feedback" />
     </group>
 </menu>
