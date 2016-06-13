@@ -242,6 +242,8 @@ public class MainActivity extends AppCompatActivity implements
             fragment = new TextQueryFragment();
         else if (id == R.id.app_settings_btn)
             fragment = new PrefsFragment();
+        else if (id == R.id.help_btn)
+            launchHelpFeedbackActivity();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -254,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements
                 launchFragment(fragment);
 //                verifyBeaconDataAndLaunch(fragment);
         } else {
-            Log.e(UMBCIoTApplication.getDebugTag(), "Error");
+            Log.e(UMBCIoTApplication.getDebugTag(), "Must be going for the help & feedback activity");
         }
 
         return true;
@@ -350,6 +352,11 @@ public class MainActivity extends AppCompatActivity implements
     private void launchAlternateMainActivity() {
         Intent alternateActivityLaunchIntent = new Intent(getApplicationContext(), AlternateMainActivity.class);
         startActivity(alternateActivityLaunchIntent);
+    }
+
+    private void launchHelpFeedbackActivity() {
+        Intent helpFeedbackActivityLaunchIntent = new Intent(getApplicationContext(), HelpFeedbackActivity.class);
+        startActivity(helpFeedbackActivityLaunchIntent);
     }
 
     @Override

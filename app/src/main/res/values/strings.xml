@@ -8,6 +8,11 @@
     <string name="check_again_button_text">Check again!</string>
 
     <string name="default_display_text">What do you want to know about UMBC?</string>
+    <string name="help_text">UMBC IoT Project Android Client\n
+* In the current mode of deployment, the app will work, if you are near one of our beacons in the Information Technology and Engineering building at UMBC.\n
+* If you are near one of them, you will be able to query our Knowledge Base using voice commands or through text input.\n
+* It\'s an AMA app, enabling you to ask queries about UMBC.</string>
+    <string name="feedback_hint_text">Click on the + button below, if you want to provide feedback.</string>
     <string name="info_display_text">Hmmm... Can\'t connect to any Beacons. If you think you should see one anyway, click on the button below.</string>
     <string name="query_hint">Type your query here...</string>
     <string name="send_query_to_server_image_button_content_description_text">Click this button to send the query to server</string>
@@ -31,4 +36,5 @@
     <string name="text_interface_menu_text">Text Interface</string>
     <string name="setting_menu_text">Settings</string>
     <string name="help_feedback_menu_text">Help &amp; Feedback</string>
+    <string name="title_activity_help_feedback">Help &amp; Feedback</string>
 </resources>

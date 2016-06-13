@@ -36,6 +36,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.umbc.cs.iot.clients.android.ui.activities.MainActivity" />
         </activity>
+        <activity
+            android:name=".ui.activities.HelpFeedbackActivity"
+            android:label="@string/title_activity_help_feedback"
+            android:parentActivityName=".ui.activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.umbc.cs.iot.clients.android.ui.activities.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
