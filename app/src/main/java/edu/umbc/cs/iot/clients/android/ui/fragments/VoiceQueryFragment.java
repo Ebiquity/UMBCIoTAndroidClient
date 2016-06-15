@@ -9,8 +9,11 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.Voice;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +35,7 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import edu.umbc.cs.iot.clients.android.R;
 import edu.umbc.cs.iot.clients.android.UMBCIoTApplication;
@@ -47,7 +51,7 @@ import static android.app.Activity.RESULT_OK;
  * Use the  factory method to
  * create an instance of this fragment.
  */
-public class VoiceQueryFragment extends Fragment {
+public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitListener {
 //    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 //    private static final String ARG_PARAM1 = "param1";
 //    private static final String ARG_PARAM2 = "param2";
@@ -59,6 +63,7 @@ public class VoiceQueryFragment extends Fragment {
     private RequestQueue queue;
     // temporary string to show the parsed response
     private String jsonResponse;
+    private TextToSpeech speakThis;
 
     private TextView mVoiceFgmtDisplayTextView;
     private ScrollView mVoiceFgmtScrollViewForDisplayText;
@@ -66,6 +71,7 @@ public class VoiceQueryFragment extends Fragment {
     private ImageButton mSendVoiceQueryToServerBtn;
 
     private String mBeconIDParam;
+    private Bundle bundle;
 
     private OnVoiceQueryFragmentInteractionListener mListener;
 
@@ -106,6 +112,7 @@ public class VoiceQueryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_voice_query, container, false);
+        speakThis = new TextToSpeech(this.getActivity(), this);
         initViews();
         initData();
         setOnClickListeners();
@@ -146,7 +153,7 @@ public class VoiceQueryFragment extends Fragment {
     }
 
     private void initData() {
-        Bundle bundle = this.getArguments();
+        bundle = this.getArguments();
         mBeconIDParam = bundle.getString(UMBCIoTApplication.getBeaconTag(), "No beaconID");
         jsonResponse = new String("");
         // Get a RequestQueue
@@ -175,6 +182,15 @@ public class VoiceQueryFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onInit(int status) {
+        if(status == TextToSpeech.SUCCESS) {
+            speakThis.setLanguage(Locale.getDefault());
+            speakThis.setPitch(1f);
+            speakThis.setSpeechRate(1f);
+        }
     }
 
     /**
@@ -240,6 +256,7 @@ public class VoiceQueryFragment extends Fragment {
 
 //                            Toast.makeText(view.getContext(),"JSON response: "+jsonResponse,Toast.LENGTH_LONG).show();
                             mVoiceFgmtDisplayTextView.setText(jsonResponse);
+                            speakThis(text);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(view.getContext(),
@@ -294,6 +311,15 @@ public class VoiceQueryFragment extends Fragment {
 
         // Add a request (in this example, called jsObjRequest) to your RequestQueue.
         VolleySingleton.getInstance(view.getContext()).addToRequestQueue(jsObjRequest);
+    }
+
+    private void speakThis(String text) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String utteranceId=this.hashCode() + "";
+            speakThis.speak(text, TextToSpeech.QUEUE_FLUSH, bundle, utteranceId);
+        } else {
+            speakThis.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+        }
     }
 
     private String createJSONObject(String query, String beacon) throws JSONException {
