@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
-import android.speech.tts.Voice;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +35,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Random;
 
 import edu.umbc.cs.iot.clients.android.R;
 import edu.umbc.cs.iot.clients.android.UMBCIoTApplication;
@@ -63,7 +63,7 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
     private RequestQueue queue;
     // temporary string to show the parsed response
     private String jsonResponse;
-    private TextToSpeech speakThis;
+    private TextToSpeech talker;
 
     private TextView mVoiceFgmtDisplayTextView;
     private ScrollView mVoiceFgmtScrollViewForDisplayText;
@@ -105,14 +105,13 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mBeconIDParam = getArguments().getString(UMBCIoTApplication.getBeaconTag(), "No beaconID");
-        }
+            }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_voice_query, container, false);
-        speakThis = new TextToSpeech(this.getActivity(), this);
         initViews();
         initData();
         setOnClickListeners();
@@ -172,6 +171,7 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
         super.onAttach(context);
         if (context instanceof OnVoiceQueryFragmentInteractionListener) {
             mListener = (OnVoiceQueryFragmentInteractionListener) context;
+            talker = new TextToSpeech(this.getActivity(), this);
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnVoiceQueryFragmentInteractionListener");
@@ -182,14 +182,16 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        talker.shutdown();
     }
 
     @Override
     public void onInit(int status) {
+        Log.d(UMBCIoTApplication.getDebugTag(), "came into onInit");
         if(status == TextToSpeech.SUCCESS) {
-            speakThis.setLanguage(Locale.getDefault());
-            speakThis.setPitch(1f);
-            speakThis.setSpeechRate(1f);
+            talker.setLanguage(Locale.getDefault());
+            talker.setPitch(1f);
+            talker.setSpeechRate(1f);
         }
     }
 
@@ -236,8 +238,8 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                         try {
                             // Parsing json object response
                             // response will be a json object
-                            String status = response.getString("status");
-                            String text = response.getString("text");
+                            final String status = response.getString("status");
+                            final String text = response.getString("text");
 //                            JSONObject phone = response.getJSONObject("phone");
 //                            String home = phone.getString("home");
 //                            String mobile = phone.getString("mobile");
@@ -315,10 +317,12 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
 
     private void speakThis(String text) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            String utteranceId=this.hashCode() + "";
-            speakThis.speak(text, TextToSpeech.QUEUE_FLUSH, bundle, utteranceId);
+            Random random = new Random();
+            random.setSeed(System.currentTimeMillis());
+            String utteranceId=this.hashCode() + Integer.toString(random.nextInt(Integer.MAX_VALUE));
+            talker.speak(text, TextToSpeech.QUEUE_FLUSH, bundle, utteranceId);
         } else {
-            speakThis.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+            talker.speak(text, TextToSpeech.QUEUE_FLUSH, null);
         }
     }
 
