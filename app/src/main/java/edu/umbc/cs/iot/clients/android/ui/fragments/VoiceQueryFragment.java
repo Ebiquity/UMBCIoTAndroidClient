@@ -8,6 +8,7 @@ package edu.umbc.cs.iot.clients.android.ui.fragments;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ import java.util.Random;
 
 import edu.umbc.cs.iot.clients.android.R;
 import edu.umbc.cs.iot.clients.android.UMBCIoTApplication;
+import edu.umbc.cs.iot.clients.android.util.JSONRequest;
 import edu.umbc.cs.iot.clients.android.util.VolleySingleton;
 
 import static android.app.Activity.RESULT_OK;
@@ -55,11 +57,10 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
 //    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 //    private static final String ARG_PARAM1 = "param1";
 //    private static final String ARG_PARAM2 = "param2";
-
 //    private String mParam1;
 //    private String mParam2;
 
-    private JSONObject jsonObject;
+    private JSONRequest jsonRequest;
     private RequestQueue queue;
     // temporary string to show the parsed response
     private String jsonResponse;
@@ -72,6 +73,8 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
 
     private String mBeconIDParam;
     private Bundle bundle;
+    private String mSessionId;
+    private SharedPreferences sharedPreferences;
 
     private OnVoiceQueryFragmentInteractionListener mListener;
 
@@ -154,6 +157,8 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
     private void initData() {
         bundle = this.getArguments();
         mBeconIDParam = bundle.getString(UMBCIoTApplication.getBeaconTag(), "No beaconID");
+        sharedPreferences = getActivity().getSharedPreferences(UMBCIoTApplication.getSharedPreference(), Context.MODE_PRIVATE);
+        mSessionId = sharedPreferences.getString(UMBCIoTApplication.getPrefSessionIdTag(),"No sessionID");
         jsonResponse = new String("");
         // Get a RequestQueue
         queue = VolleySingleton.getInstance(view.getContext()).getRequestQueue();
@@ -209,11 +214,13 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
         // TODO: Update argument type and name
         void onVoiceQueryFragmentInteraction(Uri uri);
     }
+
     private void callWebServiceWithQuery(String query) {
         Log.d(UMBCIoTApplication.getDebugTag(),"Came to callWebServiceWithQuery");
         // Create a JSONObject for the POST call to the NLP engine server
         try {
-            createJSONObject(query,mBeconIDParam);
+//            createJSONObject(query,mBeconIDParam);
+            jsonRequest = new JSONRequest(query,mBeconIDParam,mSessionId);
         } catch (JSONException aJSONException) {
             Log.d("JSONException:"," Something went wrong in JSON object creation");
         }
@@ -230,7 +237,7 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(
                 Request.Method.POST,
                 UMBCIoTApplication.getUrl(),
-                jsonObject,
+                jsonRequest.getRequest(),
                 new Response.Listener<JSONObject>() {
 
                     @Override
@@ -248,9 +255,9 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                             if (!mVoiceFgmtDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
                                 jsonResponse += "------------------------" + "\n";
                             jsonResponse +=  "Query parameters were: "
-                                    +jsonObject.getString(UMBCIoTApplication.getQuestionTag())
+                                    +jsonRequest.getRequest().getString(UMBCIoTApplication.getQuestionTag())
                                     +" "
-                                    +jsonObject.get(UMBCIoTApplication.getBeaconTag())
+                                    +jsonRequest.getRequest().get(UMBCIoTApplication.getBeaconTag())
                                     +"\n\n";
                             jsonResponse += "Response is:\nStatus: " + status + " Text: " + text + "\n";
 //                            response += "Home: " + home + "\n\n";
@@ -280,9 +287,9 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                             if (!mVoiceFgmtDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
                                 jsonResponse += "------------------------" + "\n";
                             jsonResponse +=  "Query parameters were: "
-                                    +jsonObject.getString(UMBCIoTApplication.getQuestionTag())
+                                    +jsonRequest.getRequest().getString(UMBCIoTApplication.getQuestionTag())
                                     +" "
-                                    +jsonObject.get(UMBCIoTApplication.getBeaconTag())
+                                    +jsonRequest.getRequest().get(UMBCIoTApplication.getBeaconTag())
                                     +"\n\n";
                             jsonResponse += "Getting an error code: " + statusCode + " from the server\n";
 //                            response += "Home: " + home + "\n\n";
@@ -326,22 +333,22 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
         }
     }
 
-    private String createJSONObject(String query, String beacon) throws JSONException {
-        // Add your data
-        //Create JSONObject here
-        jsonObject = new JSONObject();
-        jsonObject.put(UMBCIoTApplication.getQuestionTag(), query);
-        jsonObject.put(UMBCIoTApplication.getBeaconTag(), beacon);
-//        Toast.makeText(view.getContext(),"I have: "+mBeconID,Toast.LENGTH_LONG).show();
-
-//        JSONArray jsonArray = new JSONArray();
-//        for(String applicationInfo : getCurrentlyInstalledAppsList()) {
-//            jsonArray.put(applicationInfo);
-//        	  jsonArray.put("Facebook");
-//			  jsonArray.put("Twitter");
-//        }
-//        jsonParam.put("currentApps",jsonArray);
-
-        return jsonObject.toString();
-    }
+//    private String createJSONObject(String query, String beacon) throws JSONException {
+//        // Add your data
+//        //Create JSONObject here
+//        jsonObject = new JSONObject();
+//        jsonObject.put(UMBCIoTApplication.getQuestionTag(), query);
+//        jsonObject.put(UMBCIoTApplication.getBeaconTag(), beacon);
+////        Toast.makeText(view.getContext(),"I have: "+mBeconID,Toast.LENGTH_LONG).show();
+//
+////        JSONArray jsonArray = new JSONArray();
+////        for(String applicationInfo : getCurrentlyInstalledAppsList()) {
+////            jsonArray.put(applicationInfo);
+////        	  jsonArray.put("Facebook");
+////			  jsonArray.put("Twitter");
+////        }
+////        jsonParam.put("currentApps",jsonArray);
+//
+//        return jsonObject.toString();
+//    }
 }

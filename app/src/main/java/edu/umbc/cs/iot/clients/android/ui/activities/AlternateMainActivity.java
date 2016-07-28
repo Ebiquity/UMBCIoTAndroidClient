@@ -17,6 +17,7 @@ import edu.umbc.cs.iot.clients.android.R;
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
+ * This screen exists to show that we are unable to connect to a beacon.
  */
 public class AlternateMainActivity extends AppCompatActivity {
     /**

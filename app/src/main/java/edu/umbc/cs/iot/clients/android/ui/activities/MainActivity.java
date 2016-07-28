@@ -82,6 +82,10 @@ public class MainActivity extends AppCompatActivity implements
 
         sharedPreferences = getSharedPreferences(UMBCIoTApplication.getSharedPreference(), Context.MODE_PRIVATE);
         beaconDisabled = sharedPreferences.getBoolean(UMBCIoTApplication.getPrefBeaconDisabledTag(), false);
+        if(sharedPreferences.getString(UMBCIoTApplication.getPrefSessionIdTag(),"").isEmpty()) {
+            final SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(UMBCIoTApplication.getPrefSessionIdTag(), UMBCIoTApplication.generateRandomSessionId());
+        }
 
         if(!isBluetoothAvailable()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
