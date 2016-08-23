@@ -1,5 +1,11 @@
 package edu.umbc.cs.iot.clients.android.ui.activities;
 
+/**
+ * Created on August 23, 2016
+ * @author: Prajit Kumar Das
+ * @purpose: If the connection fails after a time "AUTO_HIDE_DELAY_MILLIS" then we come to this alternate full screen view. This view uses a popup button to restart the discovery process.
+ */
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;

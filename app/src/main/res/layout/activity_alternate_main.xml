@@ -16,7 +16,7 @@
         android:keepScreenOn="true"
         android:textAlignment="center"
         android:textSize="30sp"
-        android:fontFamily="serif"
+        android:fontFamily="cursive"
         android:textColor="@color/colorPrimaryDark"
         android:textAppearance="@android:style/TextAppearance.Holo.Medium"
         android:text="@string/info_display_text" />

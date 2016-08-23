@@ -1,5 +1,11 @@
 package edu.umbc.cs.iot.clients.android.ui.activities;
 
+/**
+ * Created on August 23, 2016
+ * @author: Prajit Kumar Das
+ * @purpose: This is a placeholder activity, which will be used to obtain user feedback about the app, in the future.
+ */
+
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;

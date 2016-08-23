@@ -3,6 +3,7 @@ package edu.umbc.cs.iot.clients.android.ui.activities;
 /**
  * Created on May 27, 2016
  * @author: Prajit Kumar Das
+ * @purpose: The purpose for this code is to setup the Physical Web connection and to obtain the info from the server using the beacon upon successfully connecting to it.
  */
 
 import android.Manifest;
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements
         navigationView.setNavigationItemSelectedListener(this);
 
         /**
+         * We wanted to show different banner at different times during the day. The following sub-section of the method takes care of that.
          * http://stackoverflow.com/questions/33560219/in-android-how-to-set-navigation-drawer-header-image-and-name-programmatically-i
          * As mentioned in the bug 190226, Since version 23.1.0 getting header layout view with: navigationView.findViewById(R.id.navigation_header_text) no longer works.
          * A workaround is to inflate the headerview programatically and find view by ID from the inflated header view.
@@ -112,10 +114,8 @@ public class MainActivity extends AppCompatActivity implements
          */
         headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
         headerView.findViewById(R.id.drawer_view);
-
         Calendar cal = Calendar.getInstance();
         int hourofday = cal.get(Calendar.HOUR_OF_DAY);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (hourofday <= 12 && hourofday > 6)
                 headerView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.csee_morning, getTheme()));
@@ -135,7 +135,6 @@ public class MainActivity extends AppCompatActivity implements
         // Get a GoogleApiClient object for the using the NearbyMessagesApi
         setGoogleApiClient();
         setListeners();
-//        launchFragment(new VoiceQueryFragment());
     }
 
     @Override
@@ -156,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void setGoogleApiClient() {
         //Construct a connection to Play Services
+        Log.d(UMBCIoTApplication.getDebugTag(),"Came into setGoogleApiClient");
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -178,10 +178,11 @@ public class MainActivity extends AppCompatActivity implements
         mMessageListener = new MessageListener() {
             @Override
             public void onFound(Message message) {
+                Log.d(UMBCIoTApplication.getDebugTag(),"Came into onFound");
                 String foundMessage = new String(message.getContent());
                 // Do something with the message here.
-                Log.i(UMBCIoTApplication.getDebugTag(), "Message string: " + new String(message.getContent()));
-                Log.i(UMBCIoTApplication.getDebugTag(), "Message namespace type: " + message.getNamespace() +
+                Log.d(UMBCIoTApplication.getDebugTag(), "Message string: " + new String(message.getContent()));
+                Log.d(UMBCIoTApplication.getDebugTag(), "Message namespace type: " + message.getNamespace() +
                         "/" + message.getType());
                 if(message.getNamespace().equals(UMBCIoTApplication.getProjectId())
                         && message.getType().equals("string")
@@ -359,18 +360,18 @@ public class MainActivity extends AppCompatActivity implements
 
     // Subscribe to receive messages.
     private void subscribe() {
-        Log.i(UMBCIoTApplication.getDebugTag(), "Subscribing.");
         Toast.makeText(getApplicationContext(),"Subscribing!",Toast.LENGTH_SHORT).show();
         SubscribeOptions options = new SubscribeOptions.Builder()
                 .setStrategy(Strategy.BLE_ONLY)
                 .build();
         Nearby.Messages.subscribe(mGoogleApiClient, mMessageListener, options);
+        Log.d(UMBCIoTApplication.getDebugTag(), "Finished subscribing method tasks.");
     }
 
     private void unsubscribe() {
-        Log.i(UMBCIoTApplication.getDebugTag(), "Unsubscribing.");
         Toast.makeText(getApplicationContext(),"Unsubscribing!",Toast.LENGTH_SHORT).show();
         Nearby.Messages.unsubscribe(mGoogleApiClient, mMessageListener);
+        Log.d(UMBCIoTApplication.getDebugTag(), "Finished unsubscribing method tasks.");
     }
 
     /**
