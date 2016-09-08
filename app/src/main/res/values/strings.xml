@@ -45,7 +45,4 @@
     <string name="setting_menu_text">Settings</string>
     <string name="help_feedback_menu_text">Help &amp; Feedback</string>
     <string name="title_activity_help_feedback">Help &amp; Feedback</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
