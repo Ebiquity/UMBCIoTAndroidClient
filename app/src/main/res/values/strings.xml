@@ -27,10 +27,17 @@
     <string name="app_icon">App icon</string>
 
     <!-- Strings related to Settings -->
-    <string name="pref_beacon_disabled_tag">beacondisabledtag</string>
-    <string name="preference_attributes">Context pref</string>
+    <string name="pref_beacon_disabled_key">beacondisabledkey</string>
+    <string name="preference_header_beacon">Beacon pref</string>
     <string name="pref_title_disable_beacon_scanning">Disable beacon scanning</string>
-    <string name="pref_summary_disable_beacon_scanning">Slide to ask queries without obtaining context from beacons</string>
+    <string name="pref_summary_disable_beacon_scanning">Check the box to ask queries without obtaining context from beacons</string>
+
+    <string name="pref_add_user_key">adduserkey</string>
+    <string name="preference_header_user">User pref</string>
+    <string name="pref_title_add_user_identity">Add user identity</string>
+    <string name="pref_summary_add_user_identity">Click to enter user identity info</string>
+
+    <string name="pref_user_id_default_value">ebiquity.iral@umbc.edu</string>
 
     <!-- Strings related to Drawer Menu -->
     <string name="voice_interface_menu_text">Voice interface</string>

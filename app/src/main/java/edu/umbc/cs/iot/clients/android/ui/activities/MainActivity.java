@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private SharedPreferences sharedPreferences;
     private boolean beaconDisabled;
+    private String userId;
     private NavigationView navigationView;
     private Toolbar toolbar;
     private DrawerLayout drawer;
@@ -84,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements
 
         sharedPreferences = getSharedPreferences(UMBCIoTApplication.getSharedPreference(), Context.MODE_PRIVATE);
         beaconDisabled = sharedPreferences.getBoolean(UMBCIoTApplication.getPrefBeaconDisabledTag(), false);
+        userId = sharedPreferences.getString(UMBCIoTApplication.getPrefUserIdTag(), getResources().getString(R.string.pref_user_id_default_value));
+        Toast.makeText(this,userId,Toast.LENGTH_LONG).show();
+
         if(sharedPreferences.getString(UMBCIoTApplication.getPrefSessionIdTag(),"").isEmpty()) {
             final SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(UMBCIoTApplication.getPrefSessionIdTag(), UMBCIoTApplication.generateRandomSessionId());
@@ -91,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements
 
         if(!isBluetoothAvailable()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, UMBCIoTApplication.PERMISSIONS_REQUEST_BLUETOOTH);
+            startActivityForResult(enableBtIntent, UMBCIoTApplication.getPermissionsRequestBluetooth());
         }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);

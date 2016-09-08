@@ -259,7 +259,7 @@ public class TextQueryFragment extends Fragment {
          */
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(
             Request.Method.POST,
-            UMBCIoTApplication.getUrl(),
+            UMBCIoTApplication.getURL(),
             jsonRequest.getRequest(),
             new Response.Listener<JSONObject>() {
 

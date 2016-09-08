@@ -1,11 +1,20 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-        android:title="@string/preference_attributes">
+        android:title="@string/preference_header_beacon">
         <CheckBoxPreference
             android:enabled="false"
             android:defaultValue="false"
-            android:key="@string/pref_beacon_disabled_tag"
+            android:key="@string/pref_beacon_disabled_key"
             android:summary="@string/pref_summary_disable_beacon_scanning"
             android:title="@string/pref_title_disable_beacon_scanning" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/preference_header_user">
+        <EditTextPreference
+            android:enabled="true"
+            android:defaultValue="@string/pref_user_id_default_value"
+            android:key="@string/pref_add_user_key"
+            android:summary="@string/pref_summary_add_user_identity"
+            android:title="@string/pref_title_add_user_identity" />
     </PreferenceCategory>
 </PreferenceScreen>
