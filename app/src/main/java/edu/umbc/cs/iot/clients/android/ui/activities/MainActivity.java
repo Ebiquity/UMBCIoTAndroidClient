@@ -9,6 +9,7 @@ package edu.umbc.cs.iot.clients.android.ui.activities;
 import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -190,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements
                     beaconData = foundMessage.substring(4);
                     Toast.makeText(getApplicationContext(),"Found: "+beaconData,Toast.LENGTH_SHORT).show();
                     // Only when the beaconData has been found we shall move on to loading the UI
-                    launchFragment(new VoiceQueryFragment());
+                    launchFragment(new VoiceQueryFragment(), false);
 //                    launchFragment(new TextQueryFragment());
                 }
             }
@@ -234,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements
                  * TODO This is a bug. The fragment being loaded is a new fragment every time. This might cause memory leakges.
                  * Fix it @prajit
                  */
-                launchFragment(new VoiceQueryFragment());
+                launchFragment(new VoiceQueryFragment(), false);
                 return true;
             }
             default: {
@@ -245,32 +246,33 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-//    public void verifyBeaconDataAndLaunch(Fragment fragment) {
-//        if(isBeaconDisabled())
-//            launchFragment(fragment);
-//    }
-
-    private void launchFragment(Fragment fragment) {
-        if (beaconData != null) {
-            Bundle bundle = new Bundle();
-            bundle.putString(UMBCIoTApplication.getBeaconTag(), beaconData);
-            fragment.setArguments(bundle);
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.container, fragment)
-                    .commit();
-        } else
-            launchAlternateMainActivity();
-    }
-
     private void launchFragment(Fragment fragment, boolean isPrefFragment) {
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.container, fragment)
-                .commit();
+//        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        if (beaconData == null)
+            launchAlternateMainActivity();
+        else {
+            if (!isPrefFragment) {
+                Bundle bundle = new Bundle(); //Launch one of the QueryFragments
+                bundle.putString(UMBCIoTApplication.getBeaconTag(), beaconData);
+                fragment.setArguments(bundle);
+            }
+//            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+            /**
+             * From: http://stackoverflow.com/a/18940937/1816861
+             * Replace whatever is in the fragment_container view with this fragment,
+             * and add the transaction to the back stack if needed
+             */
+            transaction.replace(R.id.container, fragment);
+            transaction.addToBackStack(null);
+            // Commit the transaction
+            transaction.commit();
+        }
     }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        Fragment fragment = null;
+        Fragment fragment = new VoiceQueryFragment();
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -280,22 +282,25 @@ public class MainActivity extends AppCompatActivity implements
             fragment = new TextQueryFragment();
         else if (id == R.id.app_settings_btn)
             fragment = new PrefsFragment();
-        else if (id == R.id.help_btn)
+        else if (id == R.id.help_btn) {
             launchHelpFeedbackActivity();
+            return true;
+        }
 
+//        launchFragment(fragment);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
         // update the main content by replacing fragments
-        if (fragment != null) {
-            if (fragment instanceof PrefsFragment)
-                launchFragment(fragment, true);
-            else
-                launchFragment(fragment);
-//                verifyBeaconDataAndLaunch(fragment);
-        } else {
-            Log.e(UMBCIoTApplication.getDebugTag(), "Must be going for the help & feedback activity");
-        }
+//        if (fragment != null) {
+        if (fragment instanceof PrefsFragment)
+            launchFragment(fragment, true);
+        else
+            if(!isBeaconDisabled())
+                launchFragment(fragment, false);
+//        } else {
+//            Log.e(UMBCIoTApplication.getDebugTag(), "Must be going for the help & feedback activity");
+//        }
 
         return true;
     }
@@ -399,12 +404,12 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onTextQueryFragmentInteraction(Uri uri) {
-
+        Log.d(UMBCIoTApplication.getDebugTag(), uri.toString());
     }
 
     @Override
     public void onVoiceQueryFragmentInteraction(Uri uri) {
-
+        Log.d(UMBCIoTApplication.getDebugTag(), uri.toString());
     }
 
     public boolean isBeaconDisabled() {
