@@ -74,6 +74,7 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
     private String mBeconIDParam;
     private Bundle bundle;
     private String mSessionId;
+    private String mUserId;
     private SharedPreferences sharedPreferences;
 
     private OnVoiceQueryFragmentInteractionListener mListener;
@@ -159,6 +160,7 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
         mBeconIDParam = bundle.getString(UMBCIoTApplication.getBeaconTag(), "No beaconID");
         sharedPreferences = getActivity().getSharedPreferences(UMBCIoTApplication.getSharedPreference(), Context.MODE_PRIVATE);
         mSessionId = sharedPreferences.getString(UMBCIoTApplication.getPrefSessionIdTag(),"No sessionID");
+        mUserId = sharedPreferences.getString(UMBCIoTApplication.getPrefUserIdTag(), "No userID");
         jsonResponse = new String("");
         // Get a RequestQueue
         queue = VolleySingleton.getInstance(view.getContext()).getRequestQueue();
@@ -187,7 +189,8 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        talker.shutdown();
+        if(talker != null)
+            talker.shutdown();
     }
 
     @Override
@@ -220,7 +223,7 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
         // Create a JSONObject for the POST call to the NLP engine server
         try {
 //            createJSONObject(query,mBeconIDParam);
-            jsonRequest = new JSONRequest(query,mBeconIDParam,mSessionId);
+            jsonRequest = new JSONRequest(query,mBeconIDParam,mSessionId,mUserId);
         } catch (JSONException aJSONException) {
             Log.d("JSONException:"," Something went wrong in JSON object creation");
         }
@@ -236,7 +239,7 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
          */
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(
                 Request.Method.POST,
-                UMBCIoTApplication.getUrl(),
+                UMBCIoTApplication.getURL(),
                 jsonRequest.getRequest(),
                 new Response.Listener<JSONObject>() {
 
@@ -312,7 +315,7 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                             }
                         }
                         Log.d(UMBCIoTApplication.getDebugTag(), "In ErrorListener"+statusCode+body);
-                        VolleyLog.d(UMBCIoTApplication.getDebugTag(), "I ma here Error: " + error.getMessage());
+                        VolleyLog.d(UMBCIoTApplication.getDebugTag(), "I am here Error: " + error.getMessage());
                         //                Toast.makeText(view.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }

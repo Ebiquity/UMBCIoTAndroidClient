@@ -13,13 +13,14 @@ import edu.umbc.cs.iot.clients.android.UMBCIoTApplication;
 public final class JSONRequest {
     private JSONObject request;
 
-    public JSONRequest(String aQuery, String aBeasonId, String aSessionId) throws JSONException {
+    public JSONRequest(String aQuery, String aBeasonId, String aSessionId, String aUserId) throws JSONException {
         // Add your data
         //Create JSONObject here
         request = new JSONObject();
         request.put(UMBCIoTApplication.getQuestionTag(), aQuery);
         request.put(UMBCIoTApplication.getBeaconTag(), aBeasonId);
         request.put(UMBCIoTApplication.getSessionIdTag(), aSessionId);
+        request.put(UMBCIoTApplication.getUserIdTag(), aUserId);
 //        Toast.makeText(view.getContext(),"I have: "+mBeconID,Toast.LENGTH_LONG).show();
 
 //        JSONArray jsonArray = new JSONArray();

@@ -23,7 +23,7 @@ public class PrefsFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Toast.makeText(getActivity(),"Feature currently disabled",Toast.LENGTH_LONG).show();
+//        Toast.makeText(getActivity(),"Feature currently disabled",Toast.LENGTH_LONG).show();
 
         sharedPreferences = getActivity().getSharedPreferences(UMBCIoTApplication.getSharedPreference(), Context.MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -38,6 +38,12 @@ public class PrefsFragment extends PreferenceFragment {
                     Preference connectionPref = findPreference(key);
 
                     editor.putBoolean(UMBCIoTApplication.getPrefBeaconDisabledTag(), connectionPref.getShouldDisableView());
+                    editor.commit();
+                }
+                if (key.equals(UMBCIoTApplication.getPrefUserIdTag())) {
+                    Preference connectionPref = findPreference(key);
+
+                    editor.putString(UMBCIoTApplication.getPrefUserIdTag(), getResources().getString(R.string.pref_user_id_default_value));
                     editor.commit();
                 }
             }

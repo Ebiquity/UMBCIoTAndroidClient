@@ -33,7 +33,7 @@ public class HelpFeedbackActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 //    @Override

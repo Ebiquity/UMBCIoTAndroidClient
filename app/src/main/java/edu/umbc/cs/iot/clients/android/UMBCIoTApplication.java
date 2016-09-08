@@ -16,6 +16,7 @@ public class UMBCIoTApplication extends Application {
     private static final String QUESTION_TAG = "question";
     private static final String BEACON_TAG = "beaconid";
     private static final String SESSION_ID_TAG = "sessionid";
+    private static final String USER_ID_TAG = "userid";
     private static final String RESPONSE_TAG = "response";
     private static final String EDDYSTONE_UUID = "0000feaa-0000-1000-8000-00805f9b34fb";
     private static final String URL = "http://104.154.36.223/bot";
@@ -81,5 +82,9 @@ public class UMBCIoTApplication extends Application {
 
     public static String getPrefUserIdTag() {
         return PREF_USER_ID_TAG;
+    }
+
+    public static String getUserIdTag() {
+        return USER_ID_TAG;
     }
 }

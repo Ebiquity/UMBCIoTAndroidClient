@@ -70,6 +70,7 @@ public class TextQueryFragment extends Fragment {
 
     private String mBeconIDParam;
     private String mSessionId;
+    private String mUserId;
     private SharedPreferences sharedPreferences;
 
     private OnTextQueryFragmentInteractionListener mListener;
@@ -185,6 +186,7 @@ public class TextQueryFragment extends Fragment {
         mBeconIDParam = bundle.getString(UMBCIoTApplication.getBeaconTag(), "No beaconID");
         sharedPreferences = getActivity().getSharedPreferences(UMBCIoTApplication.getSharedPreference(), Context.MODE_PRIVATE);
         mSessionId = sharedPreferences.getString(UMBCIoTApplication.getPrefSessionIdTag(),"No sessionID");
+        mUserId = sharedPreferences.getString(UMBCIoTApplication.getPrefUserIdTag(), "No userID");
         jsonResponse = new String("");
         // Get a RequestQueue
         queue = VolleySingleton.getInstance(view.getContext()).getRequestQueue();
@@ -243,7 +245,7 @@ public class TextQueryFragment extends Fragment {
         // Create a JSONObject for the POST call to the NLP engine server
         try {
 //            createJSONObject(query,mBeconIDParam);
-            jsonRequest = new JSONRequest(query,mBeconIDParam,mSessionId);
+            jsonRequest = new JSONRequest(query,mBeconIDParam,mSessionId,mUserId);
         } catch (JSONException aJSONException) {
             Log.d("JSONException:"," Something went wrong in JSON object creation");
         }
