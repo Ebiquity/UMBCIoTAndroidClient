@@ -5,6 +5,8 @@ package edu.umbc.cs.iot.clients.android.util;
  * @author Prajit Kumar Das
  */
 
+//import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,6 +23,7 @@ public final class JSONRequest {
         request.put(UMBCIoTApplication.getJsonUserIdKey(), aUserId);
     }
     public JSONObject getRequest() {
+//        Log.d(UMBCIoTApplication.getDebugTag(),request.toString());
         return request;
     }
 }

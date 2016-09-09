@@ -12,17 +12,11 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4e3aaeeb-b312-4a31-8437-e005b2b27275" name="Default" comment="user id added">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/gradle.xml" afterPath="$PROJECT_DIR$/.idea/gradle.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+    <list default="true" id="4e3aaeeb-b312-4a31-8437-e005b2b27275" name="Default" comment="user id added and app testing complete">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/UMBCIoTAndroidClient.iml" afterPath="$PROJECT_DIR$/UMBCIoTAndroidClient.iml" />
-      <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/.idea/gradle.xml" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/.idea/gradle.xml" />
-      <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/.idea/modules.xml" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/.idea/vcs.xml" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/.idea/workspace.xml" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/UMBCIoTAndroidClient.iml" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/UMBCIoTAndroidClient.iml" />
+      <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/UMBCIoTApplication.java" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/UMBCIoTApplication.java" />
+      <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/VoiceQueryFragment.java" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/VoiceQueryFragment.java" />
       <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/util/JSONRequest.java" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/util/JSONRequest.java" />
       <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/volley/volley.iml" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/volley/volley.iml" />
     </list>
@@ -62,12 +56,12 @@
     <favorites_list name="UMBCIoT" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="JSONRequest.java" pinned="false" current-in-tab="true">
-        <entry file="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/util/JSONRequest.java">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="VoiceQueryFragment.java" pinned="false" current-in-tab="true">
+        <entry file="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/VoiceQueryFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="21" column="5" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
+            <state relative-caret-position="199">
+              <caret line="296" column="32" selection-start-line="296" selection-start-column="32" selection-end-line="296" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -84,15 +78,15 @@
     </option>
   </component>
   <component name="GenerateSignedApkSettings">
-    <option name="KEY_STORE_PATH" value="$USER_HOME$/Google Drive/UMBCIoTProjectKeyStore.jks" />
+    <option name="KEY_STORE_PATH" value="/media/prajit/data/Dropbox/UMBCIoTProjectKeyStore.jks" />
     <option name="KEY_ALIAS" value="UMBC IoT Proj Andro Client Key" />
     <option name="REMEMBER_PASSWORDS" value="true" />
   </component>
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
       <list>
-        <option value="ui" />
         <option value="Prajit Kumar Das" />
+        <option value="ui" />
       </list>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient" />
@@ -3200,7 +3194,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="8840377309236" />
+        <entry key="$PROJECT_DIR$" value="8842255826826" />
         <entry key="C:\Users\praji\Documents\code\StudioProjects\UMBCIoT" value="8786516056641" />
         <entry key="C:\Users\praji\Documents\code\StudioProjects\UMBCIoTAndroidClient" value="8801091992776" />
         <entry key="D:\Prajit\work\code\AndroidStudioProjects\UMBCIoTAndroidClient" value="8840205216556" />
@@ -3847,26 +3841,26 @@
         <option value="$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/PrefsFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-        <option value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/UMBCIoTApplication.java" />
         <option value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/res/xml/pref_general.xml" />
         <option value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/res/layout/fragment_prefs.xml" />
         <option value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/res/menu/activity_main_drawer.xml" />
         <option value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/TextQueryFragment.java" />
-        <option value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/VoiceQueryFragment.java" />
         <option value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/HelpFeedbackActivity.java" />
         <option value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/res/menu/main.xml" />
         <option value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java" />
         <option value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/res/values/strings.xml" />
         <option value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/res/xml/preferences.xml" />
         <option value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/PrefsFragment.java" />
+        <option value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/UMBCIoTApplication.java" />
         <option value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/util/JSONRequest.java" />
+        <option value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/VoiceQueryFragment.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1967" />
+    <option name="x" value="1973" />
     <option name="y" value="24" />
-    <option name="width" value="1873" />
+    <option name="width" value="1867" />
     <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -3894,6 +3888,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -3911,38 +3906,6 @@
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xml" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="UMBCIoTAndroidClient" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="UMBCIoTAndroidClient" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -3974,28 +3937,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="android" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="UMBCIoTAndroidClient" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="android" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="util" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -4045,42 +3986,23 @@
               <option name="myItemId" value="ui" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="activities" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="UMBCIoTAndroidClient" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="manifests" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidManifestsGroupNode" />
-            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane />
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
-    <property name="device.picker.selection" value="TA9921AB39" />
+    <property name="device.picker.selection" value="019b3e3ff0a68015" />
     <property name="UI_DESIGNER_EDITOR_MODE.NlPaletteManager-NlPreviewForm.SHOW" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/build/outputs/apk" />
+    <property name="last_opened_file_path" value="/media/prajit/data/Dropbox/UMBCIoTProjectKeyStore.jks" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android" />
     <property name="ExportApk.ApkPath" value="$PROJECT_DIR$/app/build/outputs/apk" />
     <property name="ExportApk.Flavors" value="" />
@@ -4801,33 +4723,32 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1967" y="24" width="1873" height="1056" extended-state="6" />
+    <frame x="1973" y="24" width="1867" height="1056" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23990306" sideWeight="0.50793654" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46566522" sideWeight="0.5063966" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38197425" sideWeight="0.4936034" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19759168" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3984451" sideWeight="0.49573562" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32618025" sideWeight="0.4978678" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32618025" sideWeight="0.4978678" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23990306" sideWeight="0.50793654" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32950193" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46566522" sideWeight="0.5063966" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6802575" sideWeight="0.4936034" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3196347" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24959612" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="11" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18500273" sideWeight="0.4920635" order="6" side_tool="false" content_ui="combo" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.184514" sideWeight="0.4920635" order="6" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19759168" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3984451" sideWeight="0.49573562" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23990306" sideWeight="0.5053272" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -4836,6 +4757,7 @@
       <window_info id="Nl-Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32950193" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -4874,6 +4796,9 @@
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23990306" sideWeight="0.5053272" order="5" side_tool="true" content_ui="tabs" />
     </layout-to-restore>
   </component>
+  <component name="UpdateCopyrightCheckinHandler">
+    <option name="UPDATE_COPYRIGHT" value="true" />
+  </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
       <collection />
@@ -4886,7 +4811,7 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="completed the &quot;chat&quot; functionality with the server to work on NerabyMessagesApi integration" />
+    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <MESSAGE value="fixing icon issue" />
     <MESSAGE value="attrib" />
     <MESSAGE value="fixing few ui issues" />
@@ -4911,7 +4836,11 @@
     <MESSAGE value="gradle changes" />
     <MESSAGE value="fixing bugs" />
     <MESSAGE value="user id added" />
-    <option name="LAST_COMMIT_MESSAGE" value="user id added" />
+    <MESSAGE value="user id added and app testing complete" />
+    <option name="LAST_COMMIT_MESSAGE" value="user id added and app testing complete" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -4948,61 +4877,61 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/VoiceQueryFragment.java</url>
-          <line>332</line>
+          <line>333</line>
           <properties />
           <option name="timeStamp" value="153" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/VoiceQueryFragment.java</url>
-          <line>333</line>
+          <line>334</line>
           <properties />
           <option name="timeStamp" value="154" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/VoiceQueryFragment.java</url>
-          <line>334</line>
+          <line>335</line>
           <properties />
           <option name="timeStamp" value="155" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/VoiceQueryFragment.java</url>
-          <line>269</line>
+          <line>270</line>
           <properties />
           <option name="timeStamp" value="156" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/VoiceQueryFragment.java</url>
-          <line>271</line>
+          <line>272</line>
           <properties />
           <option name="timeStamp" value="158" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/VoiceQueryFragment.java</url>
-          <line>277</line>
+          <line>278</line>
           <properties />
           <option name="timeStamp" value="159" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/VoiceQueryFragment.java</url>
-          <line>180</line>
+          <line>181</line>
           <properties />
           <option name="timeStamp" value="190" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/VoiceQueryFragment.java</url>
-          <line>177</line>
+          <line>178</line>
           <properties />
           <option name="timeStamp" value="191" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/VoiceQueryFragment.java</url>
-          <line>182</line>
+          <line>183</line>
           <properties />
           <option name="timeStamp" value="192" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/VoiceQueryFragment.java</url>
-          <line>179</line>
+          <line>180</line>
           <properties />
           <option name="timeStamp" value="193" />
         </line-breakpoint>
@@ -5141,23 +5070,23 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_alternate_main.xml">
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_help_feedback.xml">
       <provider editor-type-id="android-designer2">
         <state />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_help_feedback.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
           <caret line="23" column="40" selection-start-line="23" selection-start-column="40" selection-end-line="23" selection-end-column="40" />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/settings.xml">
@@ -5194,7 +5123,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
           <caret line="36" column="5" selection-start-line="36" selection-start-column="5" selection-end-line="36" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -5202,21 +5130,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1170">
           <caret line="105" column="0" selection-start-line="105" selection-start-column="0" selection-end-line="107" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/xml/pref_general.xml">
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="68" selection-start-line="14" selection-start-column="68" selection-end-line="14" selection-end-column="68" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/xml/pref_general.xml" />
     <entry file="file://$PROJECT_DIR$/../../../Android/sdk/sources/android-24/android/preference/Preference.java" />
     <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/VoiceQueryFragment.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -5224,16 +5141,9 @@
           <caret line="192" column="30" selection-start-line="192" selection-start-column="30" selection-end-line="192" selection-end-column="30" />
           <folding>
             <element signature="docComment;class#VoiceQueryFragment#0" expanded="false" />
-            <element signature="e#1731#1800#0" expanded="false" />
-            <element signature="e#2809#2818#0" expanded="false" />
             <element signature="method#onCreate#0;class#VoiceQueryFragment#0" expanded="false" />
             <element signature="method#onActivityResult#0;class#VoiceQueryFragment#0" expanded="false" />
             <element signature="method#onInit#0;class#VoiceQueryFragment#0" expanded="false" />
-            <element signature="e#9656#9687#0" expanded="false" />
-            <element signature="e#9906#9987#0" expanded="false" />
-            <element signature="e#10887#10954#0" expanded="false" />
-            <element signature="e#12937#13004#0" expanded="false" />
-            <element signature="e#15095#15184#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -5261,51 +5171,37 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/res/xml/pref_headers.xml" />
     <entry file="file://$PROJECT_DIR$/app/src/main/res/xml/pref_notification.xml" />
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider editor-type-id="android-manifest">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="705">
           <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
-          <folding />
         </state>
+      </provider>
+      <provider editor-type-id="android-manifest">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="705">
           <caret line="47" column="12" selection-start-line="47" selection-start-column="12" selection-end-line="47" selection-end-column="12" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/res/menu/activity_main_drawer.xml">
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
-    </entry>
-    <entry file="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/res/layout/fragment_prefs.xml">
       <provider editor-type-id="android-designer2">
         <state />
       </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="17" selection-start-line="1" selection-start-column="17" selection-end-line="1" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
     </entry>
+    <entry file="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/res/layout/fragment_prefs.xml" />
     <entry file="file://$PROJECT_DIR$/../../sdk/sources/android-24/android/preference/Preference.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="182">
           <caret line="144" column="21" selection-start-line="144" selection-start-column="21" selection-end-line="144" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -5313,38 +5209,23 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="525">
           <caret line="35" column="7" selection-start-line="35" selection-start-column="7" selection-end-line="35" selection-end-column="7" />
-          <folding>
-            <element signature="e#329#364#0" expanded="true" />
-            <element signature="e#500#534#0" expanded="true" />
-            <element signature="e#1108#1135#0" expanded="true" />
-            <element signature="e#1267#1300#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/res/layout/activity_main.xml">
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
           <caret line="21" column="44" selection-start-line="21" selection-start-column="24" selection-end-line="21" selection-end-column="44" />
-          <folding />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
       </provider>
     </entry>
     <entry file="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/TextQueryFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3975">
           <caret line="315" column="99" selection-start-line="315" selection-start-column="99" selection-end-line="315" selection-end-column="99" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/VoiceQueryFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-422">
-          <caret line="294" column="103" selection-start-line="294" selection-start-column="103" selection-end-line="294" selection-end-column="103" />
           <folding />
         </state>
       </provider>
@@ -5358,47 +5239,30 @@
       </provider>
     </entry>
     <entry file="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/AndroidManifest.xml">
-      <provider editor-type-id="android-manifest">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-12">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
-    </entry>
-    <entry file="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/UMBCIoTApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="163">
-          <caret line="25" column="57" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="57" />
-          <folding>
-            <element signature="e#2062#2063#0" expanded="true" />
-            <element signature="e#2101#2102#0" expanded="true" />
-          </folding>
-        </state>
+      <provider editor-type-id="android-manifest">
+        <state />
       </provider>
     </entry>
     <entry file="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/res/menu/main.xml">
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="10" column="7" selection-start-line="10" selection-start-column="7" selection-end-line="10" selection-end-column="7" />
-          <folding>
-            <element signature="e#343#365#0" expanded="true" />
-          </folding>
         </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
       </provider>
     </entry>
     <entry file="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/HelpFeedbackActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -5406,7 +5270,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1950">
           <caret line="165" column="24" selection-start-line="165" selection-start-column="24" selection-end-line="165" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -5414,9 +5277,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
           <caret line="87" column="84" selection-start-line="87" selection-start-column="84" selection-end-line="87" selection-end-column="84" />
-          <folding>
-            <element signature="e#3665#3726#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -5424,47 +5285,49 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="548">
           <caret line="39" column="37" selection-start-line="39" selection-start-column="37" selection-end-line="39" selection-end-column="37" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/res/xml/preferences.xml">
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="17" column="52" selection-start-line="17" selection-start-column="52" selection-end-line="17" selection-end-column="52" />
-          <folding>
-            <element signature="e#763#806#0" expanded="true" />
-            <element signature="e#1091#1127#0" expanded="true" />
-            <element signature="e#1154#1188#0" expanded="true" />
-          </folding>
         </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
       </provider>
     </entry>
     <entry file="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/PrefsFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="707">
           <caret line="75" column="0" selection-start-line="75" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
-          <folding>
-            <element signature="e#1456#1517#0" expanded="true" />
-            <element signature="e#1650#1711#0" expanded="true" />
-            <element signature="e#2538#2599#0" expanded="true" />
-            <element signature="e#2756#2817#0" expanded="true" />
-            <element signature="e#3009#3070#0" expanded="true" />
-            <element signature="e#3306#3367#0" expanded="true" />
-            <element signature="e#3524#3585#0" expanded="true" />
-            <element signature="e#4215#4276#0" expanded="true" />
-            <element signature="e#4425#4486#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/util/JSONRequest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="21" column="5" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
+        <state relative-caret-position="120">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/UMBCIoTApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="48">
+          <caret line="24" column="61" selection-start-line="24" selection-start-column="61" selection-end-line="24" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/fragments/VoiceQueryFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="296" column="32" selection-start-line="296" selection-start-column="32" selection-end-line="296" selection-end-column="32" />
           <folding />
         </state>
       </provider>

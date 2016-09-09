@@ -22,10 +22,10 @@ public class UMBCIoTApplication extends Application {
     private static final String JSON_QUESTION_KEY = "question";
     private static final String JSON_BEACON_KEY = "beaconid";
     private static final String JSON_SESSION_ID_KEY = "sessionid";
-    private static final String JSON_USER_ID_KEY = "userid";
+    private static final String JSON_USER_ID_KEY = "contextid";//userid will be used later now it is going to be contextid
     private static final String JSON_RESPONSE_KEY = "response";
     private static final String EDDYSTONE_UUID = "0000feaa-0000-1000-8000-00805f9b34fb";
-    private static final String URL = "http://104.154.36.223/bot";
+    private static final String URL = "http://104.154.36.223/bot/";
     private static final String SHARED_PREFERENCE = "UMBC_IOT_APP_SHARED_PREFERENCE";
     private static final String PREF_BEACON_DISABLED_KEY = "beaconDisabledKey";
     private static final String PREF_ENABLE_USER_ID_KEY = "enableUserIdKey";

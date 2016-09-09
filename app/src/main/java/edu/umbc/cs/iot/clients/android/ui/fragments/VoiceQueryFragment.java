@@ -43,6 +43,8 @@ import edu.umbc.cs.iot.clients.android.util.VolleySingleton;
 
 import static android.app.Activity.RESULT_OK;
 
+//import android.util.Log;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
