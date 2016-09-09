@@ -6,11 +6,17 @@ package edu.umbc.cs.iot.clients.android;
  */
 
 import android.app.Application;
-import android.bluetooth.BluetoothAdapter;
 
 import java.util.UUID;
 
 public class UMBCIoTApplication extends Application {
+    public static final int REQUEST_RESOLVE_ERROR = 1;
+    public static final int REQUEST_PERMISSION = 2;
+    public static final int VOICE_QUERY_RESPONSE = 3;
+    public static final int PERMISSIONS_REQUEST_BLUETOOTH = 4;
+    public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 5;
+    public static final int PERMISSIONS_REQUEST_INTERNET = 6;
+    public static final int PERMISSIONS_REQUEST_BLUETOOTH_ADMIN = 7;
     private static final String DEBUG_TAG = "UMBCIoTDebugTag";
     private static final String PROJECT_ID = "androidclient-umbc";
     private static final String JSON_QUESTION_KEY = "question";
@@ -20,13 +26,6 @@ public class UMBCIoTApplication extends Application {
     private static final String JSON_RESPONSE_KEY = "response";
     private static final String EDDYSTONE_UUID = "0000feaa-0000-1000-8000-00805f9b34fb";
     private static final String URL = "http://104.154.36.223/bot";
-    public static final int REQUEST_RESOLVE_ERROR = 1;
-    public static final int REQUEST_PERMISSION = 2;
-    public static final int VOICE_QUERY_RESPONSE = 3;
-    public static final int PERMISSIONS_REQUEST_BLUETOOTH = 4;
-    public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 5;
-    public static final int PERMISSIONS_REQUEST_INTERNET = 6;
-    public static final int PERMISSIONS_REQUEST_BLUETOOTH_ADMIN = 7;
     private static final String SHARED_PREFERENCE = "UMBC_IOT_APP_SHARED_PREFERENCE";
     private static final String PREF_BEACON_DISABLED_KEY = "beaconDisabledKey";
     private static final String PREF_ENABLE_USER_ID_KEY = "enableUserIdKey";

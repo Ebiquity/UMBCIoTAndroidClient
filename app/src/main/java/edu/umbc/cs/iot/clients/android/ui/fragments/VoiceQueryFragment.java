@@ -14,14 +14,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -138,7 +136,7 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                 try {
                     startActivityForResult(i, UMBCIoTApplication.VOICE_QUERY_RESPONSE);
                 } catch (Exception e) {
-                    Toast.makeText(v.getContext(), "Error initializing speech to text engine.", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(v.getContext(), "Error initializing speech to text engine.", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -161,7 +159,7 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
         sharedPreferences = getActivity().getSharedPreferences(UMBCIoTApplication.getSharedPreference(), Context.MODE_PRIVATE);
         mSessionId = sharedPreferences.getString(UMBCIoTApplication.getJsonSessionIdKey(),"No sessionID");
         mUserId = sharedPreferences.getString(UMBCIoTApplication.getPrefUserIdKey(), "No userID");
-        jsonResponse = new String("");
+        jsonResponse = new String();
         // Get a RequestQueue
         queue = VolleySingleton.getInstance(view.getContext()).getRequestQueue();
     }
@@ -195,7 +193,7 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
 
     @Override
     public void onInit(int status) {
-        Log.d(UMBCIoTApplication.getDebugTag(), "came into onInit");
+//        Log.d(UMBCIoTApplication.getDebugTag(), "came into onInit");
         if(status == TextToSpeech.SUCCESS) {
             talker.setLanguage(Locale.getDefault());
             talker.setPitch(1f);
@@ -203,29 +201,14 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
         }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnVoiceQueryFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onVoiceQueryFragmentInteraction(Uri uri);
-    }
-
     private void callWebServiceWithQuery(String query) {
-        Log.d(UMBCIoTApplication.getDebugTag(),"Came to callWebServiceWithQuery");
+//        Log.d(UMBCIoTApplication.getDebugTag(),"Came to callWebServiceWithQuery");
         // Create a JSONObject for the POST call to the NLP engine server
         try {
 //            createJSONObject(query,mBeconIDParam);
             jsonRequest = new JSONRequest(query,mBeconIDParam,mSessionId,mUserId);
         } catch (JSONException aJSONException) {
-            Log.d("JSONException:"," Something went wrong in JSON object creation");
+//            Log.d("JSONException:"," Something went wrong in JSON object creation");
         }
 //        Toast.makeText(view.getContext(),"Calling the webservice with url: "+UMBCIoTApplication.getUrl()+" and payload "+jsonObject.toString(),Toast.LENGTH_LONG).show();
         /**
@@ -271,9 +254,9 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                             speakThis(text);
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(view.getContext(),
-                                    "Error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
+//                            Toast.makeText(view.getContext(),
+//                                    "Error: " + e.getMessage(),
+//                                    Toast.LENGTH_LONG).show();
                         }
                     }
                 },
@@ -284,8 +267,8 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                         String body = new String();
                         //get status code here
                         String statusCode = String.valueOf(error.networkResponse.statusCode);
-                        Log.d(UMBCIoTApplication.getDebugTag(), "Error status code was: " + statusCode);
-                        Toast.makeText(view.getContext(), "Error status code was: " + statusCode, Toast.LENGTH_LONG).show();
+//                        Log.d(UMBCIoTApplication.getDebugTag(), "Error status code was: " + statusCode);
+//                        Toast.makeText(view.getContext(), "Error status code was: " + statusCode, Toast.LENGTH_LONG).show();
                         try {
                             if (!mVoiceFgmtDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
                                 jsonResponse += "------------------------" + "\n";
@@ -302,9 +285,9 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                             mVoiceFgmtDisplayTextView.setText(jsonResponse);
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(view.getContext(),
-                                    "Error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
+//                            Toast.makeText(view.getContext(),
+//                                    "Error: " + e.getMessage(),
+//                                    Toast.LENGTH_LONG).show();
                         }
                         //get response body and parse with appropriate encoding
                         if(error.networkResponse.data!=null) {
@@ -314,7 +297,7 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                                 e.printStackTrace();
                             }
                         }
-                        Log.d(UMBCIoTApplication.getDebugTag(), "In ErrorListener"+statusCode+body);
+//                        Log.d(UMBCIoTApplication.getDebugTag(), "In ErrorListener"+statusCode+body);
                         VolleyLog.d(UMBCIoTApplication.getDebugTag(), "I am here Error: " + error.getMessage());
                         //                Toast.makeText(view.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -331,9 +314,25 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
             random.setSeed(System.currentTimeMillis());
             String utteranceId=this.hashCode() + Integer.toString(random.nextInt(Integer.MAX_VALUE));
             talker.speak(text, TextToSpeech.QUEUE_FLUSH, bundle, utteranceId);
-        } else {
-            talker.speak(text, TextToSpeech.QUEUE_FLUSH, null);
         }
+//        else {
+//            talker.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+//        }
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnVoiceQueryFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onVoiceQueryFragmentInteraction(Uri uri);
     }
 
 //    private String createJSONObject(String query, String beacon) throws JSONException {

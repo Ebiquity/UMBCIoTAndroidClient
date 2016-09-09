@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +24,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -97,6 +95,11 @@ public class TextQueryFragment extends Fragment {
 //        fragment.setArguments(args);
 //        return fragment;
 //    }
+
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -176,18 +179,13 @@ public class TextQueryFragment extends Fragment {
         });
     }
 
-    public static void hideKeyboardFrom(Context context, View view) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
     private void initData() {
         Bundle bundle = this.getArguments();
         mBeconIDParam = bundle.getString(UMBCIoTApplication.getJsonBeaconKey(), "No beaconID");
         sharedPreferences = getActivity().getSharedPreferences(UMBCIoTApplication.getSharedPreference(), Context.MODE_PRIVATE);
         mSessionId = sharedPreferences.getString(UMBCIoTApplication.getJsonSessionIdKey(),"No sessionID");
         mUserId = sharedPreferences.getString(UMBCIoTApplication.getPrefUserIdKey(), "No userID");
-        jsonResponse = new String("");
+        jsonResponse = new String();
         // Get a RequestQueue
         queue = VolleySingleton.getInstance(view.getContext()).getRequestQueue();
     }
@@ -225,29 +223,14 @@ public class TextQueryFragment extends Fragment {
         hideKeyboardFrom(view.getContext(),view);
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnTextQueryFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onTextQueryFragmentInteraction(Uri uri);
-    }
-
     private void callWebServiceWithQuery(String query) {
-        Log.d(UMBCIoTApplication.getDebugTag(),"Came to callWebServiceWithQuery");
+//        Log.d(UMBCIoTApplication.getDebugTag(),"Came to callWebServiceWithQuery");
         // Create a JSONObject for the POST call to the NLP engine server
         try {
 //            createJSONObject(query,mBeconIDParam);
             jsonRequest = new JSONRequest(query,mBeconIDParam,mSessionId,mUserId);
         } catch (JSONException aJSONException) {
-            Log.d("JSONException:"," Something went wrong in JSON object creation");
+//            Log.d("JSONException:"," Something went wrong in JSON object creation");
         }
 //        Toast.makeText(view.getContext(),"Calling the webservice with url: "+UMBCIoTApplication.getUrl()+" and payload "+jsonObject.toString(),Toast.LENGTH_LONG).show();
         /**
@@ -292,9 +275,9 @@ public class TextQueryFragment extends Fragment {
                         mTextFgmtDisplayTextView.setText(jsonResponse);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(view.getContext(),
-                                "Error: " + e.getMessage(),
-                                Toast.LENGTH_LONG).show();
+//                        Toast.makeText(view.getContext(),
+//                                "Error: " + e.getMessage(),
+//                                Toast.LENGTH_LONG).show();
                     }
                 }
             },
@@ -305,8 +288,8 @@ public class TextQueryFragment extends Fragment {
                     String body = new String();
                     //get status code here
                     String statusCode = String.valueOf(error.networkResponse.statusCode);
-                    Log.d(UMBCIoTApplication.getDebugTag(), "Error status code was: " + statusCode);
-                    Toast.makeText(view.getContext(), "Error status code was: " + statusCode, Toast.LENGTH_LONG).show();
+//                    Log.d(UMBCIoTApplication.getDebugTag(), "Error status code was: " + statusCode);
+//                    Toast.makeText(view.getContext(), "Error status code was: " + statusCode, Toast.LENGTH_LONG).show();
                     try {
                         if (!mTextFgmtDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
                             jsonResponse += "------------------------" + "\n";
@@ -323,9 +306,9 @@ public class TextQueryFragment extends Fragment {
                         mTextFgmtDisplayTextView.setText(jsonResponse);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(view.getContext(),
-                                "Error: " + e.getMessage(),
-                                Toast.LENGTH_LONG).show();
+//                        Toast.makeText(view.getContext(),
+//                                "Error: " + e.getMessage(),
+//                                Toast.LENGTH_LONG).show();
                     }
                     //get response body and parse with appropriate encoding
                     if(error.networkResponse.data!=null) {
@@ -335,7 +318,7 @@ public class TextQueryFragment extends Fragment {
                             e.printStackTrace();
                         }
                     }
-                    Log.d(UMBCIoTApplication.getDebugTag(), "In ErrorListener"+statusCode+body);
+//                    Log.d(UMBCIoTApplication.getDebugTag(), "In ErrorListener"+statusCode+body);
                     VolleyLog.d(UMBCIoTApplication.getDebugTag(), "I ma here Error: " + error.getMessage());
     //                Toast.makeText(view.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -344,6 +327,21 @@ public class TextQueryFragment extends Fragment {
 
         // Add a request (in this example, called jsObjRequest) to your RequestQueue.
         VolleySingleton.getInstance(view.getContext()).addToRequestQueue(jsObjRequest);
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnTextQueryFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onTextQueryFragmentInteraction(Uri uri);
     }
 
 //    private String createJSONObject(String query, String beacon) throws JSONException {

@@ -8,7 +8,6 @@ package edu.umbc.cs.iot.clients.android.ui.activities;
 
 import android.Manifest;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
@@ -30,11 +29,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -61,6 +58,19 @@ public class MainActivity extends AppCompatActivity implements
         TextQueryFragment.OnTextQueryFragmentInteractionListener,
         VoiceQueryFragment.OnVoiceQueryFragmentInteractionListener {
 
+    /**
+     * Delay the process of stopping beacon discovery for 100 seconds so that we don't keep on hanging around forever for beacons
+     */
+    private static final int AUTO_HIDE_DELAY_MILLIS = 100000;
+    private final Handler mHideHandler = new Handler();
+    private final Runnable mHideRunnable = new Runnable() {
+        @Override
+        public void run() {
+//            Log.d(UMBCIoTApplication.getDebugTag(), "Could not connect to any beacon for "+AUTO_HIDE_DELAY_MILLIS+" milliseconds, going offline...");
+//            Toast.makeText(getApplicationContext(), "Could not connect to any beacon for "+AUTO_HIDE_DELAY_MILLIS+" milliseconds, going offline...", Toast.LENGTH_SHORT).show();
+            launchAlternateMainActivity();
+        }
+    };
     private SharedPreferences sharedPreferences;
     private boolean beaconDisabled;
     private String userId;
@@ -73,11 +83,6 @@ public class MainActivity extends AppCompatActivity implements
     private MessageListener mMessageListener;
     private View headerView;
 
-    /**
-     * Delay the process of stopping beacon discovery for 100 seconds so that we don't keep on hanging around forever for beacons
-     */
-    private static final int AUTO_HIDE_DELAY_MILLIS = 100000;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,11 +91,12 @@ public class MainActivity extends AppCompatActivity implements
         sharedPreferences = getSharedPreferences(UMBCIoTApplication.getSharedPreference(), Context.MODE_PRIVATE);
         beaconDisabled = sharedPreferences.getBoolean(UMBCIoTApplication.getPrefBeaconDisabledKey(), false);
         userId = sharedPreferences.getString(UMBCIoTApplication.getPrefUserIdKey(), getResources().getString(R.string.pref_user_id_default_value));
-        Toast.makeText(this,userId,Toast.LENGTH_LONG).show();
+//        Toast.makeText(this,userId,Toast.LENGTH_LONG).show();
 
         if(sharedPreferences.getString(UMBCIoTApplication.getJsonSessionIdKey(),"").isEmpty()) {
             final SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(UMBCIoTApplication.getJsonSessionIdKey(), UMBCIoTApplication.generateRandomSessionId());
+            editor.commit();
         }
 
         if(!isBluetoothAvailable()) {
@@ -160,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void setGoogleApiClient() {
         //Construct a connection to Play Services
-        Log.d(UMBCIoTApplication.getDebugTag(),"Came into setGoogleApiClient");
+//        Log.d(UMBCIoTApplication.getDebugTag(),"Came into setGoogleApiClient");
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -183,17 +189,16 @@ public class MainActivity extends AppCompatActivity implements
         mMessageListener = new MessageListener() {
             @Override
             public void onFound(Message message) {
-                Log.d(UMBCIoTApplication.getDebugTag(),"Came into onFound");
+//                Log.d(UMBCIoTApplication.getDebugTag(),"Came into onFound");
                 String foundMessage = new String(message.getContent());
                 // Do something with the message here.
-                Log.d(UMBCIoTApplication.getDebugTag(), "Message string: " + new String(message.getContent()));
-                Log.d(UMBCIoTApplication.getDebugTag(), "Message namespace type: " + message.getNamespace() +
-                        "/" + message.getType());
+//                Log.d(UMBCIoTApplication.getDebugTag(), "Message string: " + new String(message.getContent()));
+//                Log.d(UMBCIoTApplication.getDebugTag(), "Message namespace type: " + message.getNamespace() + "/" + message.getType());
                 if(message.getNamespace().equals(UMBCIoTApplication.getProjectId())
                         && message.getType().equals("string")
                         && foundMessage.startsWith("MAC")) {
                     beaconData = foundMessage.substring(4);
-                    Toast.makeText(getApplicationContext(),"Found: "+beaconData,Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(),"Found: "+beaconData,Toast.LENGTH_SHORT).show();
                     // Only when the beaconData has been found we shall move on to loading the UI
                     launchFragment(new VoiceQueryFragment(), false);
 //                    launchFragment(new TextQueryFragment());
@@ -203,8 +208,8 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onLost(Message message) {
                 String messageAsString = new String(message.getContent());
-                Log.d(UMBCIoTApplication.getDebugTag(), "Lost beacon message: " + messageAsString);
-                Toast.makeText(getApplicationContext(), "Lost contact with beacon! I will wait for "+AUTO_HIDE_DELAY_MILLIS+" milliseconds...", Toast.LENGTH_SHORT).show();
+//                Log.d(UMBCIoTApplication.getDebugTag(), "Lost beacon message: " + messageAsString);
+//                Toast.makeText(getApplicationContext(), "Lost contact with beacon! I will wait for "+AUTO_HIDE_DELAY_MILLIS+" milliseconds...", Toast.LENGTH_SHORT).show();
                 PauseBeaconNotFoundActivity aPauseBeaconNotFoundActivity = new PauseBeaconNotFoundActivity();
                 aPauseBeaconNotFoundActivity.execute();
             }
@@ -309,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onConnectionSuspended(int cause) {
-        Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient disconnected with cause: " + cause);
+//        Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient disconnected with cause: " + cause);
     }
 
     @Override
@@ -318,13 +323,14 @@ public class MainActivity extends AppCompatActivity implements
             try {
                 result.startResolutionForResult(this, UMBCIoTApplication.REQUEST_RESOLVE_ERROR);
             } catch (IntentSender.SendIntentException e) {
-                Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed due to"+e.getMessage());
-                Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed due to"+e.getMessage(), Toast.LENGTH_SHORT).show();
+//                Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed due to"+e.getMessage());
+//                Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed due to"+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-        } else {
-            Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed");
-            Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed", Toast.LENGTH_SHORT).show();
         }
+//        else {
+//            Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed");
+//            Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed", Toast.LENGTH_SHORT).show();
+//        }
     }
 
     /**
@@ -338,19 +344,20 @@ public class MainActivity extends AppCompatActivity implements
                     // Permission granted or error resolved successfully then we proceed
                     // with publish and subscribe..
                     subscribe();
-                } else {
-                    Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed. Unable to resolve.", Toast.LENGTH_SHORT).show();
                 }
+//                else {
+//                    Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed. Unable to resolve.", Toast.LENGTH_SHORT).show();
+//                }
             }
             case UMBCIoTApplication.REQUEST_PERMISSION: {
                 if (resultCode != RESULT_OK) {
-                    Toast.makeText(getApplicationContext(), "We need location permission to get scan results!", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "We need location permission to get scan results!", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
             case UMBCIoTApplication.PERMISSIONS_REQUEST_BLUETOOTH: {
                 if (resultCode != RESULT_OK) {
-                    Toast.makeText(getApplicationContext(), "We need bluetooth enabled to use the nearby messages api!", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "We need bluetooth enabled to use the nearby messages api!", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
@@ -362,18 +369,18 @@ public class MainActivity extends AppCompatActivity implements
 
     // Subscribe to receive messages.
     private void subscribe() {
-        Toast.makeText(getApplicationContext(),"Subscribing!",Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(),"Subscribing!",Toast.LENGTH_SHORT).show();
         SubscribeOptions options = new SubscribeOptions.Builder()
                 .setStrategy(Strategy.BLE_ONLY)
                 .build();
         Nearby.Messages.subscribe(mGoogleApiClient, mMessageListener, options);
-        Log.d(UMBCIoTApplication.getDebugTag(), "Finished subscribing method tasks.");
+//        Log.d(UMBCIoTApplication.getDebugTag(), "Finished subscribing method tasks.");
     }
 
     private void unsubscribe() {
-        Toast.makeText(getApplicationContext(),"Unsubscribing!",Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(),"Unsubscribing!",Toast.LENGTH_SHORT).show();
         Nearby.Messages.unsubscribe(mGoogleApiClient, mMessageListener);
-        Log.d(UMBCIoTApplication.getDebugTag(), "Finished unsubscribing method tasks.");
+//        Log.d(UMBCIoTApplication.getDebugTag(), "Finished unsubscribing method tasks.");
     }
 
     /**
@@ -383,7 +390,7 @@ public class MainActivity extends AppCompatActivity implements
     public boolean isBluetoothAvailable() {
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
-            Toast.makeText(getApplicationContext(), "Device does not support Bluetooth.\nApp won't work without it!", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "Device does not support Bluetooth.\nApp won't work without it!", Toast.LENGTH_SHORT).show();
             finish();
         }
         return mBluetoothAdapter.isEnabled();
@@ -401,68 +408,57 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onTextQueryFragmentInteraction(Uri uri) {
-        Log.d(UMBCIoTApplication.getDebugTag(), uri.toString());
+//        Log.d(UMBCIoTApplication.getDebugTag(), uri.toString());
     }
 
     @Override
     public void onVoiceQueryFragmentInteraction(Uri uri) {
-        Log.d(UMBCIoTApplication.getDebugTag(), uri.toString());
+//        Log.d(UMBCIoTApplication.getDebugTag(), uri.toString());
     }
 
     public boolean isBeaconDisabled() {
         return beaconDisabled;
     }
 
-    class PauseBeaconNotFoundActivity extends AsyncTask<Void, Void, Void> {
-        protected Void doInBackground(Void... params) {
-            try {
-                Log.d(UMBCIoTApplication.getDebugTag(), "came into doInBackground"+System.currentTimeMillis());
-                Thread.sleep(AUTO_HIDE_DELAY_MILLIS);
-                Log.d(UMBCIoTApplication.getDebugTag(), "sleep complete"+System.currentTimeMillis());
-                launchAlternateMainActivity();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
-
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        Log.d(UMBCIoTApplication.getDebugTag(), "Came to onPostCreate");
+//        Log.d(UMBCIoTApplication.getDebugTag(), "Came to onPostCreate");
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available.
-        delayedHide(AUTO_HIDE_DELAY_MILLIS);
+//        delayedHide(AUTO_HIDE_DELAY_MILLIS);
     }
-
-    private final Handler mHideHandler = new Handler();
 
     /**
      * Schedules a call to hide() in [delay] milliseconds, canceling any
      * previously scheduled calls.
      */
-    private void delayedHide(int delayMillis) {
-        Log.d(UMBCIoTApplication.getDebugTag(), "Came to delayedHide");
-        if (beaconData == null) {
-            Log.d(UMBCIoTApplication.getDebugTag(), "Came inside delayedHide");
+//    private void delayedHide(int delayMillis) {
+//        Log.d(UMBCIoTApplication.getDebugTag(), "Came to delayedHide");
+//        if (beaconData == null) {
+//            Log.d(UMBCIoTApplication.getDebugTag(), "Came inside delayedHide");
             /**
              * TODO Callback to display beacon not found activity has been removed for the time being in order to ensure demo works.
              * Fix it @prajit
              */
 //            mHideHandler.removeCallbacks(mHideRunnable);
 //            mHideHandler.postDelayed(mHideRunnable, delayMillis);
-        }
-    }
+//        }
+//    }
 
-    private final Runnable mHideRunnable = new Runnable() {
-        @Override
-        public void run() {
-            Log.d(UMBCIoTApplication.getDebugTag(), "Could not connect to any beacon for "+AUTO_HIDE_DELAY_MILLIS+" milliseconds, going offline...");
-            Toast.makeText(getApplicationContext(), "Could not connect to any beacon for "+AUTO_HIDE_DELAY_MILLIS+" milliseconds, going offline...", Toast.LENGTH_SHORT).show();
-            launchAlternateMainActivity();
+            class PauseBeaconNotFoundActivity extends AsyncTask<Void, Void, Void> {
+                protected Void doInBackground(Void... params) {
+                    try {
+//                Log.d(UMBCIoTApplication.getDebugTag(), "came into doInBackground"+System.currentTimeMillis());
+                        Thread.sleep(AUTO_HIDE_DELAY_MILLIS);
+//                Log.d(UMBCIoTApplication.getDebugTag(), "sleep complete"+System.currentTimeMillis());
+                        launchAlternateMainActivity();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
         }
-    };
+            }
 }

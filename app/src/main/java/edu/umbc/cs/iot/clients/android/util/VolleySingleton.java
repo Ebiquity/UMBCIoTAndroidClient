@@ -11,14 +11,10 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-/**
- * Created by praji on 5/28/2016.
- */
-
 public class VolleySingleton {
     private static VolleySingleton mInstance;
-    private RequestQueue mRequestQueue;
     private static Context mCtx;
+    private RequestQueue mRequestQueue;
 
     private VolleySingleton(Context context) {
         mCtx = context;
