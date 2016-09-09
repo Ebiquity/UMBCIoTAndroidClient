@@ -27,17 +27,23 @@
     <string name="app_icon">App icon</string>
 
     <!-- Strings related to Settings -->
-    <string name="pref_beacon_disabled_key">beacondisabledkey</string>
     <string name="preference_header_beacon">Beacon pref</string>
+
+    <string name="pref_beacon_disabled_key">beaconDisabledKey</string>
     <string name="pref_title_disable_beacon_scanning">Disable beacon scanning</string>
     <string name="pref_summary_disable_beacon_scanning">Check the box to ask queries without obtaining context from beacons</string>
 
-    <string name="pref_add_user_key">adduserkey</string>
     <string name="preference_header_user">User pref</string>
-    <string name="pref_title_add_user_identity">Add user identity</string>
-    <string name="pref_summary_add_user_identity">Click to enter user identity info</string>
 
-    <string name="pref_user_id_default_value">ebiquity.iral@umbc.edu</string>
+    <string name="pref_enable_user_id_key">enableUserIdKey</string>
+    <string name="pref_title_enable_user_identity">Enable user identification</string>
+    <string name="pref_summary_enable_user_identity">Swipe to enable user identification</string>
+
+    <string name="pref_user_id_key">userIdKey</string>
+    <string name="pref_title_user_identity">Add user identity</string>
+    <string name="pref_summary_user_identity">Click to enter user identity info. Currently user id is set as: </string>
+
+    <string name="pref_user_id_default_value">anon</string>
 
     <!-- Strings related to Drawer Menu -->
     <string name="voice_interface_menu_text">Voice interface</string>

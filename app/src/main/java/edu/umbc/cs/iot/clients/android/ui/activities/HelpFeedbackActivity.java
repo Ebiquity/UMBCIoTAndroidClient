@@ -6,7 +6,6 @@ package edu.umbc.cs.iot.clients.android.ui.activities;
  * @purpose: This is a placeholder activity, which will be used to obtain user feedback about the app, in the future.
  */
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;

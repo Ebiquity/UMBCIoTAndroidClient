@@ -84,18 +84,18 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         sharedPreferences = getSharedPreferences(UMBCIoTApplication.getSharedPreference(), Context.MODE_PRIVATE);
-        beaconDisabled = sharedPreferences.getBoolean(UMBCIoTApplication.getPrefBeaconDisabledTag(), false);
-        userId = sharedPreferences.getString(UMBCIoTApplication.getPrefUserIdTag(), getResources().getString(R.string.pref_user_id_default_value));
+        beaconDisabled = sharedPreferences.getBoolean(UMBCIoTApplication.getPrefBeaconDisabledKey(), false);
+        userId = sharedPreferences.getString(UMBCIoTApplication.getPrefUserIdKey(), getResources().getString(R.string.pref_user_id_default_value));
         Toast.makeText(this,userId,Toast.LENGTH_LONG).show();
 
-        if(sharedPreferences.getString(UMBCIoTApplication.getPrefSessionIdTag(),"").isEmpty()) {
+        if(sharedPreferences.getString(UMBCIoTApplication.getJsonSessionIdKey(),"").isEmpty()) {
             final SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(UMBCIoTApplication.getPrefSessionIdTag(), UMBCIoTApplication.generateRandomSessionId());
+            editor.putString(UMBCIoTApplication.getJsonSessionIdKey(), UMBCIoTApplication.generateRandomSessionId());
         }
 
         if(!isBluetoothAvailable()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, UMBCIoTApplication.getPermissionsRequestBluetooth());
+            startActivityForResult(enableBtIntent, UMBCIoTApplication.PERMISSIONS_REQUEST_BLUETOOTH);
         }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -251,27 +251,27 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void launchFragment(Fragment fragment, boolean isPrefFragment) {
-//        FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        if (beaconData == null)
-            launchAlternateMainActivity();
-        else {
-            if (!isPrefFragment) {
+        if(!isPrefFragment) {
+            if (beaconData == null) {
+                launchAlternateMainActivity();
+                return;
+            }
+            else {
                 Bundle bundle = new Bundle(); //Launch one of the QueryFragments
-                bundle.putString(UMBCIoTApplication.getBeaconTag(), beaconData);
+                bundle.putString(UMBCIoTApplication.getJsonBeaconKey(), beaconData);
                 fragment.setArguments(bundle);
             }
-//            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-            /**
-             * From: http://stackoverflow.com/a/18940937/1816861
-             * Replace whatever is in the fragment_container view with this fragment,
-             * and add the transaction to the back stack if needed
-             */
-            transaction.replace(R.id.container, fragment);
-            transaction.addToBackStack(null);
-            // Commit the transaction
-            transaction.commit();
         }
+        /**
+         * From: http://stackoverflow.com/a/18940937/1816861
+         * Replace whatever is in the fragment_container view with this fragment,
+         * and add the transaction to the back stack if needed
+         */
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null);
+        // Commit the transaction
+        transaction.commit();
     }
 
     @Override
@@ -291,21 +291,14 @@ public class MainActivity extends AppCompatActivity implements
             return true;
         }
 
-//        launchFragment(fragment);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
-        // update the main content by replacing fragments
-//        if (fragment != null) {
         if (fragment instanceof PrefsFragment)
             launchFragment(fragment, true);
         else
             if(!isBeaconDisabled())
                 launchFragment(fragment, false);
-//        } else {
-//            Log.e(UMBCIoTApplication.getDebugTag(), "Must be going for the help & feedback activity");
-//        }
-
         return true;
     }
 

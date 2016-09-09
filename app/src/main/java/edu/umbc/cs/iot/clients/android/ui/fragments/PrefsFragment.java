@@ -3,9 +3,13 @@ package edu.umbc.cs.iot.clients.android.ui.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.widget.Toast;
+import android.preference.SwitchPreference;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import edu.umbc.cs.iot.clients.android.R;
 import edu.umbc.cs.iot.clients.android.UMBCIoTApplication;
@@ -17,36 +21,68 @@ import edu.umbc.cs.iot.clients.android.UMBCIoTApplication;
 public class PrefsFragment extends PreferenceFragment {
 
     private SharedPreferences sharedPreferences;
-    private boolean beaconDisabled;
+    private SwitchPreference mSwitchPreferenceEnableUserIdentification;
+    private EditTextPreference mEditTextPreferenceUserIdentity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        Toast.makeText(getActivity(),"Feature currently disabled",Toast.LENGTH_LONG).show();
+        // Load the preferences from an XML resource
+        addPreferencesFromResource(R.xml.preferences);
 
         sharedPreferences = getActivity().getSharedPreferences(UMBCIoTApplication.getSharedPreference(), Context.MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        // Load the preferences from an XML resource
-        addPreferencesFromResource(R.xml.pref_general);
+        mEditTextPreferenceUserIdentity = (EditTextPreference) getPreferenceManager().findPreference(UMBCIoTApplication.getPrefUserIdKey());
+        mEditTextPreferenceUserIdentity.setSummary(
+                getResources().getString(R.string.pref_summary_user_identity).concat(
+                        sharedPreferences.getString(
+                                UMBCIoTApplication.getPrefUserIdKey(), getResources().getString(R.string.pref_user_id_default_value))));
+        if (sharedPreferences.getBoolean(UMBCIoTApplication.getPrefEnableUserIdKey(), false))
+            mEditTextPreferenceUserIdentity.setEnabled(true);
 
-        sharedPreferences.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+        mSwitchPreferenceEnableUserIdentification = (SwitchPreference) getPreferenceManager().findPreference(UMBCIoTApplication.getPrefEnableUserIdKey());
+        mSwitchPreferenceEnableUserIdentification.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
-            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                if (key.equals(UMBCIoTApplication.getPrefBeaconDisabledTag())) {
-                    Preference connectionPref = findPreference(key);
-
-                    editor.putBoolean(UMBCIoTApplication.getPrefBeaconDisabledTag(), connectionPref.getShouldDisableView());
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if((Boolean) newValue) {
+                    editor.putBoolean(UMBCIoTApplication.getPrefEnableUserIdKey(), (Boolean) newValue);
                     editor.commit();
+                    mEditTextPreferenceUserIdentity.setSummary(
+                            getResources().getString(R.string.pref_summary_user_identity).concat(
+                                    sharedPreferences.getString(
+                                            UMBCIoTApplication.getPrefUserIdKey(), getResources().getString(R.string.pref_user_id_default_value))));
+                    mEditTextPreferenceUserIdentity.setEnabled(true);
                 }
-                if (key.equals(UMBCIoTApplication.getPrefUserIdTag())) {
-                    Preference connectionPref = findPreference(key);
-
-                    editor.putString(UMBCIoTApplication.getPrefUserIdTag(), getResources().getString(R.string.pref_user_id_default_value));
+                else {
+                    editor.putString(UMBCIoTApplication.getPrefUserIdKey(), getResources().getString(R.string.pref_user_id_default_value));
+                    editor.putBoolean(UMBCIoTApplication.getPrefEnableUserIdKey(), (Boolean) newValue);
                     editor.commit();
+                    mEditTextPreferenceUserIdentity.setSummary(
+                            getResources().getString(R.string.pref_summary_user_identity).concat(
+                                    sharedPreferences.getString(
+                                            UMBCIoTApplication.getPrefUserIdKey(), getResources().getString(R.string.pref_user_id_default_value))));
+                    mEditTextPreferenceUserIdentity.setEnabled(false);
                 }
+                return true;
             }
         });
+
+        mEditTextPreferenceUserIdentity.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+//                if(!newValue.equals("")) {
+                editor.putString(UMBCIoTApplication.getPrefUserIdKey(), (String) newValue);
+                editor.commit();
+                mEditTextPreferenceUserIdentity.setSummary(
+                        getResources().getString(R.string.pref_summary_user_identity).concat(
+                                sharedPreferences.getString(
+                                        UMBCIoTApplication.getPrefUserIdKey(), getResources().getString(R.string.pref_user_id_default_value))));
+//                }
+                return true;
+            }
+        });
+
     }
 }

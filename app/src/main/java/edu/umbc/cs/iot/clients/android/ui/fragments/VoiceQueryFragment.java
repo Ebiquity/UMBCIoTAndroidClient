@@ -108,7 +108,7 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mBeconIDParam = getArguments().getString(UMBCIoTApplication.getBeaconTag(), "No beaconID");
+            mBeconIDParam = getArguments().getString(UMBCIoTApplication.getJsonBeaconKey(), "No beaconID");
             }
     }
 
@@ -157,10 +157,10 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
 
     private void initData() {
         bundle = this.getArguments();
-        mBeconIDParam = bundle.getString(UMBCIoTApplication.getBeaconTag(), "No beaconID");
+        mBeconIDParam = bundle.getString(UMBCIoTApplication.getJsonBeaconKey(), "No beaconID");
         sharedPreferences = getActivity().getSharedPreferences(UMBCIoTApplication.getSharedPreference(), Context.MODE_PRIVATE);
-        mSessionId = sharedPreferences.getString(UMBCIoTApplication.getPrefSessionIdTag(),"No sessionID");
-        mUserId = sharedPreferences.getString(UMBCIoTApplication.getPrefUserIdTag(), "No userID");
+        mSessionId = sharedPreferences.getString(UMBCIoTApplication.getJsonSessionIdKey(),"No sessionID");
+        mUserId = sharedPreferences.getString(UMBCIoTApplication.getPrefUserIdKey(), "No userID");
         jsonResponse = new String("");
         // Get a RequestQueue
         queue = VolleySingleton.getInstance(view.getContext()).getRequestQueue();
@@ -258,9 +258,9 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                             if (!mVoiceFgmtDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
                                 jsonResponse += "------------------------" + "\n";
                             jsonResponse +=  "Query parameters were: "
-                                    +jsonRequest.getRequest().getString(UMBCIoTApplication.getQuestionTag())
+                                    +jsonRequest.getRequest().getString(UMBCIoTApplication.getJsonQuestionKey())
                                     +" "
-                                    +jsonRequest.getRequest().get(UMBCIoTApplication.getBeaconTag())
+                                    +jsonRequest.getRequest().get(UMBCIoTApplication.getJsonBeaconKey())
                                     +"\n\n";
                             jsonResponse += "Response is:\nStatus: " + status + " Text: " + text + "\n";
 //                            response += "Home: " + home + "\n\n";
@@ -290,9 +290,9 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                             if (!mVoiceFgmtDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
                                 jsonResponse += "------------------------" + "\n";
                             jsonResponse +=  "Query parameters were: "
-                                    +jsonRequest.getRequest().getString(UMBCIoTApplication.getQuestionTag())
+                                    +jsonRequest.getRequest().getString(UMBCIoTApplication.getJsonQuestionKey())
                                     +" "
-                                    +jsonRequest.getRequest().get(UMBCIoTApplication.getBeaconTag())
+                                    +jsonRequest.getRequest().get(UMBCIoTApplication.getJsonBeaconKey())
                                     +"\n\n";
                             jsonResponse += "Getting an error code: " + statusCode + " from the server\n";
 //                            response += "Home: " + home + "\n\n";

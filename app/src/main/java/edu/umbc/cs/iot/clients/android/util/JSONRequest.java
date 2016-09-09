@@ -17,10 +17,10 @@ public final class JSONRequest {
         // Add your data
         //Create JSONObject here
         request = new JSONObject();
-        request.put(UMBCIoTApplication.getQuestionTag(), aQuery);
-        request.put(UMBCIoTApplication.getBeaconTag(), aBeasonId);
-        request.put(UMBCIoTApplication.getSessionIdTag(), aSessionId);
-        request.put(UMBCIoTApplication.getUserIdTag(), aUserId);
+        request.put(UMBCIoTApplication.getJsonQuestionKey(), aQuery);
+        request.put(UMBCIoTApplication.getJsonBeaconKey(), aBeasonId);
+        request.put(UMBCIoTApplication.getJsonSessionIdKey(), aSessionId);
+        request.put(UMBCIoTApplication.getJsonUserIdKey(), aUserId);
 //        Toast.makeText(view.getContext(),"I have: "+mBeconID,Toast.LENGTH_LONG).show();
 
 //        JSONArray jsonArray = new JSONArray();
