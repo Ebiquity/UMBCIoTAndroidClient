@@ -184,16 +184,18 @@ public class MainActivity extends AppCompatActivity implements
                             mGoogleApiClient = new GoogleApiClient.Builder(this)
                                     .addApi(Nearby.MESSAGES_API)
                                     .addConnectionCallbacks(this)
-//                                    .enableAutoManage(this, this)
+                                    .addOnConnectionFailedListener(this)
                                     .build();
+//                                    .enableAutoManage(this, this)
                         } else {
                             mGoogleApiClient = new GoogleApiClient.Builder(this)
                                     .addApi(Nearby.MESSAGES_API, new MessagesOptions.Builder()
                                             .setPermissions(NearbyPermissions.BLE)
                                             .build())
                                     .addConnectionCallbacks(this)
-//                                    .enableAutoManage(this, this)
+                                    .addOnConnectionFailedListener(this)
                                     .build();
+//                                    .enableAutoManage(this, this)
                             // permission was granted, yay! Do the
                             // contacts-related task you need to do.
                         }
@@ -351,6 +353,26 @@ public class MainActivity extends AppCompatActivity implements
         subscribe();
     }
 
+    @Override
+    public void onConnectionSuspended(int cause) {
+        Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient disconnected with cause: " + cause);
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        if (result.hasResolution()) {
+            try {
+                result.startResolutionForResult(this, UMBCIoTApplication.REQUEST_RESOLVE_ERROR);
+            } catch (IntentSender.SendIntentException e) {
+                Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed due to" + e.getMessage());
+//                Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed due to"+e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed");
+//            Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     // Subscribe to receive messages.
     private void subscribe() {
 //        Toast.makeText(getApplicationContext(),"Subscribing!",Toast.LENGTH_SHORT).show();
@@ -382,26 +404,6 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onConnectionSuspended(int cause) {
-        Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient disconnected with cause: " + cause);
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult result) {
-        if (result.hasResolution()) {
-            try {
-                result.startResolutionForResult(this, UMBCIoTApplication.REQUEST_RESOLVE_ERROR);
-            } catch (IntentSender.SendIntentException e) {
-                Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed due to" + e.getMessage());
-//                Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed due to"+e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed");
-//            Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
@@ -420,9 +422,7 @@ public class MainActivity extends AppCompatActivity implements
         switch (requestCode) {
             case UMBCIoTApplication.REQUEST_RESOLVE_ERROR: {
                 if (resultCode == RESULT_OK) {
-                    // Permission granted or error resolved successfully then we proceed
-                    // with publish and subscribe..
-                    subscribe();
+                    mGoogleApiClient.connect();
                 } else {
                     Log.d(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed. Unable to resolve.");
 //                    Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed. Unable to resolve.", Toast.LENGTH_SHORT).show();
