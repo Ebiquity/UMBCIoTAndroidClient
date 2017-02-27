@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         launchFragment(new EmptyFragment(), false);
+        setListeners();
     }
 
     @Override
@@ -394,7 +395,6 @@ public class MainActivity extends AppCompatActivity implements
         if (mGoogleApiClient != null) {
             Log.d(UMBCIoTApplication.getDebugTag(), "Connecting API client");
             mGoogleApiClient.connect();
-            setListeners();
         } else
             Log.d(UMBCIoTApplication.getDebugTag(), "mGoogleApiClient was null?");
     }
