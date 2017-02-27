@@ -30,7 +30,7 @@ public class UMBCIoTApplication extends Application {
     private static final String PREF_BEACON_DISABLED_KEY = "beaconDisabledKey";
     private static final String PREF_ENABLE_USER_ID_KEY = "enableUserIdKey";
     private static final String PREF_USER_ID_KEY = "userIdKey";
-    private static final String PREF_ALREADY_ASKED = "alreadyAskedKey";
+    private static final String PREF_SUBSCRIBED = "subscribed";
 
     public static String getDebugTag() {
         return DEBUG_TAG;
@@ -88,7 +88,7 @@ public class UMBCIoTApplication extends Application {
         return UUID.randomUUID().toString();
     }
 
-    public static String getPrefAlreadyAsked() {
-        return PREF_ALREADY_ASKED;
+    public static String getPrefSubscribed() {
+        return PREF_SUBSCRIBED;
     }
 }
