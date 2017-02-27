@@ -6,6 +6,7 @@
 
     <string name="action_clear">Clear</string>
     <string name="check_again_button_text">Check again!</string>
+    <string name="no_beacons_found_yet_text">No beacons found yet!</string>
 
     <string name="default_display_text">What do you want to know about UMBC?</string>
     <string name="default_no_data_display_text">We are not getting any data from the beacons. Are you sure they are working?</string>

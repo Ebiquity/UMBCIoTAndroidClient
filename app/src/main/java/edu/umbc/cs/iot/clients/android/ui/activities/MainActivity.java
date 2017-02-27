@@ -20,6 +20,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -38,8 +39,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
+import com.google.android.gms.nearby.messages.MessageFilter;
 import com.google.android.gms.nearby.messages.MessageListener;
 import com.google.android.gms.nearby.messages.MessagesOptions;
 import com.google.android.gms.nearby.messages.NearbyPermissions;
@@ -50,6 +54,7 @@ import java.util.Calendar;
 
 import edu.umbc.cs.iot.clients.android.R;
 import edu.umbc.cs.iot.clients.android.UMBCIoTApplication;
+import edu.umbc.cs.iot.clients.android.ui.fragments.EmptyFragment;
 import edu.umbc.cs.iot.clients.android.ui.fragments.PrefsFragment;
 import edu.umbc.cs.iot.clients.android.ui.fragments.TextQueryFragment;
 import edu.umbc.cs.iot.clients.android.ui.fragments.VoiceQueryFragment;
@@ -59,12 +64,13 @@ public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         TextQueryFragment.OnTextQueryFragmentInteractionListener,
-        VoiceQueryFragment.OnVoiceQueryFragmentInteractionListener {
+        VoiceQueryFragment.OnVoiceQueryFragmentInteractionListener,
+        EmptyFragment.OnFragmentInteractionListener {
 
     /**
      * Delay the process of stopping beacon discovery for 100 seconds so that we don't keep on hanging around forever for beacons
      */
-    private static final int AUTO_HIDE_DELAY_MILLIS = 100000;
+    private static final int AUTO_HIDE_DELAY_MILLIS = 1000000;
     private final Handler mHideHandler = new Handler();
     private final Runnable mHideRunnable = new Runnable() {
         @Override
@@ -168,7 +174,8 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         setListeners();
-        delayedHide(AUTO_HIDE_DELAY_MILLIS);
+        launchFragment(new EmptyFragment(), true);
+//        delayedHide(AUTO_HIDE_DELAY_MILLIS);
     }
 
     @Override
@@ -184,18 +191,18 @@ public class MainActivity extends AppCompatActivity implements
                             mGoogleApiClient = new GoogleApiClient.Builder(this)
                                     .addApi(Nearby.MESSAGES_API)
                                     .addConnectionCallbacks(this)
-                                    .addOnConnectionFailedListener(this)
+                                    .enableAutoManage(this, this)
+//                                    .addOnConnectionFailedListener(this)
                                     .build();
-//                                    .enableAutoManage(this, this)
                         } else {
                             mGoogleApiClient = new GoogleApiClient.Builder(this)
                                     .addApi(Nearby.MESSAGES_API, new MessagesOptions.Builder()
                                             .setPermissions(NearbyPermissions.BLE)
                                             .build())
                                     .addConnectionCallbacks(this)
-                                    .addOnConnectionFailedListener(this)
+                                    .enableAutoManage(this, this)
+//                                    .addOnConnectionFailedListener(this)
                                     .build();
-//                                    .enableAutoManage(this, this)
                             // permission was granted, yay! Do the
                             // contacts-related task you need to do.
                         }
@@ -280,22 +287,21 @@ public class MainActivity extends AppCompatActivity implements
     private void launchFragment(Fragment fragment, boolean isPrefFragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         if(!isPrefFragment) {
-            if (beaconData == null) {
-                launchAlternateMainActivity();
-                return;
-            }
-            else {
+            if (beaconData != null) {
                 Bundle bundle = new Bundle(); //Launch one of the QueryFragments
                 bundle.putString(UMBCIoTApplication.getJsonBeaconKey(), beaconData);
                 fragment.setArguments(bundle);
+                /**
+                 * From: http://stackoverflow.com/a/18940937/1816861
+                 * Replace whatever is in the fragment_container view with this fragment,
+                 * and add the transaction to the back stack if needed
+                 */
+                transaction.replace(R.id.container, fragment);
+            } else {
+                transaction.replace(R.id.container, new EmptyFragment());
             }
-        }
-        /**
-         * From: http://stackoverflow.com/a/18940937/1816861
-         * Replace whatever is in the fragment_container view with this fragment,
-         * and add the transaction to the back stack if needed
-         */
-        transaction.replace(R.id.container, fragment);
+        } else
+            transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(null);
         // Commit the transaction
         transaction.commit();
@@ -329,23 +335,23 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.connect();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            unpublish();
-            unsubscribe();
-            mGoogleApiClient.disconnect();
-        }
-        super.onStop();
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        if (mGoogleApiClient != null) {
+//            mGoogleApiClient.connect();
+//        }
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+//            unpublish();
+//            unsubscribe();
+//            mGoogleApiClient.disconnect();
+//        }
+//        super.onStop();
+//    }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -378,8 +384,15 @@ public class MainActivity extends AppCompatActivity implements
 //        Toast.makeText(getApplicationContext(),"Subscribing!",Toast.LENGTH_SHORT).show();
         SubscribeOptions options = new SubscribeOptions.Builder()
                 .setStrategy(Strategy.BLE_ONLY)
+                .setFilter(MessageFilter.INCLUDE_ALL_MY_TYPES)
                 .build();
-        Nearby.Messages.subscribe(mGoogleApiClient, mMessageListener, options);
+        Nearby.Messages.subscribe(mGoogleApiClient, mMessageListener, options).setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(@NonNull Status status) {
+                Log.d(UMBCIoTApplication.getDebugTag(), "Subscription result : " + status.getStatus());
+            }
+        });
+
         Log.d(UMBCIoTApplication.getDebugTag(), "Finished subscribing method tasks.");
     }
 
@@ -422,7 +435,8 @@ public class MainActivity extends AppCompatActivity implements
         switch (requestCode) {
             case UMBCIoTApplication.REQUEST_RESOLVE_ERROR: {
                 if (resultCode == RESULT_OK) {
-                    mGoogleApiClient.connect();
+                    Log.d(UMBCIoTApplication.getDebugTag(), "User consent granted...");
+                    subscribe();
                 } else {
                     Log.d(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed. Unable to resolve.");
 //                    Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed. Unable to resolve.", Toast.LENGTH_SHORT).show();
@@ -442,10 +456,8 @@ public class MainActivity extends AppCompatActivity implements
                     finish();
                 }
             }
-            default: {
-                super.onActivityResult(requestCode, resultCode, data);
-            }
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -501,6 +513,11 @@ public class MainActivity extends AppCompatActivity implements
             mHideHandler.removeCallbacks(mHideRunnable);
             mHideHandler.postDelayed(mHideRunnable, delayMillis);
         }
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        //TODO do something
     }
 
     class PauseBeaconNotFoundActivity extends AsyncTask<Void, Void, Void> {
