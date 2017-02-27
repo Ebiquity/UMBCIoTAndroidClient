@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private GoogleApiClient mGoogleApiClient;
     private MessageListener mMessageListener;
-    private Message mActiveMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,32 +182,34 @@ public class MainActivity extends AppCompatActivity implements
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case UMBCIoTApplication.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0) {
-                    for (int i = 0; i < grantResults.length; i++) {
-                        if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                            // permission denied, boo! Disable the
-                            // functionality that depends on this permission.
-                            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                                    .addApi(Nearby.MESSAGES_API)
-                                    .addConnectionCallbacks(this)
-                                    .enableAutoManage(this, this)
+                Log.d(UMBCIoTApplication.getDebugTag(), "In permission result");
+                createGoogleApiClient();
+//                // If request is cancelled, the result arrays are empty.
+//                if (grantResults.length > 0) {
+//                    for (int i = 0; i < grantResults.length; i++) {
+//                        if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+//                            // permission denied, boo! Disable the
+//                            // functionality that depends on this permission.
+//                            mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                                    .addApi(Nearby.MESSAGES_API)
+//                                    .enableAutoManage(this, this)
+//                                    .addConnectionCallbacks(this)
 //                                    .addOnConnectionFailedListener(this)
-                                    .build();
-                        } else {
-                            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                                    .addApi(Nearby.MESSAGES_API, new MessagesOptions.Builder()
-                                            .setPermissions(NearbyPermissions.BLE)
-                                            .build())
-                                    .addConnectionCallbacks(this)
-                                    .enableAutoManage(this, this)
+//                                    .build();
+//                        } else {
+//                            mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                                    .addApi(Nearby.MESSAGES_API, new MessagesOptions.Builder()
+//                                            .setPermissions(NearbyPermissions.BLE)
+//                                            .build())
+//                                    .enableAutoManage(this, this)
+//                                    .addConnectionCallbacks(this)
 //                                    .addOnConnectionFailedListener(this)
-                                    .build();
-                            // permission was granted, yay! Do the
-                            // contacts-related task you need to do.
-                        }
-                    }
-                }
+//                                    .build();
+//                            // permission was granted, yay! Do the
+//                            // contacts-related task you need to do.
+//                        }
+//                    }
+//                }
             }
             // other 'case' lines to check for other
             // permissions this app might request
@@ -222,18 +223,18 @@ public class MainActivity extends AppCompatActivity implements
                 // functionality that depends on this permission.
                 mGoogleApiClient = new GoogleApiClient.Builder(this)
                         .addApi(Nearby.MESSAGES_API)
+                        .enableAutoManage(this, this)
                         .addConnectionCallbacks(this)
-//                        .enableAutoManage(this, this)
-                        .addOnConnectionFailedListener(this)
+//                        .addOnConnectionFailedListener(this)
                         .build();
             } else {
                 mGoogleApiClient = new GoogleApiClient.Builder(this)
                         .addApi(Nearby.MESSAGES_API, new MessagesOptions.Builder()
                                 .setPermissions(NearbyPermissions.BLE)
                                 .build())
+                        .enableAutoManage(this, this)
                         .addConnectionCallbacks(this)
-//                        .enableAutoManage(this, this)
-                        .addOnConnectionFailedListener(this)
+//                        .addOnConnectionFailedListener(this)
                         .build();
                 // permission was granted, yay! Do the
                 // contacts-related task you need to do.
@@ -390,22 +391,10 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        if (mGoogleApiClient != null) {
-            Log.d(UMBCIoTApplication.getDebugTag(), "Connecting API client");
-            mGoogleApiClient.connect();
-        } else
-            Log.d(UMBCIoTApplication.getDebugTag(), "mGoogleApiClient was null?");
-    }
-
-    @Override
     protected void onStop() {
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             Log.d(UMBCIoTApplication.getDebugTag(), "Disconnecting API client");
-            unpublish();
             unsubscribe();
-            mGoogleApiClient.disconnect();
         }
         super.onStop();
     }
@@ -413,7 +402,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(UMBCIoTApplication.getDebugTag(), "Connected to API client");
-        publish("Hello World");
         subscribe();
     }
 
@@ -457,20 +445,6 @@ public class MainActivity extends AppCompatActivity implements
 //        Toast.makeText(getApplicationContext(),"Unsubscribing!",Toast.LENGTH_SHORT).show();
         Nearby.Messages.unsubscribe(mGoogleApiClient, mMessageListener);
         Log.d(UMBCIoTApplication.getDebugTag(), "Finished unsubscribing method tasks.");
-    }
-
-    private void publish(String message) {
-        Log.d(UMBCIoTApplication.getDebugTag(), "Publishing message: " + message);
-        mActiveMessage = new Message(message.getBytes());
-        Nearby.Messages.publish(mGoogleApiClient, mActiveMessage);
-    }
-
-    private void unpublish() {
-        Log.d(UMBCIoTApplication.getDebugTag(), "Unpublishing.");
-        if (mActiveMessage != null) {
-            Nearby.Messages.unpublish(mGoogleApiClient, mActiveMessage);
-            mActiveMessage = null;
-        }
     }
 
     @Override
