@@ -42,8 +42,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.messages.BleSignal;
+import com.google.android.gms.nearby.messages.Distance;
 import com.google.android.gms.nearby.messages.Message;
-import com.google.android.gms.nearby.messages.MessageFilter;
 import com.google.android.gms.nearby.messages.MessageListener;
 import com.google.android.gms.nearby.messages.MessagesOptions;
 import com.google.android.gms.nearby.messages.NearbyPermissions;
@@ -113,11 +114,12 @@ public class MainActivity extends AppCompatActivity implements
                     Toast.makeText(this, "You denied " + Manifest.permission.ACCESS_FINE_LOCATION + " permission. This might disrupt some functionality!", Toast.LENGTH_SHORT).show();
                     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, UMBCIoTApplication.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
                 } else
-                    Toast.makeText(this, "You denied " + Manifest.permission.ACCESS_FINE_LOCATION + " permission. This might disrupt some functionality!", Toast.LENGTH_SHORT).show();
+                    createGoogleApiClient();
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, UMBCIoTApplication.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
             }
-        }
+        } else
+            createGoogleApiClient();
 
         beaconDisabled = sharedPreferences.getBoolean(UMBCIoTApplication.getPrefBeaconDisabledKey(), false);
         userId = sharedPreferences.getString(UMBCIoTApplication.getPrefUserIdKey(), getResources().getString(R.string.pref_user_id_default_value));
@@ -173,9 +175,7 @@ public class MainActivity extends AppCompatActivity implements
                 headerView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.csee_evening));
         }
 
-        setListeners();
-        launchFragment(new EmptyFragment(), true);
-//        delayedHide(AUTO_HIDE_DELAY_MILLIS);
+        launchFragment(new EmptyFragment(), false);
     }
 
     @Override
@@ -214,11 +214,37 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    private void createGoogleApiClient() {
+        if (mGoogleApiClient == null) {
+            if ((ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)) == PackageManager.PERMISSION_DENIED) {
+                // permission denied, boo! Disable the
+                // functionality that depends on this permission.
+                mGoogleApiClient = new GoogleApiClient.Builder(this)
+                        .addApi(Nearby.MESSAGES_API)
+                        .addConnectionCallbacks(this)
+//                        .enableAutoManage(this, this)
+                        .addOnConnectionFailedListener(this)
+                        .build();
+            } else {
+                mGoogleApiClient = new GoogleApiClient.Builder(this)
+                        .addApi(Nearby.MESSAGES_API, new MessagesOptions.Builder()
+                                .setPermissions(NearbyPermissions.BLE)
+                                .build())
+                        .addConnectionCallbacks(this)
+//                        .enableAutoManage(this, this)
+                        .addOnConnectionFailedListener(this)
+                        .build();
+                // permission was granted, yay! Do the
+                // contacts-related task you need to do.
+            }
+        }
+    }
+
     private void setListeners() {
         Log.d(UMBCIoTApplication.getDebugTag(), "Came into setListeners");
         mMessageListener = new MessageListener() {
             @Override
-            public void onFound(Message message) {
+            public void onFound(final Message message) {
                 String foundMessage = new String(message.getContent());
                 // Do something with the message here.
                 Log.d(UMBCIoTApplication.getDebugTag(), "Message string: " + new String(message.getContent()));
@@ -234,8 +260,37 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
 
+            /**
+             * Called when the Bluetooth Low Energy (BLE) signal associated with a message changes.
+             * <p>
+             * This is currently only called for BLE beacon messages.
+             * <p>
+             * For example, this is called when we see the first BLE advertisement
+             * frame associated with a message; or when we see subsequent frames with
+             * significantly different received signal strength indicator (RSSI)
+             * readings.
+             * <p>
+             * For more information, see the MessageListener Javadocs.
+             */
             @Override
-            public void onLost(Message message) {
+            public void onBleSignalChanged(final Message message, final BleSignal bleSignal) {
+                Log.d(UMBCIoTApplication.getDebugTag(), "Message: " + message + " has new BLE signal information: " + bleSignal);
+            }
+
+            /**
+             * Called when Nearby's estimate of the distance to a message changes.
+             * <p>
+             * This is currently only called for BLE beacon messages.
+             * <p>
+             * For more information, see the MessageListener Javadocs.
+             */
+            @Override
+            public void onDistanceChanged(final Message message, final Distance distance) {
+                Log.d(UMBCIoTApplication.getDebugTag(), "Distance changed, message: " + message + ", new distance: " + distance);
+            }
+
+            @Override
+            public void onLost(final Message message) {
                 String messageAsString = new String(message.getContent());
                 Log.d(UMBCIoTApplication.getDebugTag(), "Lost beacon message: " + messageAsString);
 //                Toast.makeText(getApplicationContext(), "Lost contact with beacon! I will wait for "+AUTO_HIDE_DELAY_MILLIS+" milliseconds...", Toast.LENGTH_SHORT).show();
@@ -269,11 +324,10 @@ public class MainActivity extends AppCompatActivity implements
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_clear: {
-                /**
-                 * TODO This is a bug. The fragment being loaded is a new fragment every time. This might cause memory leakges.
-                 * Fix it @prajit
-                 */
-                launchFragment(new VoiceQueryFragment(), false);
+                if(beaconData != null)
+                    launchFragment(new VoiceQueryFragment(), false);
+                else
+                    launchFragment(new EmptyFragment(), false);
                 return true;
             }
             default: {
@@ -329,39 +383,43 @@ public class MainActivity extends AppCompatActivity implements
 
         if (fragment instanceof PrefsFragment)
             launchFragment(fragment, true);
-        else
-            if(!isBeaconDisabled())
-                launchFragment(fragment, false);
+        else if (!isBeaconDisabled())
+            launchFragment(fragment, false);
         return true;
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        if (mGoogleApiClient != null) {
-//            mGoogleApiClient.connect();
-//        }
-//    }
-//
-//    @Override
-//    public void onStop() {
-//        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-//            unpublish();
-//            unsubscribe();
-//            mGoogleApiClient.disconnect();
-//        }
-//        super.onStop();
-//    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mGoogleApiClient != null) {
+            Log.d(UMBCIoTApplication.getDebugTag(), "Connecting API client");
+            mGoogleApiClient.connect();
+            setListeners();
+        } else
+            Log.d(UMBCIoTApplication.getDebugTag(), "mGoogleApiClient was null?");
+    }
+
+    @Override
+    protected void onStop() {
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            Log.d(UMBCIoTApplication.getDebugTag(), "Disconnecting API client");
+            unpublish();
+            unsubscribe();
+            mGoogleApiClient.disconnect();
+        }
+        super.onStop();
+    }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        Log.d(UMBCIoTApplication.getDebugTag(), "Connected to API client");
         publish("Hello World");
         subscribe();
     }
 
     @Override
     public void onConnectionSuspended(int cause) {
-        Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient disconnected with cause: " + cause);
+        Log.d(UMBCIoTApplication.getDebugTag(), "GoogleApiClient disconnected with cause: " + cause);
     }
 
     @Override
@@ -370,11 +428,11 @@ public class MainActivity extends AppCompatActivity implements
             try {
                 result.startResolutionForResult(this, UMBCIoTApplication.REQUEST_RESOLVE_ERROR);
             } catch (IntentSender.SendIntentException e) {
-                Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed due to" + e.getMessage());
+                Log.d(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed due to" + e.getMessage());
 //                Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed due to"+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         } else {
-            Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed");
+            Log.d(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed");
 //            Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed", Toast.LENGTH_SHORT).show();
         }
     }
@@ -384,7 +442,6 @@ public class MainActivity extends AppCompatActivity implements
 //        Toast.makeText(getApplicationContext(),"Subscribing!",Toast.LENGTH_SHORT).show();
         SubscribeOptions options = new SubscribeOptions.Builder()
                 .setStrategy(Strategy.BLE_ONLY)
-                .setFilter(MessageFilter.INCLUDE_ALL_MY_TYPES)
                 .build();
         Nearby.Messages.subscribe(mGoogleApiClient, mMessageListener, options).setResultCallback(new ResultCallback<Status>() {
             @Override
@@ -403,13 +460,13 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void publish(String message) {
-        Log.i(UMBCIoTApplication.getDebugTag(), "Publishing message: " + message);
+        Log.d(UMBCIoTApplication.getDebugTag(), "Publishing message: " + message);
         mActiveMessage = new Message(message.getBytes());
         Nearby.Messages.publish(mGoogleApiClient, mActiveMessage);
     }
 
     private void unpublish() {
-        Log.i(UMBCIoTApplication.getDebugTag(), "Unpublishing.");
+        Log.d(UMBCIoTApplication.getDebugTag(), "Unpublishing.");
         if (mActiveMessage != null) {
             Nearby.Messages.unpublish(mGoogleApiClient, mActiveMessage);
             mActiveMessage = null;
@@ -484,16 +541,6 @@ public class MainActivity extends AppCompatActivity implements
         startActivity(helpFeedbackActivityLaunchIntent);
     }
 
-    @Override
-    public void onTextQueryFragmentInteraction(Uri uri) {
-        Log.d(UMBCIoTApplication.getDebugTag(), uri.toString());
-    }
-
-    @Override
-    public void onVoiceQueryFragmentInteraction(Uri uri) {
-        Log.d(UMBCIoTApplication.getDebugTag(), uri.toString());
-    }
-
     public boolean isBeaconDisabled() {
         return beaconDisabled;
     }
@@ -513,6 +560,16 @@ public class MainActivity extends AppCompatActivity implements
             mHideHandler.removeCallbacks(mHideRunnable);
             mHideHandler.postDelayed(mHideRunnable, delayMillis);
         }
+    }
+
+    @Override
+    public void onTextQueryFragmentInteraction(Uri uri) {
+        Log.d(UMBCIoTApplication.getDebugTag(), uri.toString());
+    }
+
+    @Override
+    public void onVoiceQueryFragmentInteraction(Uri uri) {
+        Log.d(UMBCIoTApplication.getDebugTag(), uri.toString());
     }
 
     @Override
