@@ -48,6 +48,7 @@ import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.BleSignal;
 import com.google.android.gms.nearby.messages.Distance;
 import com.google.android.gms.nearby.messages.Message;
+import com.google.android.gms.nearby.messages.MessageFilter;
 import com.google.android.gms.nearby.messages.MessageListener;
 import com.google.android.gms.nearby.messages.MessagesOptions;
 import com.google.android.gms.nearby.messages.NearbyPermissions;
@@ -332,7 +333,8 @@ public class MainActivity extends AppCompatActivity implements
     private synchronized void buildGoogleApiClient() {
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(Nearby.MESSAGES_API, new MessagesOptions.Builder()
+                    .addApi(Nearby.MESSAGES_API,
+                            new MessagesOptions.Builder()
                             .setPermissions(NearbyPermissions.BLE)
                             .setPermissions(NearbyPermissions.MICROPHONE)
                             .setPermissions(NearbyPermissions.BLUETOOTH)
@@ -587,6 +589,7 @@ public class MainActivity extends AppCompatActivity implements
     private void subscribe() {
         Log.d(UMBCIoTApplication.getDebugTag(), "Subscribing");
         SubscribeOptions options = new SubscribeOptions.Builder()
+                .setFilter(MessageFilter.INCLUDE_ALL_MY_TYPES)
                 .setStrategy(PUB_SUB_STRATEGY)
                 .setCallback(new SubscribeCallback() {
                     @Override
@@ -614,13 +617,14 @@ public class MainActivity extends AppCompatActivity implements
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putBoolean(UMBCIoTApplication.getPrefSubscribed(), true);
                             editor.commit();
-                            Log.d(UMBCIoTApplication.getDebugTag(), "Subscribed successfully.");
+                            Log.d(UMBCIoTApplication.getDebugTag(), "Subscribed successfully. Status code=" + status.getStatusMessage());
                         } else {
                             logAndShowSnackbar("Could not subscribe, status = " + status);
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putBoolean(UMBCIoTApplication.getPrefSubscribed(), false);
                             editor.commit();
 //                            mSubscribeSwitch.setChecked(false);
+                            Log.d(UMBCIoTApplication.getDebugTag(), "Unsuccessful. Status code=" + status.getStatusMessage());
                         }
                     }
                 });
