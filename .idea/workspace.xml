@@ -14,13 +14,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4e3aaeeb-b312-4a31-8437-e005b2b27275" name="Default" comment="Listeners are working but not finding the message">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/.idea/workspace.xml" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/app.iml" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/app.iml" />
-      <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/AndroidManifest.xml" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/UMBCIoTApplication.java" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/UMBCIoTApplication.java" />
-      <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/res/values/strings.xml" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/volley/volley.iml" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/volley/volley.iml" />
     </list>
     <ignored path="UMBCIoT.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -57,21 +50,7 @@
     <favorites_list name="UMBCIoT" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="strings.xml" pinned="false" current-in-tab="true">
-        <entry file="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/res/values/strings.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="217">
-              <caret line="24" column="57" selection-start-line="24" selection-start-column="57" selection-end-line="24" selection-end-column="57" />
-              <folding>
-                <element signature="e#1619#1626#0" expanded="true" />
-                <element signature="e#1784#1791#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -4845,7 +4824,7 @@
     <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32580644" sideWeight="0.4978678" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32580644" sideWeight="0.4978678" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23990306" sideWeight="0.50793654" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
