@@ -1,6 +1,6 @@
 package edu.umbc.cs.iot.clients.android.ui.activities;
 
-/**
+/*
  * Created on May 27, 2016
  * @author: Prajit Kumar Das
  * @purpose: The purpose for this code is to setup the Physical Web connection and to obtain the info from the server using the beacon upon successfully connecting to it.
@@ -38,6 +38,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -116,6 +117,13 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Use this check to determine whether BLE is supported on the device. Then
+        // you can selectively disable BLE-related features.
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
         sharedPreferences = getSharedPreferences(UMBCIoTApplication.getSharedPreference(), Context.MODE_PRIVATE);
 
 //        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -183,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        /**
+        /*
          * We wanted to show different banner at different times during the day. The following sub-section of the method takes care of that.
          * http://stackoverflow.com/questions/33560219/in-android-how-to-set-navigation-drawer-header-image-and-name-programmatically-i
          * As mentioned in the bug 190226, Since version 23.1.0 getting header layout view with: navigationView.findViewById(R.id.navigation_header_text) no longer works.
@@ -242,9 +250,10 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode != UMBCIoTApplication.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
+        if (requestCode != UMBCIoTApplication.PERMISSIONS_REQUEST_ALL_REQUIRED) {
             return;
         }
+        boolean denied = false;
         for (int i = 0; i < permissions.length; i++) {
             String permission = permissions[i];
             if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
@@ -263,11 +272,13 @@ public class MainActivity extends AppCompatActivity implements
                     Log.i(UMBCIoTApplication.getDebugTag(), "Permission denied with 'NEVER ASK AGAIN': " + permission);
                     showLinkToSettingsSnackbar();
                 }
-            } else {
-                Log.i(UMBCIoTApplication.getDebugTag(), "Permission granted, building GoogleApiClient");
-                buildGoogleApiClient();
+                denied = true;
             }
         }
+        if (denied)
+            return;
+        Log.i(UMBCIoTApplication.getDebugTag(), "Permission granted, building GoogleApiClient");
+        buildGoogleApiClient();
     }
 
     /**
@@ -310,8 +321,10 @@ public class MainActivity extends AppCompatActivity implements
                     public void onClick(View view) {
                         // Request permission.
                         ActivityCompat.requestPermissions(MainActivity.this,
-                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                UMBCIoTApplication.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                                new String[]{
+                                        Manifest.permission.ACCESS_FINE_LOCATION,
+                                        Manifest.permission.RECORD_AUDIO},
+                                UMBCIoTApplication.PERMISSIONS_REQUEST_ALL_REQUIRED);
                     }
                 }).show();
     }
@@ -321,6 +334,8 @@ public class MainActivity extends AppCompatActivity implements
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addApi(Nearby.MESSAGES_API, new MessagesOptions.Builder()
                             .setPermissions(NearbyPermissions.BLE)
+                            .setPermissions(NearbyPermissions.MICROPHONE)
+                            .setPermissions(NearbyPermissions.BLUETOOTH)
                             .build())
                     .addConnectionCallbacks(this)
                     .enableAutoManage(this, this)
@@ -459,7 +474,7 @@ public class MainActivity extends AppCompatActivity implements
                 Bundle bundle = new Bundle(); //Launch one of the QueryFragments
                 bundle.putString(UMBCIoTApplication.getJsonBeaconKey(), beaconData);
                 fragment.setArguments(bundle);
-                /**
+                /*
                  * From: http://stackoverflow.com/a/18940937/1816861
                  * Replace whatever is in the fragment_container view with this fragment,
                  * and add the transaction to the back stack if needed
@@ -476,7 +491,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = new VoiceQueryFragment();
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -532,13 +547,17 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private boolean havePermissions() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED;
+        return (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED)
+                && (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                == PackageManager.PERMISSION_GRANTED);
     }
 
     private void requestPermissions() {
         ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, UMBCIoTApplication.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.RECORD_AUDIO}, UMBCIoTApplication.PERMISSIONS_REQUEST_ALL_REQUIRED);
     }
 
 //    @Override
@@ -691,13 +710,12 @@ public class MainActivity extends AppCompatActivity implements
      * @return True if Bluetooth is available and enabled.
      */
     public boolean isBluetoothAvailable() {
-        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter == null) {
+        if (BluetoothAdapter.getDefaultAdapter() == null) {
             Log.d(UMBCIoTApplication.getDebugTag(), "Device does not support Bluetooth.\\nApp won't work without it!");
 //            Toast.makeText(getApplicationContext(), "Device does not support Bluetooth.\nApp won't work without it!", Toast.LENGTH_SHORT).show();
             finish();
         }
-        return mBluetoothAdapter.isEnabled();
+        return BluetoothAdapter.getDefaultAdapter().isEnabled();
     }
 
     private void launchAlternateMainActivity() {
@@ -714,7 +732,7 @@ public class MainActivity extends AppCompatActivity implements
         return beaconDisabled;
     }
 
-    /**
+    /*
      * Schedules a call to hide() in [delay] milliseconds, canceling any
      * previously scheduled calls.
      */
@@ -722,7 +740,7 @@ public class MainActivity extends AppCompatActivity implements
         Log.d(UMBCIoTApplication.getDebugTag(), "Came to delayedHide");
         if (beaconData == null) {
             Log.d(UMBCIoTApplication.getDebugTag(), "Came inside delayedHide");
-            /**
+            /*
              * DONE Callback to display beacon not found activity has been removed for the time being in order to ensure demo works.
              * Fix it @prajit - done
              */
@@ -746,7 +764,7 @@ public class MainActivity extends AppCompatActivity implements
         //TODO do something
     }
 
-    class PauseBeaconNotFoundActivity extends AsyncTask<Void, Void, Void> {
+    private class PauseBeaconNotFoundActivity extends AsyncTask<Void, Void, Void> {
         protected Void doInBackground(Void... params) {
             try {
                 Log.d(UMBCIoTApplication.getDebugTag(), "came into doInBackground" + System.currentTimeMillis());

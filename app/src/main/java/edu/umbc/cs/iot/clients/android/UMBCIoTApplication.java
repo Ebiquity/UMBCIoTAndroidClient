@@ -1,6 +1,6 @@
 package edu.umbc.cs.iot.clients.android;
 
-/**
+/*
  * Created on May 27, 2016
  * @author: Prajit Kumar Das
  */
@@ -15,8 +15,10 @@ public class UMBCIoTApplication extends Application {
     public static final int VOICE_QUERY_RESPONSE = 3;
     public static final int PERMISSIONS_REQUEST_BLUETOOTH = 4;
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 5;
-    public static final int PERMISSIONS_REQUEST_INTERNET = 6;
-    public static final int PERMISSIONS_REQUEST_BLUETOOTH_ADMIN = 7;
+    public static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 6;
+    public static final int PERMISSIONS_REQUEST_INTERNET = 7;
+    public static final int PERMISSIONS_REQUEST_BLUETOOTH_ADMIN = 8;
+    public static final int PERMISSIONS_REQUEST_ALL_REQUIRED = 9;
     private static final String DEBUG_TAG = "UMBCIoTDebugTag";
     private static final String PROJECT_ID = "androidclient-umbc";
     private static final String JSON_QUESTION_KEY = "question";
