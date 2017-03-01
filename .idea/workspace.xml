@@ -14,9 +14,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4e3aaeeb-b312-4a31-8437-e005b2b27275" name="Default" comment="Listeners are working but not finding the message">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/.idea/workspace.xml" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/AndroidManifest.xml" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java" />
     </list>
     <ignored path="UMBCIoT.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -75,8 +72,8 @@
               <folding>
                 <element signature="e#27879#28738#0" expanded="true" />
                 <element signature="e#28737#28738#0" expanded="true" />
-                <element signature="e#28864#30011#0" expanded="true" />
-                <element signature="e#30010#30011#0" expanded="true" />
+                <element signature="e#28864#30015#0" expanded="true" />
+                <element signature="e#30014#30015#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -5652,8 +5649,8 @@
           <folding>
             <element signature="e#27879#28738#0" expanded="true" />
             <element signature="e#28737#28738#0" expanded="true" />
-            <element signature="e#28864#30011#0" expanded="true" />
-            <element signature="e#30010#30011#0" expanded="true" />
+            <element signature="e#28864#30015#0" expanded="true" />
+            <element signature="e#30014#30015#0" expanded="true" />
           </folding>
         </state>
       </provider>
