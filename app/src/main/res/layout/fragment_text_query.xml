@@ -2,16 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.umbc.cs.iot.clients.android.ui.fragments.TextQueryFragment"
     android:focusable="true"
-    android:focusableInTouchMode="true" >
+    android:focusableInTouchMode="true"
+    tools:context="edu.umbc.cs.iot.clients.android.ui.fragments.TextQueryFragment">
 
     <ScrollView
         android:id="@+id/textFgmtScrollViewForDisplayText"
-        android:layout_above="@+id/textInputLayout"
-        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textInputLayout"
+        android:layout_alignParentTop="true">
         <!--<HorizontalScrollView-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="match_parent">-->
@@ -21,39 +21,37 @@
             android:id="@+id/textFgmtDisplayTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:text="@string/default_display_text"
             android:textAlignment="center"
-            android:textSize="25sp"
-            android:textColor="@color/colorPrimaryDark"
             android:textAppearance="@android:style/TextAppearance.Holo.Medium"
-            android:text="@string/default_display_text" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="25sp" />
 
         <!--</HorizontalScrollView>-->
     </ScrollView>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textInputLayout"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/sendTextQueryToServerImageButton"
-        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
         <EditText
             android:id="@+id/userQueryEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:imeOptions="actionSend"
             android:fontFamily="sans-serif-condensed"
             android:hint="@string/query_hint"
+            android:imeOptions="actionSend"
             android:inputType="textCapSentences|textImeMultiLine"
-            android:textSize="20sp"
+            android:selectAllOnFocus="true"
             android:textColor="@color/colorPrimaryDark"
-            android:selectAllOnFocus="true" />
+            android:textSize="20sp" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -61,12 +59,12 @@
         android:id="@+id/sendTextQueryToServerImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_menu_send"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:visibility="visible"
-        android:contentDescription="@string/send_query_to_server_image_button_content_description_text"
         android:backgroundTint="@color/colorAccent"
-        android:elevation="24dp" />
+        android:contentDescription="@string/send_query_to_server_image_button_content_description_text"
+        android:elevation="24dp"
+        android:src="@drawable/ic_menu_send"
+        android:visibility="visible" />
 
 </RelativeLayout>

@@ -615,7 +615,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void launchHelpFeedbackActivity() {
-        Intent helpFeedbackActivityLaunchIntent = new Intent(getApplicationContext(), HelpFeedbackActivity.class);
+        Intent helpFeedbackActivityLaunchIntent = new Intent(getApplicationContext(), AboutUsActivity.class);
         startActivity(helpFeedbackActivityLaunchIntent);
     }
 

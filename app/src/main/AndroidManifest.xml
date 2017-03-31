@@ -45,7 +45,7 @@
                 android:value="edu.umbc.cs.iot.clients.android.ui.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.activities.HelpFeedbackActivity"
+            android:name=".ui.activities.AboutUsActivity"
             android:label="@string/title_activity_help_feedback"
             android:parentActivityName=".ui.activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
