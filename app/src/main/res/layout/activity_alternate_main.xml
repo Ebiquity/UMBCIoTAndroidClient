@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:drawable/screen_background_dark"
-    tools:context="edu.umbc.cs.iot.clients.android.ui.activities.AlternateMainActivity">
+    tools:context=".ui.activities.AlternateMainActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
@@ -12,14 +12,14 @@
         android:id="@+id/fullscreen_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fontFamily="cursive"
         android:gravity="center"
         android:keepScreenOn="true"
+        android:text="@string/info_display_text"
         android:textAlignment="center"
-        android:textSize="30sp"
-        android:fontFamily="cursive"
-        android:textColor="@color/colorPrimaryDark"
         android:textAppearance="@android:style/TextAppearance.Holo.Medium"
-        android:text="@string/info_display_text" />
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="30sp" />
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
@@ -37,15 +37,15 @@
             tools:ignore="UselessParent">
 
             <Button
-                android:text="@string/check_again_button_text"
                 android:id="@+id/checkAgainButton"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:elevation="24dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:textSize="20sp"
                 android:fontFamily="serif"
-                android:textColor="@color/colorPrimaryDark" />
+                android:text="@string/check_again_button_text"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="20sp" />
 
         </LinearLayout>
     </FrameLayout>

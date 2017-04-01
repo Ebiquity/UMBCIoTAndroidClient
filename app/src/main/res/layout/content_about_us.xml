@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="edu.umbc.cs.iot.clients.android.ui.activities.AboutUsActivity"
+    tools:context=".ui.activities.AboutUsActivity"
     tools:showIn="@layout/activity_about_us">
 
     <TextView

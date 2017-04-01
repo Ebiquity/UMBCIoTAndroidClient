@@ -2,16 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.umbc.cs.iot.clients.android.ui.fragments.VoiceQueryFragment"
     android:focusable="true"
-    android:focusableInTouchMode="true" >
+    android:focusableInTouchMode="true"
+    tools:context=".ui.fragments.VoiceQueryFragment">
 
     <ScrollView
         android:id="@+id/voiceFgmtScrollViewForDisplayText"
-        android:layout_above="@+id/sendVoiceQueryToServerBtn"
-        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sendVoiceQueryToServerBtn"
+        android:layout_alignParentTop="true">
         <!--<HorizontalScrollView-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="match_parent">-->
@@ -21,14 +21,14 @@
             android:id="@+id/voiceFgmtDisplayTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:text="@string/default_display_text"
             android:textAlignment="center"
-            android:textSize="25sp"
-            android:textColor="@color/colorPrimaryDark"
             android:textAppearance="@android:style/TextAppearance.Holo.Medium"
-            android:text="@string/default_display_text" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="25sp" />
 
         <!--</HorizontalScrollView>-->
     </ScrollView>
@@ -37,12 +37,12 @@
         android:id="@+id/sendVoiceQueryToServerBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/microphone"
-        android:visibility="visible"
-        android:contentDescription="@string/send_query_to_server_image_button_content_description_text"
-        android:backgroundTint="@color/colorAccent"
-        android:elevation="24dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="@color/colorAccent"
+        android:contentDescription="@string/send_query_to_server_image_button_content_description_text"
+        android:elevation="24dp"
+        android:src="@drawable/microphone"
+        android:visibility="visible" />
 
 </RelativeLayout>
