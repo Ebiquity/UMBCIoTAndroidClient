@@ -12,11 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/sendVoiceQueryToServerBtn"
         android:layout_alignParentTop="true">
-        <!--<HorizontalScrollView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="match_parent">-->
 
-        <!-- Main content here -->
         <TextView
             android:id="@+id/voiceFgmtDisplayTextView"
             android:layout_width="wrap_content"

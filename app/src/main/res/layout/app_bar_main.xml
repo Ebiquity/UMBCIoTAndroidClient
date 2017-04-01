@@ -23,20 +23,28 @@
 
     <include layout="@layout/content_main" />
 
-    <!--android.support.v7.widget.SwitchCompat
-        android:id="@+id/subscribe_switch"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|end"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/switch_margin_top"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/switch_margin_right"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
         android:elevation="@dimen/fab_margin"
-        android:textSize="20sp"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
-        android:text="@string/discover_nearby_devices" /-->
+        app:backgroundTint="@color/colorPrimary"
+        app:fabSize="auto"
+        app:rippleColor="@color/lightgreen"
+        app:srcCompat="@drawable/thumb_up" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="@dimen/fab_margin"
+        android:elevation="@dimen/fab_margin"
+        app:backgroundTint="@color/colorPrimary"
+        app:fabSize="auto"
+        app:rippleColor="@color/lightgreen"
+        app:srcCompat="@drawable/thumb_down" />
 
 </android.support.design.widget.CoordinatorLayout>
