@@ -26,7 +26,6 @@
             android:textColor="@color/colorPrimaryDark"
             android:textSize="25sp" />
 
-        <!--</HorizontalScrollView>-->
     </ScrollView>
 
     <ImageButton
@@ -35,9 +34,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/fab_margin"
         android:backgroundTint="@color/colorAccent"
         android:contentDescription="@string/send_query_to_server_image_button_content_description_text"
-        android:elevation="24dp"
+        android:elevation="@dimen/fab_margin"
         android:src="@drawable/microphone"
         android:visibility="visible" />
 

@@ -3,7 +3,7 @@
   <component name="GradleExtensions">
     <project path="$PROJECT_DIR$">
       <sub-project>
-        <project path="$PROJECT_DIR$">
+        <project path="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient">
           <extensions>
             <ext name="ext" type="org.gradle.api.internal.plugins.DefaultExtraPropertiesExtension" />
             <task name="projects" type="org.gradle.api.tasks.diagnostics.ProjectReportTask">Displays the sub-projects of root project 'UMBCIoTAndroidClient'.&lt;p&gt;&lt;i&gt;Task group: help&lt;i&gt;</task>
@@ -203,8 +203,8 @@
             <conf name="classpath" scriptClasspath="true" />
           </extensions>
         </project>
-        <project path="$PROJECT_DIR$/app">
-          <extensions parent="$PROJECT_DIR$">
+        <project path="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app">
+          <extensions parent="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient">
             <ext name="ext" type="org.gradle.api.internal.plugins.DefaultExtraPropertiesExtension" />
             <ext name="defaultArtifacts" type="org.gradle.api.internal.plugins.DefaultArtifactPublicationSet" />
             <ext name="reporting" type="org.gradle.api.reporting.ReportingExtension" />
@@ -448,8 +448,8 @@
             <conf name="classpath" scriptClasspath="true" />
           </extensions>
         </project>
-        <project path="$PROJECT_DIR$/volley">
-          <extensions parent="$PROJECT_DIR$">
+        <project path="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/volley">
+          <extensions parent="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient">
             <ext name="ext" type="org.gradle.api.internal.plugins.DefaultExtraPropertiesExtension" />
             <ext name="defaultArtifacts" type="org.gradle.api.internal.plugins.DefaultArtifactPublicationSet" />
             <ext name="reporting" type="org.gradle.api.reporting.ReportingExtension" />
