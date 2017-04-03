@@ -23,28 +23,4 @@
 
     <include layout="@layout/content_main" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:elevation="@dimen/fab_margin"
-        app:backgroundTint="@color/colorAccent"
-        app:fabSize="auto"
-        app:rippleColor="@color/lightgreen"
-        app:srcCompat="@drawable/thumb_up" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_down"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_margin="@dimen/fab_margin"
-        android:elevation="@dimen/fab_margin"
-        app:backgroundTint="@color/colorAccent"
-        app:fabSize="auto"
-        app:rippleColor="@color/lightgreen"
-        app:srcCompat="@drawable/thumb_down" />
-
 </android.support.design.widget.CoordinatorLayout>

@@ -24,6 +24,8 @@
     <string name="info_display_text">Hmmm&#8230; Can\'t connect to any Beacons. If you think you should see one anyway, click on the button below.</string>
     <string name="query_hint">Type your query here&#8230;</string>
     <string name="send_query_to_server_image_button_content_description_text">Click this button to send the query to server</string>
+    <string name="thumb_up_text">Good answer</string>
+    <string name="thumb_down_text">Bad answer</string>
 
     <string name="title_activity_alternate_main">No beacons found</string>
     <string name="title_activity_device_scan">DeviceScanActivity</string>
