@@ -1,6 +1,6 @@
 package edu.umbc.cs.iot.clients.android.ui.activities;
 
-/*
+/**
  * Created on May 27, 2016
  * @author: Prajit Kumar Das
  * @purpose: The purpose for this code is to setup the Physical Web connection and to obtain the info from the server using the beacon upon successfully connecting to it.
@@ -23,6 +23,7 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -44,8 +45,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.nearby.Nearby;
-import com.google.android.gms.nearby.messages.BleSignal;
-import com.google.android.gms.nearby.messages.Distance;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageFilter;
 import com.google.android.gms.nearby.messages.MessageListener;
@@ -71,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         TextQueryFragment.OnTextQueryFragmentInteractionListener,
         VoiceQueryFragment.OnVoiceQueryFragmentInteractionListener,
-        EmptyFragment.OnFragmentInteractionListener {
+        EmptyFragment.OnEmptyFragmentInteractionListener {
 
     private static final int TTL_IN_SECONDS = 3 * 60; // Three minutes.
 
@@ -98,34 +97,27 @@ public class MainActivity extends AppCompatActivity implements
 
     private boolean beaconDisabled;
     private String userId;
-    private String beaconData;
-
-    private View headerView;
     private NavigationView navigationView;
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
-    private FrameLayout mContainer;
-
     private GoogleApiClient mGoogleApiClient;
+    private String beaconData;
     private MessageListener mMessageListener;
+    private View headerView;
+    private FloatingActionButton fabThumbUp;
+    private FloatingActionButton fabThumbDown;
+    private FrameLayout mContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Use this check to determine whether BLE is supported on the device. Then
-        // you can selectively disable BLE-related features.
-        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
-            finish();
-        }
-
         sharedPreferences = getSharedPreferences(UMBCIoTApplication.getSharedPreference(), Context.MODE_PRIVATE);
-
         beaconDisabled = sharedPreferences.getBoolean(UMBCIoTApplication.getPrefBeaconDisabledKey(), false);
         userId = sharedPreferences.getString(UMBCIoTApplication.getPrefUserIdKey(), getResources().getString(R.string.pref_user_id_default_value));
+//        Toast.makeText(this,userId,Toast.LENGTH_LONG).show();
 
         if(sharedPreferences.getString(UMBCIoTApplication.getJsonSessionIdKey(),"").isEmpty()) {
             final SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -138,10 +130,16 @@ public class MainActivity extends AppCompatActivity implements
             startActivityForResult(enableBtIntent, UMBCIoTApplication.PERMISSIONS_REQUEST_BLUETOOTH);
         }
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        fabThumbUp = (FloatingActionButton) findViewById(R.id.fab_up);
+        fabThumbUp.setVisibility(View.GONE);
+
+        fabThumbDown = (FloatingActionButton) findViewById(R.id.fab_down);
+        fabThumbDown.setVisibility(View.GONE);
 
         mContainer = (FrameLayout) findViewById(R.id.container_main);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
@@ -149,16 +147,14 @@ public class MainActivity extends AppCompatActivity implements
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        setListeners();
-
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        /*
+        /**
          * We wanted to show different banner at different times during the day. The following sub-section of the method takes care of that.
          * http://stackoverflow.com/questions/33560219/in-android-how-to-set-navigation-drawer-header-image-and-name-programmatically-i
          * As mentioned in the bug 190226, Since version 23.1.0 getting header layout view with: navigationView.findViewById(R.id.navigation_header_text) no longer works.
-         * A workaround is to inflate the headerview programmatically and find view by ID from the inflated header view.
+         * A workaround is to inflate the headerview programatically and find view by ID from the inflated header view.
          * mNavHeaderMain = (LinearLayout) findViewById(R.id.drawer_view);
          */
         headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
@@ -186,18 +182,64 @@ public class MainActivity extends AppCompatActivity implements
 //            Log.i(UMBCIoTApplication.getDebugTag(), "Requesting permissions needed for this app.");
             requestPermissions();
         }
+        setListeners();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        // As part of the permissions workflow, check permissions in case the user has gone to
-        // Settings and enabled location there. If permissions are adequate, kick off a subscription
-        // process by building GoogleApiClient.
-        if (havePermissions()) {
-            buildGoogleApiClient();
+    protected void onStop() {
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+//            Log.d(UMBCIoTApplication.getDebugTag(), "Disconnecting API client");
+            unsubscribe();
         }
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+//        Log.d(UMBCIoTApplication.getDebugTag(), "Connected to API client");
+        subscribe();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        logAndShowSnackbar("Exception while connecting to Google Play services: " +
+                connectionResult.getErrorMessage());
+//        if (connectionResult.hasResolution()) {
+//            try {
+//                connectionResult.startResolutionForResult(this, UMBCIoTApplication.REQUEST_RESOLVE_ERROR);
+//            } catch (IntentSender.SendIntentException e) {
+////                Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed due to"+e.getMessage());
+////                Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed due to"+e.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        }
+////        else {
+////            Log.e(UMBCIoTApplication.getDebugTag(), "GoogleApiClient connection failed");
+////            Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed", Toast.LENGTH_SHORT).show();
+////        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        logAndShowSnackbar("Connection suspended. Error code: " + i);
+    }
+
+    private synchronized void buildGoogleApiClient() {
+        //Construct a connection to Play Services
+//        Log.d(UMBCIoTApplication.getDebugTag(),"Came into setGoogleApiClient");
+        if (mGoogleApiClient == null && havePermissions()) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(Nearby.MESSAGES_API, new MessagesOptions.Builder()
+                            .setPermissions(NearbyPermissions.BLE)
+                            .build())
+                    .addConnectionCallbacks(this)
+                    .enableAutoManage(this, this)
+                    .build();
+        } else
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(Nearby.MESSAGES_API)
+                    .addConnectionCallbacks(this)
+                    .enableAutoManage(this, this)
+                    .build();
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -231,8 +273,42 @@ public class MainActivity extends AppCompatActivity implements
         }
         if (denied)
             return;
-//        Log.i(UMBCIoTApplication.getDebugTag(), "Permission granted, building GoogleApiClient");
+//      Log.i(UMBCIoTApplication.getDebugTag(), "Permission granted, building GoogleApiClient");
+//      Get a GoogleApiClient object for the using the NearbyMessagesApi
         buildGoogleApiClient();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // As part of the permissions workflow, check permissions in case the user has gone to
+        // Settings and enabled location there. If permissions are adequate, kick off a subscription
+        // process by building GoogleApiClient.
+        if (havePermissions()) {
+            buildGoogleApiClient();
+        }
+    }
+
+    /**
+     * Displays {@link Snackbar} with button for the user to re-initiate the permission workflow.
+     */
+    private void showRequestPermissionsSnackbar() {
+        if (mContainer == null) {
+            return;
+        }
+        Snackbar.make(mContainer, R.string.permission_rationale,
+                Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // Request permission.
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[]{
+                                        Manifest.permission.ACCESS_FINE_LOCATION},
+                                UMBCIoTApplication.PERMISSIONS_REQUEST_ALL_REQUIRED);
+                    }
+                }).show();
     }
 
     /**
@@ -261,107 +337,31 @@ public class MainActivity extends AppCompatActivity implements
                 }).show();
     }
 
-    /**
-     * Displays {@link Snackbar} with button for the user to re-initiate the permission workflow.
-     */
-    private void showRequestPermissionsSnackbar() {
-        if (mContainer == null) {
-            return;
-        }
-        Snackbar.make(mContainer, R.string.permission_rationale,
-                Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.ok, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // Request permission.
-                        ActivityCompat.requestPermissions(MainActivity.this,
-                                new String[]{
-                                        Manifest.permission.ACCESS_FINE_LOCATION,
-                                        Manifest.permission.RECORD_AUDIO},
-                                UMBCIoTApplication.PERMISSIONS_REQUEST_ALL_REQUIRED);
-                    }
-                }).show();
-    }
-
-    private synchronized void buildGoogleApiClient() {
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(Nearby.MESSAGES_API,
-                            new MessagesOptions.Builder()
-                            .setPermissions(NearbyPermissions.BLE)
-                            .build())
-                    .addConnectionCallbacks(this)
-                    .enableAutoManage(this, this)
-                    .build();
-        }
-    }
-
     private void setListeners() {
         mMessageListener = new MessageListener() {
             @Override
-            public void onFound(final Message message) {
+            public void onFound(Message message) {
+//                Log.d(UMBCIoTApplication.getDebugTag(),"Came into onFound");
                 String foundMessage = new String(message.getContent());
                 // Do something with the message here.
+//                Log.d(UMBCIoTApplication.getDebugTag(), "Message string: " + new String(message.getContent()));
+//                Log.d(UMBCIoTApplication.getDebugTag(), "Message namespace type: " + message.getNamespace() + "/" + message.getType());
                 if(message.getNamespace().equals(UMBCIoTApplication.getProjectId())
                         && message.getType().equals("string")
                         && foundMessage.startsWith("MAC")) {
                     beaconData = foundMessage.substring(4);
-//                    Toast.makeText(getApplicationContext(),"Found: " + beaconData,Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(),"Found: "+beaconData,Toast.LENGTH_SHORT).show();
                     // Only when the beaconData has been found we shall move on to loading the UI
                     launchFragment(new VoiceQueryFragment(), false);
-                }
-            }
-
-            /**
-             * Called when the Bluetooth Low Energy (BLE) signal associated with a message changes.
-             * <p>
-             * This is currently only called for BLE beacon messages.
-             * <p>
-             * For example, this is called when we see the first BLE advertisement
-             * frame associated with a message; or when we see subsequent frames with
-             * significantly different received signal strength indicator (RSSI)
-             * readings.
-             * <p>
-             * For more information, see the MessageListener Javadocs.
-             */
-            @Override
-            public void onBleSignalChanged(final Message message, final BleSignal bleSignal) {
-                String foundMessage = new String(message.getContent());
-                // Do something with the message here.
-                if (message.getNamespace().equals(UMBCIoTApplication.getProjectId())
-                        && message.getType().equals("string")
-                        && foundMessage.startsWith("MAC")) {
-                    beaconData = foundMessage.substring(4);
-//                    Toast.makeText(getApplicationContext(),"Message: " + message + " has new BLE signal information: " + bleSignal + " and beaconData is: " + beaconData,Toast.LENGTH_SHORT).show();
-                    // Only when the beaconData has been found we shall move on to loading the UI
-                    launchFragment(new VoiceQueryFragment(), false);
-                }
-            }
-
-            /**
-             * Called when Nearby's estimate of the distance to a message changes.
-             * <p>
-             * This is currently only called for BLE beacon messages.
-             * <p>
-             * For more information, see the MessageListener Javadocs.
-             */
-            @Override
-            public void onDistanceChanged(final Message message, final Distance distance) {
-                String foundMessage = new String(message.getContent());
-                // Do something with the message here.
-                if (message.getNamespace().equals(UMBCIoTApplication.getProjectId())
-                        && message.getType().equals("string")
-                        && foundMessage.startsWith("MAC")) {
-                    beaconData = foundMessage.substring(4);
-//                    Toast.makeText(getApplicationContext(),"Distance changed, message: " + message + ", new distance: " + distance + " and beaconData is: " + beaconData,Toast.LENGTH_SHORT).show();
-                    // Only when the beaconData has been found we shall move on to loading the UI
-                    launchFragment(new VoiceQueryFragment(), false);
+//                    launchFragment(new TextQueryFragment());
                 }
             }
 
             @Override
-            public void onLost(final Message message) {
-                Toast.makeText(getApplicationContext(), "Lost contact with beacon! I will wait for " + AUTO_HIDE_DELAY_MILLIS + " milliseconds...", Toast.LENGTH_SHORT).show();
+            public void onLost(Message message) {
+                String messageAsString = new String(message.getContent());
+//                Log.d(UMBCIoTApplication.getDebugTag(), "Lost beacon message: " + messageAsString);
+//                Toast.makeText(getApplicationContext(), "Lost contact with beacon! I will wait for "+AUTO_HIDE_DELAY_MILLIS+" milliseconds...", Toast.LENGTH_SHORT).show();
                 PauseBeaconNotFoundActivity aPauseBeaconNotFoundActivity = new PauseBeaconNotFoundActivity();
                 aPauseBeaconNotFoundActivity.execute();
             }
@@ -392,6 +392,10 @@ public class MainActivity extends AppCompatActivity implements
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_clear: {
+                /**
+                 * TODO This is a bug. The fragment being loaded is a new fragment every time. This might cause memory leakges.
+                 * Fix it @prajit
+                 */
                 if(beaconData != null)
                     launchFragment(new VoiceQueryFragment(), false);
                 else
@@ -429,8 +433,17 @@ public class MainActivity extends AppCompatActivity implements
         transaction.commit();
     }
 
+    private boolean havePermissions() {
+        return (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED);
+    }
+
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.ACCESS_FINE_LOCATION}, UMBCIoTApplication.PERMISSIONS_REQUEST_ALL_REQUIRED);
+    }
+
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    public boolean onNavigationItemSelected(MenuItem item) {
         Fragment fragment = new VoiceQueryFragment();
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -454,46 +467,6 @@ public class MainActivity extends AppCompatActivity implements
         else if (!isBeaconDisabled())
             launchFragment(fragment, false);
         return true;
-    }
-
-    @Override
-    protected void onStop() {
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-//            Log.d(UMBCIoTApplication.getDebugTag(), "Disconnecting API client");
-            unsubscribe();
-        }
-        super.onStop();
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-//        Log.d(UMBCIoTApplication.getDebugTag(), "Connected to API client");
-        subscribe();
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        logAndShowSnackbar("Exception while connecting to Google Play services: " +
-                connectionResult.getErrorMessage());
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        logAndShowSnackbar("Connection suspended. Error code: " + i);
-    }
-
-    private boolean havePermissions() {
-        return (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED)
-                && (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-                == PackageManager.PERMISSION_GRANTED);
-    }
-
-    private void requestPermissions() {
-        ActivityCompat.requestPermissions(this,
-                new String[]{
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.RECORD_AUDIO}, UMBCIoTApplication.PERMISSIONS_REQUEST_ALL_REQUIRED);
     }
 
     /**
@@ -558,35 +531,12 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-        // Trigger the initial hide() shortly after the activity has been
-        // created, to briefly hint to the user that UI controls
-        // are available.
-//        delayedHide(AUTO_HIDE_DELAY_MILLIS);
-    }
-
     /**
      * This is called in response to a button tap in the system permissions dialog.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case UMBCIoTApplication.REQUEST_RESOLVE_ERROR: {
-                if (resultCode == RESULT_OK) {
-                    subscribe();
-                } else {
-                    Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed. Unable to resolve.", Toast.LENGTH_SHORT).show();
-                }
-            }
-            case UMBCIoTApplication.REQUEST_PERMISSION: {
-                if (resultCode != RESULT_OK) {
-                    Toast.makeText(getApplicationContext(), "We need location permission to get scan results!", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-            }
             case UMBCIoTApplication.PERMISSIONS_REQUEST_BLUETOOTH: {
                 if (resultCode != RESULT_OK) {
                     Toast.makeText(getApplicationContext(), "We need bluetooth enabled to use the nearby messages api!", Toast.LENGTH_SHORT).show();
@@ -602,11 +552,12 @@ public class MainActivity extends AppCompatActivity implements
      * @return True if Bluetooth is available and enabled.
      */
     public boolean isBluetoothAvailable() {
-        if (BluetoothAdapter.getDefaultAdapter() == null) {
-            Toast.makeText(getApplicationContext(), "Device does not support Bluetooth.\nApp won't work without it!", Toast.LENGTH_SHORT).show();
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+//            Toast.makeText(getApplicationContext(), "Device does not support Bluetooth.\nApp won't work without it!", Toast.LENGTH_SHORT).show();
             finish();
         }
-        return BluetoothAdapter.getDefaultAdapter().isEnabled();
+        return mBluetoothAdapter.isEnabled();
     }
 
     private void launchAlternateMainActivity() {
@@ -621,6 +572,32 @@ public class MainActivity extends AppCompatActivity implements
 
     public boolean isBeaconDisabled() {
         return beaconDisabled;
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+//        Log.d(UMBCIoTApplication.getDebugTag(), "Came to onPostCreate");
+        // Trigger the initial hide() shortly after the activity has been
+        // created, to briefly hint to the user that UI controls
+        // are available.
+//        delayedHide(AUTO_HIDE_DELAY_MILLIS);
+    }
+
+    @Override
+    public void onTextQueryFragmentInteraction(Uri uri) {
+//        Log.d(UMBCIoTApplication.getDebugTag(), uri.toString());
+    }
+
+    @Override
+    public void onVoiceQueryFragmentInteraction(Uri uri) {
+//        Log.d(UMBCIoTApplication.getDebugTag(), uri.toString());
+    }
+
+    @Override
+    public void OnEmptyFragmentInteractionListener(Uri uri) {
+//        Log.d(UMBCIoTApplication.getDebugTag(), uri.toString());
     }
 
     /*
@@ -640,27 +617,12 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    @Override
-    public void onTextQueryFragmentInteraction(Uri uri) {
-//        Log.d(UMBCIoTApplication.getDebugTag(), uri.toString());
-    }
-
-    @Override
-    public void onVoiceQueryFragmentInteraction(Uri uri) {
-//        Log.d(UMBCIoTApplication.getDebugTag(), uri.toString());
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-        //TODO do something
-    }
-
-    private class PauseBeaconNotFoundActivity extends AsyncTask<Void, Void, Void> {
+    class PauseBeaconNotFoundActivity extends AsyncTask<Void, Void, Void> {
         protected Void doInBackground(Void... params) {
             try {
-//                Log.d(UMBCIoTApplication.getDebugTag(), "came into doInBackground" + System.currentTimeMillis());
+//                Log.d(UMBCIoTApplication.getDebugTag(), "came into doInBackground"+System.currentTimeMillis());
                 Thread.sleep(AUTO_HIDE_DELAY_MILLIS);
-//                Log.d(UMBCIoTApplication.getDebugTag(), "sleep complete" + System.currentTimeMillis());
+//                Log.d(UMBCIoTApplication.getDebugTag(), "sleep complete"+System.currentTimeMillis());
                 launchAlternateMainActivity();
             } catch (InterruptedException e) {
                 e.printStackTrace();

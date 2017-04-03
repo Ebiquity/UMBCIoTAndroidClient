@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import edu.umbc.cs.iot.clients.android.R;
 
 public class EmptyFragment extends Fragment {
-    private OnFragmentInteractionListener mListener;
+    private OnEmptyFragmentInteractionListener mListener;
 
     public EmptyFragment() {
         // Required empty public constructor
@@ -39,15 +39,15 @@ public class EmptyFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.OnEmptyFragmentInteractionListener(uri);
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnEmptyFragmentInteractionListener) {
+            mListener = (OnEmptyFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -70,8 +70,8 @@ public class EmptyFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnEmptyFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void OnEmptyFragmentInteractionListener(Uri uri);
     }
 }
