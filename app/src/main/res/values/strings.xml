@@ -20,12 +20,15 @@
 * In the current mode of deployment, the app will work, if you are near one of our beacons in the Information Technology and Engineering building at UMBC.\n
 * If you are near one of them, you will be able to query our Knowledge Base using voice commands or through text input.\n
 * It\'s an AMA app, enabling you to ask queries about UMBC.</string>
-    <string name="feedback_hint_text">Click on the + button below, if you want to provide feedback.</string>
     <string name="info_display_text">Hmmm&#8230; Can\'t connect to any Beacons. If you think you should see one anyway, click on the button below.</string>
     <string name="query_hint">Type your query here&#8230;</string>
     <string name="send_query_to_server_image_button_content_description_text">Click this button to send the query to server</string>
     <string name="thumb_up_text">Good answer</string>
     <string name="thumb_down_text">Bad answer</string>
+
+    <string name="feedback_dialog_title">Send feedback</string>
+    <string name="feedback_hint">Type your feedback or leave blank for no feedback</string>
+    <string name="submit_feedback">Submit</string>
 
     <string name="title_activity_alternate_main">No beacons found</string>
     <string name="title_activity_device_scan">DeviceScanActivity</string>

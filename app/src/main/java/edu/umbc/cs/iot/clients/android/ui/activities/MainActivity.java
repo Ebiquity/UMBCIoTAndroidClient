@@ -153,16 +153,16 @@ public class MainActivity extends AppCompatActivity implements
         Calendar cal = Calendar.getInstance();
         int hourofday = cal.get(Calendar.HOUR_OF_DAY);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (hourofday <= 12 && hourofday > 6)
+            if (hourofday < 12 && hourofday >= 6)
                 headerView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.csee_morning, getTheme()));
-            else if (hourofday <= 18 && hourofday > 12)
+            else if (hourofday < 18 && hourofday >= 12)
                 headerView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.csee_afternoon, getTheme()));
             else
                 headerView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.csee_evening, getTheme()));
         } else {
-            if (hourofday <= 12 && hourofday > 6)
+            if (hourofday < 12 && hourofday >= 6)
                 headerView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.csee_morning));
-            else if (hourofday <= 18 && hourofday > 12)
+            else if (hourofday < 18 && hourofday >= 12)
                 headerView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.csee_afternoon));
             else
                 headerView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.csee_evening));

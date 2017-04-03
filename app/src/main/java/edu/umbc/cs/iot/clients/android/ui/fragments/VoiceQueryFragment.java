@@ -5,21 +5,28 @@ package edu.umbc.cs.iot.clients.android.ui.fragments;
  * @author: Prajit Kumar Das
  */
 
+import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -43,8 +50,6 @@ import edu.umbc.cs.iot.clients.android.util.VolleySingleton;
 
 import static android.app.Activity.RESULT_OK;
 
-//import android.util.Log;
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -54,23 +59,24 @@ import static android.app.Activity.RESULT_OK;
  * create an instance of this fragment.
  */
 public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitListener {
-//    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-//    private static final String ARG_PARAM1 = "param1";
-//    private static final String ARG_PARAM2 = "param2";
-//    private String mParam1;
-//    private String mParam2;
+    private JSONRequest feedbackJsonRequest;
+    private String feedbackJsonResponse;
 
     private JSONRequest jsonRequest;
+    private String jsonResponse;
     private RequestQueue queue;
     // temporary string to show the parsed response
-    private String jsonResponse;
     private TextToSpeech talker;
 
     private TextView mVoiceFgmtDisplayTextView;
     private ScrollView mVoiceFgmtScrollViewForDisplayText;
     private View view;
     private ImageButton mSendVoiceQueryToServerBtn;
+    private ImageButton mThumbUpBtn;
+    private ImageButton mThumbDnBtn;
 
+    private String lastQuery;
+    private String lastResponse;
     private String mBeconIDParam;
     private Bundle bundle;
     private String mSessionId;
@@ -85,24 +91,6 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
         setArguments(new Bundle());
         // Required empty public constructor
     }
-
-//    /**
-//     * Use this factory method to create a new instance of
-//     * this fragment using the provided parameters.
-//     *
-//     * @param param1 Parameter 1.
-//     * @param param2 Parameter 2.
-//     * @return A new instance of fragment VoiceQueryFragment.
-//     */
-//    // TODO: Rename and change types and number of parameters
-//    public static VoiceQueryFragment newInstance(String param1, String param2) {
-//        VoiceQueryFragment fragment = new VoiceQueryFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -126,7 +114,14 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
     private void initViews() {
         mVoiceFgmtDisplayTextView = (TextView) view.findViewById(R.id.voiceFgmtDisplayTextView);
         mVoiceFgmtScrollViewForDisplayText = (ScrollView) view.findViewById(R.id.voiceFgmtScrollViewForDisplayText);
+
         mSendVoiceQueryToServerBtn = (ImageButton) view.findViewById(R.id.sendVoiceQueryToServerBtn);
+
+        mThumbUpBtn = (ImageButton) view.findViewById(R.id.voiceThumbsUpBtn);
+        mThumbDnBtn = (ImageButton) view.findViewById(R.id.voiceThumbsDownBtn);
+
+        mThumbUpBtn.setVisibility(View.GONE);
+        mThumbDnBtn.setVisibility(View.GONE);
     }
 
     private void setOnClickListeners() {
@@ -140,6 +135,20 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                 } catch (Exception e) {
 //                    Toast.makeText(v.getContext(), "Error initializing speech to text engine.", Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+
+        mThumbDnBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendUserFeedback(true);
+            }
+        });
+
+        mThumbDnBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendUserFeedback(false);
             }
         });
     }
@@ -203,7 +212,7 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
         }
     }
 
-    private void callWebServiceWithQuery(String query) {
+    private void callWebServiceWithQuery(final String query) {
 //        Log.d(UMBCIoTApplication.getDebugTag(),"Came to callWebServiceWithQuery");
         // Create a JSONObject for the POST call to the NLP engine server
         try {
@@ -235,6 +244,10 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                             // response will be a json object
                             final String status = response.getString("status");
                             final String text = response.getString("text");
+                            lastQuery = query;
+                            lastResponse = text;
+                            mThumbDnBtn.setVisibility(View.VISIBLE);
+                            mThumbUpBtn.setVisibility(View.VISIBLE);
 //                            JSONObject phone = response.getJSONObject("phone");
 //                            String home = phone.getString("home");
 //                            String mobile = phone.getString("mobile");
@@ -285,6 +298,8 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
 
 //                            Toast.makeText(view.getContext(),"JSON response: "+jsonResponse,Toast.LENGTH_LONG).show();
                             mVoiceFgmtDisplayTextView.setText(jsonResponse);
+                            mThumbDnBtn.setVisibility(View.GONE);
+                            mThumbUpBtn.setVisibility(View.GONE);
                         } catch (JSONException e) {
                             e.printStackTrace();
 //                            Toast.makeText(view.getContext(),
@@ -320,6 +335,72 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
 //        else {
 //            talker.speak(text, TextToSpeech.QUEUE_FLUSH, null);
 //        }
+    }
+
+    private void sendUserFeedback(boolean feedback) {
+        try {
+            feedbackJsonRequest = new JSONRequest(feedback,createAlertDialog(),lastQuery,lastResponse,mBeconIDParam,mSessionId,mUserId);
+        } catch (JSONException aJSONException) {
+        }
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                UMBCIoTApplication.getFeedbackUrl(),
+                feedbackJsonRequest.getRequest(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            final String status = response.getString("status");
+                            final String text = response.getString("text");
+                            feedbackJsonResponse += "Response is:\nStatus: " + status + " Text: " + text + "\n";
+                            Toast.makeText(view.getContext(),"JSON response: "+feedbackJsonResponse,Toast.LENGTH_LONG).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String statusCode = String.valueOf(error.networkResponse.statusCode);
+                        feedbackJsonResponse += "Getting an error code: " + statusCode + " from the server\n";
+                        Toast.makeText(view.getContext(),"JSON response: "+feedbackJsonResponse,Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+
+        // Once feedback is submitted remove the feedback buttons
+        mThumbDnBtn.setVisibility(View.GONE);
+        mThumbUpBtn.setVisibility(View.GONE);
+        // Add a request (in this example, called jsObjRequest) to your RequestQueue.
+        VolleySingleton.getInstance(view.getContext()).addToRequestQueue(jsObjRequest);
+    }
+
+    private String createAlertDialog() {
+        final StringBuilder feedbackText = new StringBuilder();
+        // Use the Builder class for convenient dialog construction
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.feedback_dialog_title);
+
+        // Set up the input
+        final EditText input = new EditText(getActivity());
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setHint(R.string.feedback_hint);
+        builder.setView(input);
+
+        builder.setPositiveButton(R.string.submit_feedback, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                feedbackText.append(input.getText().toString());
+            }
+        });
+
+        // create alert dialog
+        AlertDialog alertDialog = builder.create();
+
+        // show it
+        alertDialog.show();
+        return feedbackText.toString();
     }
 
     /**

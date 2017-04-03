@@ -15,6 +15,11 @@ import edu.umbc.cs.iot.clients.android.UMBCIoTApplication;
 public final class JSONRequest {
     private JSONObject request;
 
+    public JSONObject getRequest() {
+//        Log.d(UMBCIoTApplication.getDebugTag(),request.toString());
+        return request;
+    }
+
     public JSONRequest(String aQuery, String aBeasonId, String aSessionId, String aUserId) throws JSONException {
         request = new JSONObject();
         request.put(UMBCIoTApplication.getJsonQuestionKey(), aQuery);
@@ -22,8 +27,15 @@ public final class JSONRequest {
         request.put(UMBCIoTApplication.getJsonSessionIdKey(), aSessionId);
         request.put(UMBCIoTApplication.getJsonUserIdKey(), aUserId);
     }
-    public JSONObject getRequest() {
-//        Log.d(UMBCIoTApplication.getDebugTag(),request.toString());
-        return request;
+
+    public JSONRequest(boolean someFeedback, String someFeedbackText, String aQuery, String aResponse, String aBeasonId, String aSessionId, String aUserId) throws JSONException {
+        request = new JSONObject();
+        request.put(UMBCIoTApplication.getJsonFeedbackKey(), someFeedback);
+        request.put(UMBCIoTApplication.getJsonFeedbackTextKey(), someFeedbackText);
+        request.put(UMBCIoTApplication.getJsonQuestionKey(), aQuery);
+        request.put(UMBCIoTApplication.getJsonResponseKey(), aResponse);
+        request.put(UMBCIoTApplication.getJsonBeaconKey(), aBeasonId);
+        request.put(UMBCIoTApplication.getJsonSessionIdKey(), aSessionId);
+        request.put(UMBCIoTApplication.getJsonUserIdKey(), aUserId);
     }
 }

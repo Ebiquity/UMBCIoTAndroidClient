@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -38,7 +39,30 @@
         android:backgroundTint="@color/colorAccent"
         android:contentDescription="@string/send_query_to_server_image_button_content_description_text"
         android:elevation="@dimen/fab_margin"
-        android:src="@drawable/microphone"
-        android:visibility="visible" />
+        android:src="@drawable/microphone" />
+
+    <ImageButton
+        android:id="@+id/voiceThumbsUpBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="@dimen/fab_margin"
+        android:backgroundTint="@color/colorAccent"
+        android:contentDescription="@string/thumb_up_text"
+        android:elevation="@dimen/fab_margin"
+        android:src="@drawable/thumb_up" />
+
+    <ImageButton
+        android:id="@+id/voiceThumbsDownBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/fab_margin"
+        android:backgroundTint="@color/colorAccent"
+        android:contentDescription="@string/thumb_down_text"
+        android:elevation="@dimen/fab_margin"
+        android:src="@drawable/thumb_down" />
 
 </RelativeLayout>
