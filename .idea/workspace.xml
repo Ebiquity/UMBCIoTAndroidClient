@@ -12,12 +12,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4e3aaeeb-b312-4a31-8437-e005b2b27275" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/.idea/workspace.xml" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java" afterPath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/src/main/java/edu/umbc/cs/iot/clients/android/ui/activities/MainActivity.java" />
-    </list>
+    <list default="true" id="4e3aaeeb-b312-4a31-8437-e005b2b27275" name="Default" comment="" />
     <ignored path="UMBCIoT.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -100,11 +95,14 @@
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
       <list>
+        <option value="Prajit Kumar Das &lt;prajitdas@gmail.com&gt;" />
         <option value="Prajit Kumar Das" />
         <option value="ui" />
       </list>
     </option>
+    <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="RECENT_GIT_ROOT_PATH" value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient" />
+    <option name="SIGN_OFF_COMMIT" value="true" />
   </component>
   <component name="GradleLocalSettings">
     <option name="myGradleHomes">
@@ -4823,7 +4821,14 @@
       <option name="project" value="LOCAL" />
       <updated>1491030128568</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="added feedback buttons... testing... testing...">
+      <created>1491186299298</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1491186299298</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="TodoView" selected-index="3">
