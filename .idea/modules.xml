@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/UMBCIoTAndroidClient.iml" filepath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/UMBCIoTAndroidClient.iml" />
-      <module fileurl="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/app.iml" filepath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app/app.iml" />
-      <module fileurl="file:///media/prajit/data/code/android/projects/UMBCIoTAndroidClient/volley/volley.iml" filepath="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/volley/volley.iml" />
+      <module fileurl="file://$PROJECT_DIR$/UMBCIoTAndroidClient.iml" filepath="$PROJECT_DIR$/UMBCIoTAndroidClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/volley/volley.iml" filepath="$PROJECT_DIR$/volley/volley.iml" />
     </modules>
   </component>
 </project>
