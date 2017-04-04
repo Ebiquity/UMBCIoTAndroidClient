@@ -27,13 +27,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONException;
@@ -238,15 +236,11 @@ public class TextQueryFragment extends Fragment {
     }
 
     private void callWebServiceWithQuery(final String query) {
-//        Log.d(UMBCIoTApplication.getDebugTag(),"Came to callWebServiceWithQuery");
         // Create a JSONObject for the POST call to the NLP engine server
         try {
-//            createJSONObject(query,mBeconIDParam);
             jsonRequest = new JSONRequest(query,mBeconIDParam,mSessionId,mUserId);
         } catch (JSONException aJSONException) {
-//            Log.d("JSONException:"," Something went wrong in JSON object creation");
         }
-//        Toast.makeText(view.getContext(),"Calling the webservice with url: "+UMBCIoTApplication.getUrl()+" and payload "+jsonObject.toString(),Toast.LENGTH_LONG).show();
         /*
          * Creates a new request.
          * @param method the HTTP method to use
@@ -267,7 +261,6 @@ public class TextQueryFragment extends Fragment {
                     try {
                         // Parsing json object response
                         // response will be a json object
-//                        String status = response.getString("status");
                         String text = response.getString("text");
                         lastQuery = query;
                         lastResponse = text;
@@ -281,16 +274,9 @@ public class TextQueryFragment extends Fragment {
                                 +jsonRequest.getRequest().get(UMBCIoTApplication.getJsonBeaconKey())
                                 +"\n\n";
                         jsonResponse += "Response is:\nText: " + text + "\n";
-//                            response += "Home: " + home + "\n\n";
-//                            response += "Mobile: " + mobile + "\n\n";
-
-//                            Toast.makeText(view.getContext(),"JSON response: "+jsonResponse,Toast.LENGTH_LONG).show();
                         mTextFgmtDisplayTextView.setText(jsonResponse);
                     } catch (JSONException e) {
                         e.printStackTrace();
-//                        Toast.makeText(view.getContext(),
-//                                "Error: " + e.getMessage(),
-//                                Toast.LENGTH_LONG).show();
                     }
                 }
             },
@@ -306,8 +292,6 @@ public class TextQueryFragment extends Fragment {
                     } catch (NullPointerException e) {
                         statusCode = "fatal error! Error code not received";
                     }
-//                    Log.d(UMBCIoTApplication.getDebugTag(), "Error status code was: " + statusCode);
-//                    Toast.makeText(view.getContext(), "Error status code was: " + statusCode, Toast.LENGTH_LONG).show();
                     try {
                         if (!mTextFgmtDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
                             jsonResponse += "------------------------" + "\n";
@@ -317,18 +301,11 @@ public class TextQueryFragment extends Fragment {
                                 +jsonRequest.getRequest().get(UMBCIoTApplication.getJsonBeaconKey())
                                 +"\n\n";
                         jsonResponse += "Getting an error code: " + statusCode + " from the server\n";
-//                            response += "Home: " + home + "\n\n";
-//                            response += "Mobile: " + mobile + "\n\n";
-
-//                            Toast.makeText(view.getContext(),"JSON response: "+jsonResponse,Toast.LENGTH_LONG).show();
                         mTextFgmtDisplayTextView.setText(jsonResponse);
                         mThumbDnBtn.setVisibility(View.GONE);
                         mThumbUpBtn.setVisibility(View.GONE);
                     } catch (JSONException e) {
                         e.printStackTrace();
-//                        Toast.makeText(view.getContext(),
-//                                "Error: " + e.getMessage(),
-//                                Toast.LENGTH_LONG).show();
                     }
                     //get response body and parse with appropriate encoding
                     if(error.networkResponse.data!=null) {
@@ -338,9 +315,6 @@ public class TextQueryFragment extends Fragment {
                             e.printStackTrace();
                         }
                     }
-//                    Log.d(UMBCIoTApplication.getDebugTag(), "In ErrorListener"+statusCode+body);
-                    VolleyLog.d(UMBCIoTApplication.getDebugTag(), "I ma here Error: " + error.getMessage());
-    //                Toast.makeText(view.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         );
@@ -364,7 +338,6 @@ public class TextQueryFragment extends Fragment {
                         try {
                             final String status = response.getString("status");
                             feedbackJsonResponse = "Status: " + status;
-                            Toast.makeText(view.getContext(),"Feedback response: "+feedbackJsonResponse,Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -380,7 +353,6 @@ public class TextQueryFragment extends Fragment {
                             statusCode = "fatal error! Error code not received";
                         }
                         feedbackJsonResponse = "Getting an error code: " + statusCode + " from the server\n";
-                        Toast.makeText(view.getContext(),"Feedback response: "+feedbackJsonResponse,Toast.LENGTH_LONG).show();
                     }
                 }
         );
@@ -433,23 +405,4 @@ public class TextQueryFragment extends Fragment {
         // TODO: Update argument type and name
         void onTextQueryFragmentInteraction(Uri uri);
     }
-
-//    private String createJSONObject(String query, String beacon) throws JSONException {
-//        // Add your data
-//        //Create JSONObject here
-//        jsonObject = new JSONObject();
-//        jsonObject.put(UMBCIoTApplication.getQuestionTag(), query);
-//        jsonObject.put(UMBCIoTApplication.getBeaconTag(), beacon);
-////        Toast.makeText(view.getContext(),"I have: "+mBeconID,Toast.LENGTH_LONG).show();
-//
-////        JSONArray jsonArray = new JSONArray();
-////        for(String applicationInfo : getCurrentlyInstalledAppsList()) {
-////            jsonArray.put(applicationInfo);
-////        	  jsonArray.put("Facebook");
-////			  jsonArray.put("Twitter");
-////        }
-////        jsonParam.put("currentApps",jsonArray);
-//
-//        return jsonObject.toString();
-//    }
 }

@@ -23,13 +23,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONException;
@@ -130,7 +128,6 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                 try {
                     startActivityForResult(i, UMBCIoTApplication.VOICE_QUERY_RESPONSE);
                 } catch (Exception e) {
-//                    Toast.makeText(v.getContext(), "Error initializing speech to text engine.", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -173,13 +170,6 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
         queue = VolleySingleton.getInstance(view.getContext()).getRequestQueue();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onVoiceQueryFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -202,7 +192,6 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
 
     @Override
     public void onInit(int status) {
-//        Log.d(UMBCIoTApplication.getDebugTag(), "came into onInit");
         if(status == TextToSpeech.SUCCESS) {
             talker.setLanguage(Locale.getDefault());
             talker.setPitch(1f);
@@ -211,15 +200,10 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
     }
 
     private void callWebServiceWithQuery(final String query) {
-//        Log.d(UMBCIoTApplication.getDebugTag(),"Came to callWebServiceWithQuery");
-        // Create a JSONObject for the POST call to the NLP engine server
         try {
-//            createJSONObject(query,mBeconIDParam);
             jsonRequest = new JSONRequest(query,mBeconIDParam,mSessionId,mUserId);
         } catch (JSONException aJSONException) {
-//            Log.d("JSONException:"," Something went wrong in JSON object creation");
         }
-//        Toast.makeText(view.getContext(),"Calling the webservice with url: "+UMBCIoTApplication.getUrl()+" and payload "+jsonObject.toString(),Toast.LENGTH_LONG).show();
         /*
          * Creates a new request.
          * @param method the HTTP method to use
@@ -240,17 +224,11 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                         try {
                             // Parsing json object response
                             // response will be a json object
-//                            String status = response.getString("status");
                             String text = response.getString("text");
                             lastQuery = query;
                             lastResponse = text;
                             mThumbDnBtn.setVisibility(View.VISIBLE);
                             mThumbUpBtn.setVisibility(View.VISIBLE);
-//                            JSONObject phone = response.getJSONObject("phone");
-//                            String home = phone.getString("home");
-//                            String mobile = phone.getString("mobile");
-
-//                            jsonResponse = "";
                             if (!mVoiceFgmtDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
                                 jsonResponse += "------------------------" + "\n";
                             jsonResponse +=  "Query parameters were: "
@@ -259,17 +237,10 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                                     +jsonRequest.getRequest().get(UMBCIoTApplication.getJsonBeaconKey())
                                     +"\n\n";
                             jsonResponse += "Response is:\nText: " + text + "\n";
-//                            response += "Home: " + home + "\n\n";
-//                            response += "Mobile: " + mobile + "\n\n";
-
-//                            Toast.makeText(view.getContext(),"JSON response: "+jsonResponse,Toast.LENGTH_LONG).show();
                             mVoiceFgmtDisplayTextView.setText(jsonResponse);
                             speakThis(text);
                         } catch (JSONException e) {
                             e.printStackTrace();
-//                            Toast.makeText(view.getContext(),
-//                                    "Error: " + e.getMessage(),
-//                                    Toast.LENGTH_LONG).show();
                         }
                     }
                 },
@@ -285,8 +256,6 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                         } catch (NullPointerException e) {
                             statusCode = "fatal error! Error code not received";
                         }
-//                        Log.d(UMBCIoTApplication.getDebugTag(), "Error status code was: " + statusCode);
-//                        Toast.makeText(view.getContext(), "Error status code was: " + statusCode, Toast.LENGTH_LONG).show();
                         try {
                             if (!mVoiceFgmtDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
                                 jsonResponse += "------------------------" + "\n";
@@ -296,18 +265,11 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                                     +jsonRequest.getRequest().get(UMBCIoTApplication.getJsonBeaconKey())
                                     +"\n\n";
                             jsonResponse += "Getting an error code: " + statusCode + " from the server\n";
-//                            response += "Home: " + home + "\n\n";
-//                            response += "Mobile: " + mobile + "\n\n";
-
-//                            Toast.makeText(view.getContext(),"JSON response: "+jsonResponse,Toast.LENGTH_LONG).show();
                             mVoiceFgmtDisplayTextView.setText(jsonResponse);
                             mThumbDnBtn.setVisibility(View.GONE);
                             mThumbUpBtn.setVisibility(View.GONE);
                         } catch (JSONException e) {
                             e.printStackTrace();
-//                            Toast.makeText(view.getContext(),
-//                                    "Error: " + e.getMessage(),
-//                                    Toast.LENGTH_LONG).show();
                         }
                         //get response body and parse with appropriate encoding
                         if(error.networkResponse.data!=null) {
@@ -317,9 +279,6 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                                 e.printStackTrace();
                             }
                         }
-//                        Log.d(UMBCIoTApplication.getDebugTag(), "In ErrorListener"+statusCode+body);
-                        VolleyLog.d(UMBCIoTApplication.getDebugTag(), "I am here Error: " + error.getMessage());
-                        //                Toast.makeText(view.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -350,7 +309,6 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                         try {
                             final String status = response.getString("status");
                             feedbackJsonResponse = "Status: " + status;
-                            Toast.makeText(view.getContext(),"Feedback response: "+feedbackJsonResponse,Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -366,7 +324,6 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                             statusCode = "fatal error! Error code not received";
                         }
                         feedbackJsonResponse = "Getting an error code: " + statusCode + " from the server\n";
-                        Toast.makeText(view.getContext(),"Feedback response: "+feedbackJsonResponse,Toast.LENGTH_LONG).show();
                     }
                 }
         );
@@ -419,23 +376,4 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
         // TODO: Update argument type and name
         void onVoiceQueryFragmentInteraction(Uri uri);
     }
-
-//    private String createJSONObject(String query, String beacon) throws JSONException {
-//        // Add your data
-//        //Create JSONObject here
-//        jsonObject = new JSONObject();
-//        jsonObject.put(UMBCIoTApplication.getQuestionTag(), query);
-//        jsonObject.put(UMBCIoTApplication.getBeaconTag(), beacon);
-////        Toast.makeText(view.getContext(),"I have: "+mBeconID,Toast.LENGTH_LONG).show();
-//
-////        JSONArray jsonArray = new JSONArray();
-////        for(String applicationInfo : getCurrentlyInstalledAppsList()) {
-////            jsonArray.put(applicationInfo);
-////        	  jsonArray.put("Facebook");
-////			  jsonArray.put("Twitter");
-////        }
-////        jsonParam.put("currentApps",jsonArray);
-//
-//        return jsonObject.toString();
-//    }
 }

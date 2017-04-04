@@ -14,12 +14,6 @@ public class UMBCIoTApplication extends Application {
     public static final int VOICE_QUERY_RESPONSE = 2;
     public static final int PERMISSIONS_REQUEST_BLUETOOTH = 3;
     public static final int REQUEST_RESOLVE_ERROR = 4;
-
-    public static String generateRandomSessionId() {
-        return UUID.randomUUID().toString();
-    }
-
-    private static final String DEBUG_TAG = "UMBCIoTDebugTag";
     private static final String PROJECT_ID = "androidclient-umbc";
     private static final String JSON_QUESTION_KEY = "question";
     private static final String JSON_BEACON_KEY = "beaconid";
@@ -36,8 +30,8 @@ public class UMBCIoTApplication extends Application {
     private static final String PREF_USER_ID_KEY = "userIdKey";
     private static final String PREF_SUBSCRIBED = "subscribed";
 
-    public static String getDebugTag() {
-        return DEBUG_TAG;
+    public static String generateRandomSessionId() {
+        return UUID.randomUUID().toString();
     }
 
     public static String getProjectId() {
