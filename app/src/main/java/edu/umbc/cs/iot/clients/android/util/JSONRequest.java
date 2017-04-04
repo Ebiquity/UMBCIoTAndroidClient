@@ -24,7 +24,7 @@ public final class JSONRequest {
         request = new JSONObject();
         request.put(UMBCIoTApplication.getJsonQuestionKey(), aQuery);
         request.put(UMBCIoTApplication.getJsonBeaconKey(), aBeasonId);
-        request.put(UMBCIoTApplication.getJsonSessionIdKey(), aSessionId);
+//        request.put(UMBCIoTApplication.getJsonSessionIdKey(), aSessionId);
         request.put(UMBCIoTApplication.getJsonUserIdKey(), aUserId);
     }
 
@@ -35,7 +35,7 @@ public final class JSONRequest {
         request.put(UMBCIoTApplication.getJsonQuestionKey(), aQuery);
         request.put(UMBCIoTApplication.getJsonResponseKey(), aResponse);
         request.put(UMBCIoTApplication.getJsonBeaconKey(), aBeasonId);
-        request.put(UMBCIoTApplication.getJsonSessionIdKey(), aSessionId);
+//        request.put(UMBCIoTApplication.getJsonSessionIdKey(), aSessionId);
         request.put(UMBCIoTApplication.getJsonUserIdKey(), aUserId);
     }
 }

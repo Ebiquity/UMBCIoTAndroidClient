@@ -13,6 +13,7 @@ import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -152,21 +153,12 @@ public class MainActivity extends AppCompatActivity implements
         headerView.findViewById(R.id.drawer_view);
         Calendar cal = Calendar.getInstance();
         int hourofday = cal.get(Calendar.HOUR_OF_DAY);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (hourofday < 12 && hourofday >= 6)
-                headerView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.csee_morning, getTheme()));
-            else if (hourofday < 18 && hourofday >= 12)
-                headerView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.csee_afternoon, getTheme()));
-            else
-                headerView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.csee_evening, getTheme()));
-        } else {
-            if (hourofday < 12 && hourofday >= 6)
-                headerView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.csee_morning));
-            else if (hourofday < 18 && hourofday >= 12)
-                headerView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.csee_afternoon));
-            else
-                headerView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.csee_evening));
-        }
+        if (hourofday < 12 && hourofday >= 6)
+            headerView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.csee_morning, getTheme()));
+        else if (hourofday < 18 && hourofday >= 12)
+            headerView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.csee_afternoon, getTheme()));
+        else
+            headerView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.csee_evening, getTheme()));
 
         setListeners();
 
@@ -195,8 +187,15 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        logAndShowSnackbar("Exception while connecting to Google Play services: " +
-                connectionResult.getErrorMessage());
+        if (connectionResult.hasResolution()) {
+            try {
+                connectionResult.startResolutionForResult(this, UMBCIoTApplication.REQUEST_RESOLVE_ERROR);
+            } catch (IntentSender.SendIntentException e) {
+                logAndShowSnackbar("Exception while connecting to Google Play services: " + connectionResult.getErrorMessage());
+            }
+        } else {
+            logAndShowSnackbar("Exception while connecting to Google Play services: " + connectionResult.getErrorMessage());
+        }
     }
 
     @Override
@@ -450,8 +449,7 @@ public class MainActivity extends AppCompatActivity implements
 //        Log.d(UMBCIoTApplication.getDebugTag(), "Subscribing");
         Toast.makeText(this, "Subscribing", Toast.LENGTH_LONG).show();
         final SubscribeOptions options = new SubscribeOptions.Builder()
-                .setFilter(MessageFilter.INCLUDE_ALL_MY_TYPES)
-                .setStrategy(PUB_SUB_STRATEGY)
+                .setStrategy(Strategy.BLE_ONLY)
                 .setCallback(new SubscribeCallback() {
                     @Override
                     public void onExpired() {
@@ -510,11 +508,23 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
+            case UMBCIoTApplication.REQUEST_RESOLVE_ERROR: {
+                if (resultCode == RESULT_OK) {
+                    // Permission granted or error resolved successfully then we proceed
+                    // with publish and subscribe..
+                    subscribe();
+                } else {
+                    Toast.makeText(getApplicationContext(), "GoogleApiClient connection failed. Unable to resolve.", Toast.LENGTH_SHORT).show();
+                }
+            }
             case UMBCIoTApplication.PERMISSIONS_REQUEST_BLUETOOTH: {
                 if (resultCode != RESULT_OK) {
                     Toast.makeText(getApplicationContext(), "We need bluetooth enabled to use the nearby messages api!", Toast.LENGTH_SHORT).show();
                     finish();
                 }
+            }
+            default: {
+                super.onActivityResult(requestCode, resultCode, data);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

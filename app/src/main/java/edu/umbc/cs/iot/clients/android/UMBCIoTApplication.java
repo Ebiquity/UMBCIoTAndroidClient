@@ -13,6 +13,7 @@ public class UMBCIoTApplication extends Application {
     public static final int PERMISSIONS_REQUEST_ALL_REQUIRED = 1;
     public static final int VOICE_QUERY_RESPONSE = 2;
     public static final int PERMISSIONS_REQUEST_BLUETOOTH = 3;
+    public static final int REQUEST_RESOLVE_ERROR = 4;
 
     public static String generateRandomSessionId() {
         return UUID.randomUUID().toString();
@@ -25,8 +26,8 @@ public class UMBCIoTApplication extends Application {
     private static final String JSON_SESSION_ID_KEY = "sessionid";
     private static final String JSON_USER_ID_KEY = "contextid";//userid will be used later now it is going to be contextid
     private static final String JSON_RESPONSE_KEY = "response";
-    private static final String JSON_FEEDBACK_KEY = "response";
-    private static final String JSON_FEEDBACK_TEXT_KEY = "response";
+    private static final String JSON_FEEDBACK_KEY = "feedback";
+    private static final String JSON_FEEDBACK_TEXT_KEY = "feedbacktext";
     private static final String URL = "http://104.154.36.223/bot/";
     private static final String FEEDBACK_URL = "http://104.154.36.223/bot/feedback/";
     private static final String SHARED_PREFERENCE = "UMBC_IOT_APP_SHARED_PREFERENCE";
