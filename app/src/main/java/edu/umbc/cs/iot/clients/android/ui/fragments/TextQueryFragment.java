@@ -1,6 +1,6 @@
 package edu.umbc.cs.iot.clients.android.ui.fragments;
 
-/**
+/*
  * Created on May 27, 2016
  * @author: Prajit Kumar Das
  */
@@ -17,7 +17,6 @@ import android.support.design.widget.Snackbar;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -238,7 +237,7 @@ public class TextQueryFragment extends Fragment {
         hideKeyboardFrom(view.getContext(),view);
     }
 
-    private void callWebServiceWithQuery(String query) {
+    private void callWebServiceWithQuery(final String query) {
 //        Log.d(UMBCIoTApplication.getDebugTag(),"Came to callWebServiceWithQuery");
         // Create a JSONObject for the POST call to the NLP engine server
         try {
@@ -248,7 +247,7 @@ public class TextQueryFragment extends Fragment {
 //            Log.d("JSONException:"," Something went wrong in JSON object creation");
         }
 //        Toast.makeText(view.getContext(),"Calling the webservice with url: "+UMBCIoTApplication.getUrl()+" and payload "+jsonObject.toString(),Toast.LENGTH_LONG).show();
-        /**
+        /*
          * Creates a new request.
          * @param method the HTTP method to use
          * @param url URL to fetch the JSON from
@@ -270,11 +269,10 @@ public class TextQueryFragment extends Fragment {
                         // response will be a json object
 //                        String status = response.getString("status");
                         String text = response.getString("text");
-//                            JSONObject phone = response.getJSONObject("phone");
-//                            String home = phone.getString("home");
-//                            String mobile = phone.getString("mobile");
-
-//                            jsonResponse = "";
+                        lastQuery = query;
+                        lastResponse = text;
+                        mThumbDnBtn.setVisibility(View.VISIBLE);
+                        mThumbUpBtn.setVisibility(View.VISIBLE);
                         if (!mTextFgmtDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
                             jsonResponse += "------------------------" + "\n";
                         jsonResponse +=  "Query parameters were: "
@@ -324,6 +322,8 @@ public class TextQueryFragment extends Fragment {
 
 //                            Toast.makeText(view.getContext(),"JSON response: "+jsonResponse,Toast.LENGTH_LONG).show();
                         mTextFgmtDisplayTextView.setText(jsonResponse);
+                        mThumbDnBtn.setVisibility(View.GONE);
+                        mThumbUpBtn.setVisibility(View.GONE);
                     } catch (JSONException e) {
                         e.printStackTrace();
 //                        Toast.makeText(view.getContext(),
