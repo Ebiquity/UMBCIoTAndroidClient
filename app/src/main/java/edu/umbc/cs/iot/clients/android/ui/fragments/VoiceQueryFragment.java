@@ -1,25 +1,21 @@
 package edu.umbc.cs.iot.clients.android.ui.fragments;
 
-/**
+/*
  * Created on June 11, 2016
  * @author: Prajit Kumar Das
  */
 
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -224,7 +220,7 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
 //            Log.d("JSONException:"," Something went wrong in JSON object creation");
         }
 //        Toast.makeText(view.getContext(),"Calling the webservice with url: "+UMBCIoTApplication.getUrl()+" and payload "+jsonObject.toString(),Toast.LENGTH_LONG).show();
-        /**
+        /*
          * Creates a new request.
          * @param method the HTTP method to use
          * @param url URL to fetch the JSON from
@@ -244,8 +240,8 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                         try {
                             // Parsing json object response
                             // response will be a json object
-//                            final String status = response.getString("status");
-                            final String text = response.getString("text");
+//                            String status = response.getString("status");
+                            String text = response.getString("text");
                             lastQuery = query;
                             lastResponse = text;
                             mThumbDnBtn.setVisibility(View.VISIBLE);

@@ -27,7 +27,7 @@
     <string name="thumb_down_text">Bad answer</string>
 
     <string name="feedback_dialog_title">Send feedback</string>
-    <string name="feedback_hint">Type your feedback or leave blank for no feedback</string>
+    <string name="feedback_hint">Type feedback or leave blank</string>
     <string name="submit_feedback">Submit</string>
 
     <string name="title_activity_alternate_main">No beacons found</string>
