@@ -1,6 +1,6 @@
 package edu.umbc.cs.iot.clients.android.util;
 
-/**
+/*
  * Created on May 27, 2016
  * @author: Prajit Kumar Das
  */
@@ -19,22 +19,6 @@ public class VolleySingleton {
     private VolleySingleton(Context context) {
         mCtx = context;
         mRequestQueue = getRequestQueue();
-
-//        mImageLoader = new ImageLoader(mRequestQueue,
-//                new ImageLoader.ImageCache() {
-//                    private final LruCache<String, Bitmap>
-//                            cache = new LruCache<String, Bitmap>(20);
-//
-//                    @Override
-//                    public Bitmap getBitmap(String url) {
-//                        return cache.get(url);
-//                    }
-//
-//                    @Override
-//                    public void putBitmap(String url, Bitmap bitmap) {
-//                        cache.put(url, bitmap);
-//                    }
-//                });
     }
 
     public static synchronized VolleySingleton getInstance(Context context) {

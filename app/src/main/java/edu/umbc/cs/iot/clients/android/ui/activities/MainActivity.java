@@ -528,7 +528,6 @@ public class MainActivity extends AppCompatActivity implements
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-//        Log.d(UMBCIoTApplication.getDebugTag(), "Came to onPostCreate");
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available.
