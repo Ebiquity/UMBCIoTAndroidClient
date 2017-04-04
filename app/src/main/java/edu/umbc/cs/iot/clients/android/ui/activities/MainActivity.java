@@ -215,7 +215,6 @@ public class MainActivity extends AppCompatActivity implements
                     .build();
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {

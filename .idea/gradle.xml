@@ -10,7 +10,6 @@
           <set>
             <option value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient" />
             <option value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/app" />
-            <option value="/media/prajit/data/code/android/projects/UMBCIoTAndroidClient/volley" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
