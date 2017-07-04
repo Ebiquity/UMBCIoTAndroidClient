@@ -23,7 +23,7 @@
 
     <group
         android:id="@+id/bottomMenu"
-        android:checkableBehavior="single" >
+        android:checkableBehavior="single">
         <item
             android:id="@+id/app_settings_btn"
             android:icon="@drawable/settings"

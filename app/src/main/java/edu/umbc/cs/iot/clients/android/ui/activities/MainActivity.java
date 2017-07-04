@@ -111,13 +111,13 @@ public class MainActivity extends AppCompatActivity implements
         beaconDisabled = sharedPreferences.getBoolean(UMBCIoTApplication.getPrefBeaconDisabledKey(), false);
         userId = sharedPreferences.getString(UMBCIoTApplication.getPrefUserIdKey(), getResources().getString(R.string.pref_user_id_default_value));
 
-        if(sharedPreferences.getString(UMBCIoTApplication.getJsonSessionIdKey(),"").isEmpty()) {
+        if (sharedPreferences.getString(UMBCIoTApplication.getJsonSessionIdKey(), "").isEmpty()) {
             final SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(UMBCIoTApplication.getJsonSessionIdKey(), UMBCIoTApplication.generateRandomSessionId());
             editor.commit();
         }
 
-        if(!isBluetoothAvailable()) {
+        if (!isBluetoothAvailable()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, UMBCIoTApplication.PERMISSIONS_REQUEST_BLUETOOTH);
         }
@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements
             public void onFound(Message message) {
                 String foundMessage = new String(message.getContent());
                 // Do something with the message here.
-                if(message.getNamespace().equals(UMBCIoTApplication.getProjectId())
+                if (message.getNamespace().equals(UMBCIoTApplication.getProjectId())
                         && message.getType().equals("string")
                         && foundMessage.startsWith("MAC")) {
                     beaconData = foundMessage.substring(4);
@@ -347,7 +347,7 @@ public class MainActivity extends AppCompatActivity implements
                  * TODO This is a bug. The fragment being loaded is a new fragment every time. This might cause memory leakges.
                  * Fix it @prajit
                  */
-                if(beaconData != null)
+                if (beaconData != null)
                     launchFragment(new VoiceQueryFragment(), false);
                 else
                     launchFragment(new EmptyFragment(), false);
@@ -363,7 +363,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void launchFragment(Fragment fragment, boolean isPrefFragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        if(!isPrefFragment) {
+        if (!isPrefFragment) {
             if (beaconData != null) {
                 Bundle bundle = new Bundle(); //Launch one of the QueryFragments
                 bundle.putString(UMBCIoTApplication.getJsonBeaconKey(), beaconData);

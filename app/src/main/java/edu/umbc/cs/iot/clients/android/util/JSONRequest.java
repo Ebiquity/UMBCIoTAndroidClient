@@ -1,7 +1,8 @@
 package edu.umbc.cs.iot.clients.android.util;
 
-/*
+/**
  * Created by prajit on 7/27/2016.
+ *
  * @author Prajit Kumar Das
  */
 
@@ -12,10 +13,6 @@ import edu.umbc.cs.iot.clients.android.UMBCIoTApplication;
 
 public final class JSONRequest {
     private JSONObject request;
-
-    public JSONObject getRequest() {
-        return request;
-    }
 
     public JSONRequest(String aQuery, String aBeasonId, String aSessionId, String aUserId) throws JSONException {
         request = new JSONObject();
@@ -34,5 +31,9 @@ public final class JSONRequest {
         request.put(UMBCIoTApplication.getJsonBeaconKey(), aBeasonId);
 //        request.put(UMBCIoTApplication.getJsonSessionIdKey(), aSessionId);
         request.put(UMBCIoTApplication.getJsonUserIdKey(), aUserId);
+    }
+
+    public JSONObject getRequest() {
+        return request;
     }
 }

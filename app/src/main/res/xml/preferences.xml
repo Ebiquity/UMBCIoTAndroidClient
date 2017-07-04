@@ -8,8 +8,7 @@
             android:summary="@string/pref_summary_disable_beacon_scanning"
             android:title="@string/pref_title_disable_beacon_scanning" />
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/preference_header_user">
+    <PreferenceCategory android:title="@string/preference_header_user">
         <SwitchPreference
             android:defaultValue="false"
             android:enabled="false"

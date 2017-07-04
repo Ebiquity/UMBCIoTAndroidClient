@@ -92,7 +92,7 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mBeconIDParam = getArguments().getString(UMBCIoTApplication.getJsonBeaconKey(), "No beaconID");
-            }
+        }
     }
 
     @Override
@@ -162,7 +162,7 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
         bundle = this.getArguments();
         mBeconIDParam = bundle.getString(UMBCIoTApplication.getJsonBeaconKey(), "No beaconID");
         sharedPreferences = getActivity().getSharedPreferences(UMBCIoTApplication.getSharedPreference(), Context.MODE_PRIVATE);
-        mSessionId = sharedPreferences.getString(UMBCIoTApplication.getJsonSessionIdKey(),"No sessionID");
+        mSessionId = sharedPreferences.getString(UMBCIoTApplication.getJsonSessionIdKey(), "No sessionID");
         mUserId = sharedPreferences.getString(UMBCIoTApplication.getPrefUserIdKey(), "No userID");
         jsonResponse = new String();
         feedbackJsonResponse = new String();
@@ -186,13 +186,13 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        if(talker != null)
+        if (talker != null)
             talker.shutdown();
     }
 
     @Override
     public void onInit(int status) {
-        if(status == TextToSpeech.SUCCESS) {
+        if (status == TextToSpeech.SUCCESS) {
             talker.setLanguage(Locale.getDefault());
             talker.setPitch(1f);
             talker.setSpeechRate(1f);
@@ -201,7 +201,7 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
 
     private void callWebServiceWithQuery(final String query) {
         try {
-            jsonRequest = new JSONRequest(query,mBeconIDParam,mSessionId,mUserId);
+            jsonRequest = new JSONRequest(query, mBeconIDParam, mSessionId, mUserId);
         } catch (JSONException aJSONException) {
         }
         /*
@@ -231,11 +231,11 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                             mThumbUpBtn.setVisibility(View.VISIBLE);
                             if (!mVoiceFgmtDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
                                 jsonResponse += "------------------------" + "\n";
-                            jsonResponse +=  "Query parameters were: "
-                                    +jsonRequest.getRequest().getString(UMBCIoTApplication.getJsonQuestionKey())
-                                    +" "
-                                    +jsonRequest.getRequest().get(UMBCIoTApplication.getJsonBeaconKey())
-                                    +"\n\n";
+                            jsonResponse += "Query parameters were: "
+                                    + jsonRequest.getRequest().getString(UMBCIoTApplication.getJsonQuestionKey())
+                                    + " "
+                                    + jsonRequest.getRequest().get(UMBCIoTApplication.getJsonBeaconKey())
+                                    + "\n\n";
                             jsonResponse += "Response is:\nText: " + text + "\n";
                             mVoiceFgmtDisplayTextView.setText(jsonResponse);
                             speakThis(text);
@@ -259,11 +259,11 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                         try {
                             if (!mVoiceFgmtDisplayTextView.getText().equals(view.getContext().getResources().getString(R.string.default_display_text)))
                                 jsonResponse += "------------------------" + "\n";
-                            jsonResponse +=  "Query parameters were: "
-                                    +jsonRequest.getRequest().getString(UMBCIoTApplication.getJsonQuestionKey())
-                                    +" "
-                                    +jsonRequest.getRequest().get(UMBCIoTApplication.getJsonBeaconKey())
-                                    +"\n\n";
+                            jsonResponse += "Query parameters were: "
+                                    + jsonRequest.getRequest().getString(UMBCIoTApplication.getJsonQuestionKey())
+                                    + " "
+                                    + jsonRequest.getRequest().get(UMBCIoTApplication.getJsonBeaconKey())
+                                    + "\n\n";
                             jsonResponse += "Getting an error code: " + statusCode + " from the server\n";
                             mVoiceFgmtDisplayTextView.setText(jsonResponse);
                             mThumbDnBtn.setVisibility(View.GONE);
@@ -272,9 +272,9 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
                             e.printStackTrace();
                         }
                         //get response body and parse with appropriate encoding
-                        if(error.networkResponse.data!=null) {
+                        if (error.networkResponse.data != null) {
                             try {
-                                body = new String(error.networkResponse.data,"UTF-8");
+                                body = new String(error.networkResponse.data, "UTF-8");
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -290,13 +290,13 @@ public class VoiceQueryFragment extends Fragment implements TextToSpeech.OnInitL
     private void speakThis(String text) {
         Random random = new Random();
         random.setSeed(System.currentTimeMillis());
-        String utteranceId=this.hashCode() + Integer.toString(random.nextInt(Integer.MAX_VALUE));
+        String utteranceId = this.hashCode() + Integer.toString(random.nextInt(Integer.MAX_VALUE));
         talker.speak(text, TextToSpeech.QUEUE_FLUSH, bundle, utteranceId);
     }
 
     private void sendUserFeedback(boolean feedback, String feedbackText) {
         try {
-            feedbackJsonRequest = new JSONRequest(feedback,feedbackText,lastQuery,lastResponse,mBeconIDParam,mSessionId,mUserId);
+            feedbackJsonRequest = new JSONRequest(feedback, feedbackText, lastQuery, lastResponse, mBeconIDParam, mSessionId, mUserId);
         } catch (JSONException aJSONException) {
         }
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(

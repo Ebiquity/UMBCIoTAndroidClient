@@ -43,7 +43,7 @@ public class PrefsFragment extends PreferenceFragment {
         mSwitchPreferenceEnableUserIdentification.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if((Boolean) newValue) {
+                if ((Boolean) newValue) {
                     editor.putBoolean(UMBCIoTApplication.getPrefEnableUserIdKey(), (Boolean) newValue);
                     editor.commit();
                     mEditTextPreferenceUserIdentity.setSummary(
@@ -51,8 +51,7 @@ public class PrefsFragment extends PreferenceFragment {
                                     sharedPreferences.getString(
                                             UMBCIoTApplication.getPrefUserIdKey(), getResources().getString(R.string.pref_user_id_default_value))));
                     mEditTextPreferenceUserIdentity.setEnabled(true);
-                }
-                else {
+                } else {
                     editor.putString(UMBCIoTApplication.getPrefUserIdKey(), getResources().getString(R.string.pref_user_id_default_value));
                     editor.putBoolean(UMBCIoTApplication.getPrefEnableUserIdKey(), (Boolean) newValue);
                     editor.commit();
