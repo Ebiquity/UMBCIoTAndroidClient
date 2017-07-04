@@ -1,6 +1,6 @@
 package edu.umbc.cs.iot.clients.android.ui.activities;
 
-/*
+/**
  * Created on August 23, 2016
  * @author: Prajit Kumar Das
  * @purpose: If the connection fails after a time "AUTO_HIDE_DELAY_MILLIS" then we come to this alternate full screen view. This view uses a popup button to restart the discovery process.
@@ -20,31 +20,31 @@ import android.widget.Button;
 
 import edu.umbc.cs.iot.clients.android.R;
 
-/*
+/**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  * This screen exists to show that we are unable to connect to a beacon.
  */
 public class AlternateMainActivity extends AppCompatActivity {
-    /*
+    /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
      */
     private static final boolean AUTO_HIDE = true;
 
-    /*
+    /**
      * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
      * user interaction before hiding the system UI.
      */
     private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
 
-    /*
+    /**
      * Some older devices needs a small delay between UI widget updates
      * and a change of the status and navigation bar.
      */
     private static final int UI_ANIMATION_DELAY = 300;
     private final Handler mHideHandler = new Handler();
-    /*
+    /**
      * Touch listener to use for in-layout UI controls to delay hiding the
      * system UI. This is to prevent the jarring behavior of controls going away
      * while interacting with activity UI.
@@ -189,7 +189,7 @@ public class AlternateMainActivity extends AppCompatActivity {
         mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
     }
 
-    /*
+    /**
      * Schedules a call to hide() in [delay] milliseconds, canceling any
      * previously scheduled calls.
      */

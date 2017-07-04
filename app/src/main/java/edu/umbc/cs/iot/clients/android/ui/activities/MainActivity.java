@@ -1,6 +1,6 @@
 package edu.umbc.cs.iot.clients.android.ui.activities;
 
-/*
+/**
  * Created on May 27, 2016
  * @author: Prajit Kumar Das
  * @purpose: The purpose for this code is to setup the Physical Web connection and to obtain the info from the server using the beacon upon successfully connecting to it.

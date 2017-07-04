@@ -1,6 +1,6 @@
 package edu.umbc.cs.iot.clients.android.ui.fragments;
 
-/*
+/**
  * Created on June 11, 2016
  * @author: Prajit Kumar Das
  */

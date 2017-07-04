@@ -1,6 +1,6 @@
 package edu.umbc.cs.iot.clients.android.util;
 
-/*
+/**
  * Created on May 27, 2016
  * @author: Prajit Kumar Das
  */
